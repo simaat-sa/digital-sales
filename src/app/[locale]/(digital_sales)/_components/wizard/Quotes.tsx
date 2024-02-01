@@ -104,10 +104,14 @@ export default function Quotes() {
                 </AccordionItem>
               </Accordion>
             </div>
-            <Button className="bg-black text-white w-full h-14 rounded-xl text-lg font-semibold text-center" onClick={(e)=>{
-              e.preventDefautl();
-              onTakeAction()
-            }}>
+            <Button
+              className="bg-black text-white w-full h-14 rounded-xl text-lg font-semibold text-center"
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                onTakeAction();
+              }}
+            >
               Select
             </Button>
           </div>

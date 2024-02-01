@@ -26,7 +26,7 @@ export default function RootLayout({
     <html lang={locale} dir={locale === "en" ? "ltr" : "rtl"}>
       <body className={inter.className}>
         <NextIntlClientProvider messages={messages}>
-          <main className="container mx-auto px-4">{children}</main>
+          <main>{children}</main>
         </NextIntlClientProvider>
       </body>
     </html>

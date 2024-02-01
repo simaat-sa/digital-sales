@@ -11,7 +11,7 @@ import React from "react";
 import { useRequestQuoteService } from "../../_services/requestQuote";
 
 export default function RequirementForm() {
-  const { quotePlan, onChange } = useRequestQuoteService();
+  const { quotePlan, email, onChange } = useRequestQuoteService();
   return (
     <>
       <div className="flex flex-col gap-4">
@@ -39,7 +39,15 @@ export default function RequirementForm() {
           <Label>Email</Label>
           <Label className="text-xs text-slate-600 lowercase">(optional)</Label>
         </div>
-        <Input placeholder="+0123456789" type="email" dir="ltr" />
+        <Input
+          placeholder="example@domain.com"
+          type="email"
+          dir="ltr"
+          value={email}
+          onChange={(e) => {
+            onChange("email", e.target.value);
+          }}
+        />
       </div>
     </>
   );

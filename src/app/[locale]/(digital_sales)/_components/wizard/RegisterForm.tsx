@@ -21,18 +21,24 @@ export default function RegisterForm() {
         />
       </div>
       {showCode ? (
-        <div className="flex flex-col gap-4">
-          <Label>code OTP</Label>
-          <Input
-            placeholder="# # # #"
-            value={code}
-            onChange={(e) => {
-              onChange("code", e.target.value);
-            }}
-            className="tracking-widest"
-            dir="ltr"
-          />
-        </div>
+        <>
+          <div className="flex flex-col gap-4">
+            <Label>code OTP</Label>
+            <Input
+              placeholder="# # # #"
+              value={code}
+              onChange={(e) => {
+                onChange("code", e.target.value);
+              }}
+              className="tracking-widest"
+              dir="ltr"
+              type="tel"
+            />
+            <span className="underline text-xs font-medium cursor-pointer text-gray-600 -mt-3">
+              resend code
+            </span>
+          </div>
+        </>
       ) : null}
     </div>
   );
