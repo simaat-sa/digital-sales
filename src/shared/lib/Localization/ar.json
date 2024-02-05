@@ -1,5 +1,28 @@
 {
-  "common": {
-    "sales": "مبيعات"
+  "sales": {
+    "mobile_number": "رقم الجوال",
+    "get_code": "الحصول على رمز",
+    "check_code": "التحقق من رمز",
+    "next": "التالي",
+    "back": "السابق",
+    "code_otp": "رمز OTP",
+    "resend_code": "أعد إرسال الرمز",
+    "quote_type": "نوع الباقة",
+    "email": "بريد إلكتروني",
+    "best_matching": "أفضل مطابقة",
+    "addons": "الإضافات",
+    "contact_support": "اتصل بالدعم",
+    "schedule_meeting": "ترتيب موعد للاجتماع",
+    "select": "أختر",
+    "check": "تاكيد",
+    "confirm_and_pay": "تاكيد و دفع",
+    "ar": "عربي",
+    "en": "أنجليزي",
+    "optional": "أختياري",
+    "companies": "شركات",
+    "offices": "مكاتب",
+    "real-estate": "العقارات",
+    "continue_counts": "أستمر و ادفع {total} ر.س",
+    "s_r": "ر.س"
   }
 }

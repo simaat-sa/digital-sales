@@ -1,14 +1,19 @@
 "use client";
 import { create } from "zustand";
-import yup from "yup";
 
 type ActionButton = "get_code" | "check_code" | "next" | "confirm_pay";
 
-type Wizards = "register" | "requirements" | "quotes" | "domain";
+export type Wizards = "register" | "requirements" | "quotes" | "domain";
 
 type QuotePlan = "personal" | "office" | "company";
 
-type FieldName = "mobileNumber" | "code" | "showCode" | "quotePlan" | "email";
+type FieldName =
+  | "mobileNumber"
+  | "code"
+  | "showCode"
+  | "quotePlan"
+  | "email"
+  | "domain";
 
 interface IRequestQuoteState {
   currentWizard: Wizards;
@@ -18,7 +23,9 @@ interface IRequestQuoteState {
   showCode: boolean;
   quotePlan: QuotePlan;
   email: string;
-  addons: string[];
+  addonsId: number | null;
+  addons: number[];
+  domain: string;
   actionButton: ActionButton;
   disableBtn: boolean;
 }
@@ -29,6 +36,7 @@ interface IRequestQuoteActions {
   _checkCode: () => void;
   _onUpdateWizardHistory: (wizard?: Wizards, isBack?: boolean) => void;
   onChange: (name: FieldName, value: string | number | boolean) => void;
+  onSelectAddon: (quoteId: number, addonId: number) => void;
   onTakeAction: (isBack?: boolean) => void;
 }
 
@@ -42,7 +50,9 @@ const useRequestQuoteService = create<IRequestQuote>((set, get) => ({
   showCode: false,
   quotePlan: "personal",
   email: "",
+  addonsId: null,
   addons: [],
+  domain: "",
   actionButton: "get_code",
   disableBtn: false,
   _setCurrentWizard(wizard) {
@@ -93,6 +103,26 @@ const useRequestQuoteService = create<IRequestQuote>((set, get) => ({
     return set(() => ({
       [name]: value,
     }));
+  },
+  onSelectAddon(quoteId, addonId) {
+    const addons = get().addons;
+
+    if (get()?.addonsId === quoteId) {
+      if (addons.includes(addonId)) {
+        return set(() => ({
+          addons: addons.filter((a) => a !== addonId),
+        }));
+      } else {
+        return set(() => ({
+          addons: [...addons, addonId],
+        }));
+      }
+    } else {
+      return set(() => ({
+        addonsId: quoteId,
+        addons: [addonId],
+      }));
+    }
   },
   onTakeAction(isBack) {
     if (!isBack) {

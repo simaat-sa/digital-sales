@@ -9,38 +9,49 @@ import {
 } from "@/shared/components/ui/select";
 import React from "react";
 import { useRequestQuoteService } from "../../_services/requestQuote";
+import HeightMotion from "@/shared/components/motions/HeighEffect";
+import { useLocale, useTranslations } from "next-intl";
+import { quotesData } from "../../_services/quotesData";
 
 export default function RequirementForm() {
   const { quotePlan, email, onChange } = useRequestQuoteService();
+  const t = useTranslations("sales");
+  const locale = useLocale();
+
   return (
-    <>
+    <HeightMotion>
       <div className="flex flex-col gap-4">
-        <Label>Quote Type</Label>
+        <Label>{t("quote_type")}</Label>
         <Select
           onValueChange={(value) => onChange("quotePlan", value)}
-          value={quotePlan}
+          value={quotePlan || "1"}
+          dir={locale === "ar" ? "rtl" : "ltr"}
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Theme" />
+            <SelectValue placeholder={t("quote_type")} />
           </SelectTrigger>
           <SelectContent>
-            {(["personal", "office", "company"] as (typeof quotePlan)[]).map(
-              (quote) => (
-                <SelectItem value={quote} onChange={() => {}} key={quote}>
-                  {quote}
-                </SelectItem>
-              )
-            )}
+            {quotesData.map(({ id, name }) => (
+              <SelectItem
+                value={String(id)}
+                onChange={() => onChange("quotePlan", id)}
+                key={String(id)}
+              >
+                {t(name as any)}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 mt-6">
         <div className="flex items-center justify-between gap-x-4">
-          <Label>Email</Label>
-          <Label className="text-xs text-slate-600 lowercase">(optional)</Label>
+          <Label>{t("email")}</Label>
+          <Label className="text-xs text-slate-600 lowercase">
+            ({t("optional")})
+          </Label>
         </div>
         <Input
-          placeholder="example@domain.com"
+          placeholder={t("email")}
           type="email"
           dir="ltr"
           value={email}
@@ -49,6 +60,6 @@ export default function RequirementForm() {
           }}
         />
       </div>
-    </>
+    </HeightMotion>
   );
 }

@@ -1,24 +1,16 @@
 import { Button } from "@/shared/components/ui/button";
 import React from "react";
-import { useRequestQuoteService } from "../../_services/requestQuote";
+import { Wizards, useRequestQuoteService } from "../../_services/requestQuote";
+import { useTranslations } from "next-intl";
 
 export default function ActionButton() {
-  const {
-    actionButton,
-    disableBtn,
-    currentWizard,
-    wizardHistory,
-    onTakeAction,
-  } = useRequestQuoteService();
-  console.log(
-    "🚀 ~ ActionButton ~ currentWizard:",
-    currentWizard,
-    wizardHistory
-  );
+  const { actionButton, currentWizard, onTakeAction } =
+    useRequestQuoteService();
+  const t = useTranslations("sales");
 
   return (
     <div className="w-full pt-8 border-t border-slate-200 flex items-center justify-end gap-4">
-      {currentWizard !== "register" ? (
+      {(["register", "requirements"] as Wizards[]).includes(currentWizard) ? (
         <Button
           onClick={(e) => {
             e.preventDefault();
@@ -27,7 +19,7 @@ export default function ActionButton() {
           aria-label="go back"
           variant="outline"
         >
-          Back
+          {t("back")}
         </Button>
       ) : null}
       <Button
@@ -36,12 +28,11 @@ export default function ActionButton() {
           onTakeAction();
         }}
         aria-label="register"
-        // disabled={disableBtn}
       >
-        {actionButton === "get_code" ? "Get code" : null}
-        {actionButton === "check_code" ? "Check code" : null}
-        {actionButton === "next" ? "Next" : null}
-        {actionButton === "confirm_pay" ? "Confirm and Pay" : null}
+        {actionButton === "get_code" ? t("get_code") : null}
+        {actionButton === "check_code" ? t("check_code") : null}
+        {actionButton === "next" ? t("next") : null}
+        {actionButton === "confirm_pay" ? t("confirm_and_pay") : null}
       </Button>
     </div>
   );

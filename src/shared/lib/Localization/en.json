@@ -1,5 +1,28 @@
 {
-  "common": {
-    "sales": "Sales"
+  "sales": {
+    "mobile_number": "Mobile Number",
+    "get_code": "Get code",
+    "check_code": "Check code",
+    "next": "next",
+    "back": "Back",
+    "code_otp": "Code OTP",
+    "resend_code": "Resend code",
+    "quote_type": "Quote Type",
+    "email": "Email",
+    "best_matching": "Best matching",
+    "addons": "addons",
+    "contact_support": "Contact Support",
+    "schedule_meeting": "Schedule meeting",
+    "select": "Select",
+    "check": "Check",
+    "confirm_and_pay": "Confirm and Pay",
+    "ar": "Arabic",
+    "en": "English",
+    "optional": "optional",
+    "companies": "Companies",
+    "offices": "Offices",
+    "real-estate": "Real-Estate",
+    "continue_counts": "Continue and Pay {total} S.R",
+    "s_r": "S.R"
   }
 }

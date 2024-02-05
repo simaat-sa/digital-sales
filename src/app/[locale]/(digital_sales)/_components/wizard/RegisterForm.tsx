@@ -2,44 +2,49 @@ import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import React from "react";
 import { useRequestQuoteService } from "../../_services/requestQuote";
+import HeightMotion from "@/shared/components/motions/HeighEffect";
+import { useTranslations } from "next-intl";
 
 export default function RegisterForm() {
   const { mobileNumber, showCode, code, onChange } = useRequestQuoteService();
+  const t = useTranslations("sales");
 
   return (
-    <div className="w-full flex flex-col gap-12 transition-all duration-300 delay-75">
-      <div className="flex flex-col gap-4">
-        <Label>Mobile number</Label>
-        <Input
-          placeholder="ex. +55 000 000 0000"
-          value={mobileNumber}
-          onChange={(e) => {
-            onChange("mobileNumber", e.target.value);
-          }}
-          className="rtl:direction-normal"
-          dir="ltr"
-        />
+    <HeightMotion>
+      <div className="w-full flex flex-col gap-12 transition-all duration-300 delay-75">
+        <div className="flex flex-col gap-4">
+          <Label>{t("mobile_number")}</Label>
+          <Input
+            placeholder={t("mobile_number")}
+            value={mobileNumber}
+            onChange={(e) => {
+              onChange("mobileNumber", e.target.value);
+            }}
+            className="rtl:direction-normal"
+            dir="ltr"
+          />
+        </div>
+        {showCode ? (
+          <HeightMotion>
+            <div className="flex flex-col gap-4">
+              <Label>{t("code_otp")}</Label>
+              <Input
+                placeholder="# # # #"
+                value={code}
+                onChange={(e) => {
+                  onChange("code", e.target.value);
+                }}
+                className="tracking-widest"
+                dir="ltr"
+                type="tel"
+              />
+              <span className="underline text-xs font-medium cursor-pointer text-gray-600 -mt-3">
+                {t("resend_code")}
+              </span>
+            </div>
+          </HeightMotion>
+        ) : null}
       </div>
-      {showCode ? (
-        <>
-          <div className="flex flex-col gap-4">
-            <Label>code OTP</Label>
-            <Input
-              placeholder="# # # #"
-              value={code}
-              onChange={(e) => {
-                onChange("code", e.target.value);
-              }}
-              className="tracking-widest"
-              dir="ltr"
-              type="tel"
-            />
-            <span className="underline text-xs font-medium cursor-pointer text-gray-600 -mt-3">
-              resend code
-            </span>
-          </div>
-        </>
-      ) : null}
-    </div>
+    </HeightMotion>
   );
 }

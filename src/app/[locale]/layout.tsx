@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import { LocaleType } from "@/shared/types/locale";
 import { NextIntlClientProvider, useMessages } from "next-intl";
 import "@/shared/assets/css/globals.css";
+import ReactQueryProvider from "@/shared/lib/ReactQueryProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,9 +25,11 @@ export default function RootLayout({
 
   return (
     <html lang={locale} dir={locale === "en" ? "ltr" : "rtl"}>
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning={true}>
         <NextIntlClientProvider messages={messages}>
-          <main>{children}</main>
+          <ReactQueryProvider>
+            <main>{children}</main>
+          </ReactQueryProvider>
         </NextIntlClientProvider>
       </body>
     </html>
