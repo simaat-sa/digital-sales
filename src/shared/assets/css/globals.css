@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "@/shared/assets/css/fonts.css";
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -72,5 +74,17 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: "URWGeometricArabic";
+    scroll-behavior: smooth;
+  }
+
+  body:lang(ar) {
+    direction: rtl;
+    text-align: right;
+  }
+
+  body:lang(en) {
+    direction: ltr;
+    text-align: left;
   }
 }

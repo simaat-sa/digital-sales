@@ -11,15 +11,25 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/shared/components/ui/accordion";
-import { useRequestQuoteService } from "../../_services/requestQuote";
+import { useRequestQuoteService } from "../../_services/requestQuoteService";
 import { useTranslations } from "next-intl";
 import { quotesData } from "../../_services/quotesData";
 import { VideoComponent } from "@/shared/components/VideoComponent";
+import FooterSales from "../FooterSales";
+import {
+  DialogDescription,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/shared/components/ui/dialog";
 
 const checkedIcon = "/assets/svg/icons/CheckBold.svg";
+const VideoStream = "/assets/svg/icons/video-stream.svg";
 
 export default function Quotes() {
-  const { quotePlan, addons, addonsId, onTakeAction, onSelectAddon } =
+  const { quotePlan, addons, onTakeAction, onSelectAddon } =
     useRequestQuoteService();
   const t = useTranslations("sales");
 
@@ -36,7 +46,7 @@ export default function Quotes() {
           )}
           key={String(id)}
         >
-          <div className="w-full flex flex-col justify-center gap-8 min-h-40">
+          <div className="w-full flex flex-col justify-center gap-4 min-h-40">
             <div className="flex flex-nowrap items-center gap-x-4">
               <h4 className="font-bold text-2xl">{t(name as any)}</h4>
               {String(id) === quotePlan ? (
@@ -51,8 +61,8 @@ export default function Quotes() {
             </div>
           </div>
           <Separator className="w-full mx-auto" />
-          <div className=" flex flex-col gap-3">
-            <ul className="list-none my-3">
+          <div className=" flex flex-col gap-4">
+            <ul className="list-none">
               {features.map((feat, index) => (
                 <li key={index} className="mb-4">
                   <div className="flex flex-nowrap items-center gap-x-3">
@@ -67,12 +77,35 @@ export default function Quotes() {
                 </li>
               ))}
             </ul>
+            <Dialog>
+              <DialogTrigger>
+                <div className="flex items-center gap-x-2">
+                  <Image
+                    src={VideoStream}
+                    alt="video stream"
+                    width={16}
+                    height={16}
+                  />
+                  <p className="underline text-sm">{t("watch_full_video")}</p>
+                </div>
+              </DialogTrigger>
+              <DialogContent className="w-screen h-[75vh]">
+                <DialogHeader>
+                  <DialogTitle>{t(name as any)}</DialogTitle>
+                </DialogHeader>
+                <DialogDescription className="my-0 py-0">
+                  <div className="w-full">
+                    <VideoComponent src="https://www.w3schools.com/html/mov_bbb.mp4" />
+                  </div>
+                </DialogDescription>
+              </DialogContent>
+            </Dialog>
             <div className="w-full h-48">
-              <VideoComponent src="https://www.youtube.com/watch?v=hdSntGFXgSE" />
+              <VideoComponent src="https://www.w3schools.com/html/mov_bbb.mp4" />
             </div>
             <Accordion type="single" collapsible>
               <AccordionItem value="item-1">
-                <AccordionTrigger>Addons</AccordionTrigger>
+                <AccordionTrigger>{t("addons")}</AccordionTrigger>
                 <AccordionContent>
                   <div className="flex flex-wrap w-full gap-2">
                     {addonsList.map((addon, t) => (
@@ -87,7 +120,7 @@ export default function Quotes() {
                           onCheckedChange={() => {
                             onSelectAddon(id, addon.id);
                           }}
-                          checked={addons.includes(addon.id) && addonsId === id}
+                          checked={addons.get(id)?.includes(addon.id)}
                         />
                         <div className="flex flex-nowrap justify-between flex-1 px-4">
                           <span className="flex-1 cursor-pointer">
@@ -123,18 +156,16 @@ export default function Quotes() {
             }}
           >
             {t("continue_counts", {
-              total:
-                quotesData.find((a) => a.id === addonsId) && addonsId === id
-                  ? quotesData
-                      .find((a) => a.id === addonsId)!
-                      .addons.filter((s) => addons.includes(s.id))
-                      .map((a) => a.price)
-                      ?.reduce((a, b) => a + b) + price
-                  : price,
+              total: addons.has(id)
+                ? addonsList
+                    .filter((a) => addons.get(id)?.includes(a.id))
+                    .reduce((a, b) => a + b.price, price)
+                : price,
             })}
           </Button>
         </div>
       ))}
+      <FooterSales />
     </div>
   );
 }

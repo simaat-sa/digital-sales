@@ -6,14 +6,8 @@ export function VideoComponent({
   thumb?: string;
 }) {
   return (
-    <video
-      controls
-      preload="none"
-      className="w-full h-full"
-      autoPlay={false}
-      playsInline
-    >
-      <source src={src} />
+    <video controls className="w-full h-full" autoPlay={false} playsInline>
+      <source src={src} type="video/mp4" />
       {thumb ? <source src={thumb} type="video/ogg" /> : null}
       Your browser does not support the video tag.
     </video>

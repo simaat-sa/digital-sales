@@ -1,19 +1,22 @@
 "use client";
-import React from "react";
-import { useRequestQuoteService } from "../../_services/requestQuote";
+import React, { useEffect } from "react";
+import { useRequestQuoteService } from "../../_services/requestQuoteService";
 import ActionButton from "./ActionButton";
 import RegisterForm from "./RegisterForm";
 import RequirementForm from "./RequirementForm";
 import CheckDomain from "./CheckDomain";
 import Quotes from "./Quotes";
 import Image from "next/image";
-import { Button } from "@/shared/components/ui/button";
 import FooterSales from "../FooterSales";
-
+import { quotesData } from "../../_services/quotesData";
 const planningPrice = "/assets/flat-quotes.png";
 
 export default function Wizard() {
-  const { currentWizard } = useRequestQuoteService();
+  const { currentWizard, setAllAddons } = useRequestQuoteService();
+
+  useEffect(() => {
+    setAllAddons(quotesData);
+  }, [setAllAddons]);
 
   return (
     <>

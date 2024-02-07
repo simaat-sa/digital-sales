@@ -1,12 +1,14 @@
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import React from "react";
-import { useRequestQuoteService } from "../../_services/requestQuote";
+import { useRequestQuoteService } from "../../_services/requestQuoteService";
 import HeightMotion from "@/shared/components/motions/HeighEffect";
 import { useTranslations } from "next-intl";
+import { cn } from "@/shared/lib/utils";
 
 export default function RegisterForm() {
-  const { mobileNumber, showCode, code, onChange } = useRequestQuoteService();
+  const { mobileNumber, showCode, code, onChange, errors } =
+    useRequestQuoteService();
   const t = useTranslations("sales");
 
   return (
@@ -20,7 +22,9 @@ export default function RegisterForm() {
             onChange={(e) => {
               onChange("mobileNumber", e.target.value);
             }}
-            className="rtl:direction-normal"
+            className={cn("rtl:direction-normal", {
+              "border-red-600": errors.mobileNumber.length ? true : false,
+            })}
             dir="ltr"
           />
         </div>

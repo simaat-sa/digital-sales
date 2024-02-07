@@ -1,4 +1,4 @@
-type QuoteModel = {
+export type QuoteModel = {
   id: number;
   name: string;
   features: string[];

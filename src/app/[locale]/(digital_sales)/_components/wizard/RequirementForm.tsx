@@ -8,13 +8,14 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import React from "react";
-import { useRequestQuoteService } from "../../_services/requestQuote";
+import { useRequestQuoteService } from "../../_services/requestQuoteService";
 import HeightMotion from "@/shared/components/motions/HeighEffect";
 import { useLocale, useTranslations } from "next-intl";
 import { quotesData } from "../../_services/quotesData";
+import { cn } from "@/shared/lib/utils";
 
 export default function RequirementForm() {
-  const { quotePlan, email, onChange } = useRequestQuoteService();
+  const { quotePlan, email, onChange, errors } = useRequestQuoteService();
   const t = useTranslations("sales");
   const locale = useLocale();
 
@@ -27,7 +28,11 @@ export default function RequirementForm() {
           value={quotePlan || "1"}
           dir={locale === "ar" ? "rtl" : "ltr"}
         >
-          <SelectTrigger className="w-full">
+          <SelectTrigger
+            className={cn("w-full", {
+              "border-red-600": errors.quotePlan.length ? true : false,
+            })}
+          >
             <SelectValue placeholder={t("quote_type")} />
           </SelectTrigger>
           <SelectContent>
@@ -58,6 +63,9 @@ export default function RequirementForm() {
           onChange={(e) => {
             onChange("email", e.target.value);
           }}
+          className={cn({
+            "border-red-600": errors.email.length ? true : false,
+          })}
         />
       </div>
     </HeightMotion>
