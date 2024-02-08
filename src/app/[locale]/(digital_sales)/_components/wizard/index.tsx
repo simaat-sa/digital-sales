@@ -9,6 +9,7 @@ import Quotes from "./Quotes";
 import Image from "next/image";
 import FooterSales from "../FooterSales";
 import { quotesData } from "../../_services/quotesData";
+
 const planningPrice = "/assets/flat-quotes.png";
 
 export default function Wizard() {

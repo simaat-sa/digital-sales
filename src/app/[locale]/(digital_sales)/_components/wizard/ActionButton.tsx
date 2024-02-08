@@ -1,6 +1,9 @@
 import { Button } from "@/shared/components/ui/button";
 import React from "react";
-import { Wizards, useRequestQuoteService } from "../../_services/requestQuoteService";
+import {
+  Wizards,
+  useRequestQuoteService,
+} from "../../_services/requestQuoteService";
 import { useTranslations } from "next-intl";
 
 export default function ActionButton() {
@@ -9,7 +12,7 @@ export default function ActionButton() {
   const t = useTranslations("sales");
 
   return (
-    <div className="w-full pt-8 border-t border-slate-200 flex items-center justify-end gap-4">
+    <div className="w-full pt-8 border-t border-slate-200 flex items-center gap-4">
       {(["register", "requirements"] as Wizards[]).includes(currentWizard) ? (
         <Button
           onClick={(e) => {

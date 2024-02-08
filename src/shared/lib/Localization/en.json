@@ -24,6 +24,12 @@
     "real-estate": "Real-Estate",
     "continue_counts": "Continue and Pay {total} S.R",
     "s_r": "S.R",
-    "watch_full_video": "Watch the full video"
+    "watch_full_video": "Watch the full video",
+    "business_type": "Business type"
+  },
+  "validations": {
+    "quote_type_is_required": "Business Type is required",
+    "email_not_valid": "Email is not valid",
+    "mobile_number_not_valid": "Mobile number is not valid"
   }
 }

@@ -56,7 +56,7 @@ interface IRequestQuoteActions {
 interface IRequestQuote extends IRequestQuoteState, IRequestQuoteActions {}
 
 const useRequestQuoteService = create<IRequestQuote>((set, get) => ({
-  currentWizard: "quotes",
+  currentWizard: "register",
   wizardHistory: [],
   mobileNumber: "",
   code: "",
@@ -124,9 +124,7 @@ const useRequestQuoteService = create<IRequestQuote>((set, get) => ({
   },
   _isMobileNumberValid() {
     let mobileNumber = get().mobileNumber;
-    console.log("🚀 ~ _isMobileNumberValid ~ mobileNumber:", mobileNumber);
     const isValid = SAUDI_ARABIA_MOBILE_NUMBER_REGEX.test(mobileNumber);
-    console.log("🚀 ~ _isMobileNumberValid ~ isValid:", isValid);
 
     if (!isValid) {
       set(() => ({
