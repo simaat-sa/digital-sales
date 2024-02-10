@@ -29,7 +29,7 @@ const checkedIcon = "/assets/svg/icons/CheckBold.svg";
 const VideoStream = "/assets/svg/icons/video-stream.svg";
 
 export default function Quotes() {
-  const { quotePlan, addons, onTakeAction, onSelectAddon } =
+  const { quotePlan, addons, onTakeAction, onSelectQuote, onSelectAddon } =
     useRequestQuoteService();
   const t = useTranslations("sales");
 
@@ -50,7 +50,7 @@ export default function Quotes() {
             <div className="flex flex-nowrap items-center gap-x-4">
               <h4 className="font-bold text-2xl">{t(name as any)}</h4>
               {String(id) === quotePlan ? (
-                <span className="text-xs border rounded-md shadow p-2">
+                <span className="text-sm border rounded-md shadow-md p-2">
                   {t("best_matching")}
                 </span>
               ) : null}
@@ -89,21 +89,21 @@ export default function Quotes() {
                   <p className="underline text-sm">{t("watch_full_video")}</p>
                 </div>
               </DialogTrigger>
-              <DialogContent className="w-screen h-[75vh]">
+              <DialogContent className="w-screen">
                 <DialogHeader>
                   <DialogTitle>{t(name as any)}</DialogTitle>
                 </DialogHeader>
                 <DialogDescription className="my-0 py-0">
-                  <div className="w-full">
+                  <div className="w-full overflow-hidden">
                     <VideoComponent src="https://www.w3schools.com/html/mov_bbb.mp4" />
                   </div>
                 </DialogDescription>
               </DialogContent>
             </Dialog>
-            <div className="w-full h-48">
+            <div className="w-full max-h-48">
               <VideoComponent src="https://www.w3schools.com/html/mov_bbb.mp4" />
             </div>
-            <Accordion type="single" collapsible>
+            <Accordion type="single" collapsible className="mt-4 lg:mt-0">
               <AccordionItem value="item-1">
                 <AccordionTrigger>{t("addons")}</AccordionTrigger>
                 <AccordionContent>
@@ -148,20 +148,23 @@ export default function Quotes() {
             </Accordion>
           </div>
           <Button
-            className="bg-black text-white w-full h-14 rounded-xl text-base font-semibold text-center"
+            className="w-full h-14 rounded-xl text-lg font-semibold text-center flex flex-nowrap gap-x-2 items-baseline"
             type="button"
             onClick={(e) => {
               e.preventDefault();
+              onSelectQuote(id);
               onTakeAction();
             }}
           >
-            {t("continue_counts", {
-              total: addons.has(id)
+            {t("confirm_and_pay")}
+            <span className="text-2xl">
+              {addons.has(id)
                 ? addonsList
                     .filter((a) => addons.get(id)?.includes(a.id))
                     .reduce((a, b) => a + b.price, price)
-                : price,
-            })}
+                : price}
+            </span>
+            {t("s_r")}
           </Button>
         </div>
       ))}

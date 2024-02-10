@@ -26,7 +26,7 @@ interface IRequestQuoteState {
   showCode: boolean;
   quotePlan: QuotePlan;
   email: string;
-  addonsId: number | null;
+  quoteSelected: number | null;
   addons: Map<string | number, any[]>;
   domain: string;
   actionButton: ActionButton;
@@ -50,6 +50,7 @@ interface IRequestQuoteActions {
   setAllAddons: (listAddons: QuoteModel[]) => void;
   onChange: (name: FieldName, value: string | number | boolean) => void;
   onSelectAddon: (quoteId: number, addonId: number) => void;
+  onSelectQuote: (id: number) => void;
   onTakeAction: (isBack?: boolean) => void;
 }
 
@@ -63,7 +64,7 @@ const useRequestQuoteService = create<IRequestQuote>((set, get) => ({
   showCode: false,
   quotePlan: "",
   email: "",
-  addonsId: null,
+  quoteSelected: null,
   addons: new Map(),
   domain: "",
   actionButton: "get_code",
@@ -203,6 +204,11 @@ const useRequestQuoteService = create<IRequestQuote>((set, get) => ({
 
     set(() => ({
       addons: allAddons.set(quoteId, allAddons.get(quoteId)!),
+    }));
+  },
+  onSelectQuote(id) {
+    set(() => ({
+      quoteSelected: id,
     }));
   },
   onTakeAction(isBack) {

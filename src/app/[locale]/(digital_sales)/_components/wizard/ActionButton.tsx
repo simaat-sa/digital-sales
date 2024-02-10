@@ -13,7 +13,7 @@ export default function ActionButton() {
 
   return (
     <div className="w-full pt-8 border-t border-slate-200 flex items-center gap-4">
-      {(["register", "requirements"] as Wizards[]).includes(currentWizard) ? (
+      {currentWizard === "requirements" ? (
         <Button
           onClick={(e) => {
             e.preventDefault();

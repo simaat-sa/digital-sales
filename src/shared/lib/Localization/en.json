@@ -1,5 +1,6 @@
 {
   "sales": {
+    "simaat_digital_sales": "Simaat - digital sales",
     "mobile_number": "Mobile Number",
     "get_code": "Get code",
     "check_code": "Check code",
@@ -22,7 +23,7 @@
     "companies": "Companies",
     "offices": "Offices",
     "real-estate": "Real-Estate",
-    "continue_counts": "Continue and Pay {total} S.R",
+    "continue_counts": "Continue and Pay",
     "s_r": "S.R",
     "watch_full_video": "Watch the full video",
     "business_type": "Business type"

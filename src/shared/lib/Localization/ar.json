@@ -1,5 +1,6 @@
 {
   "sales": {
+    "simaat_digital_sales": "المبيعات الرقمية",
     "mobile_number": "رقم الجوال",
     "get_code": "الحصول على رمز",
     "check_code": "التحقق من رمز",
@@ -22,7 +23,7 @@
     "companies": "شركات",
     "offices": "مكاتب",
     "real-estate": "العقارات",
-    "continue_counts": "أستمر و ادفع {total} ر.س",
+    "continue_counts": "أستمر و ادفع",
     "s_r": "ر.س",
     "watch_full_video": "مشاهدة الديمو كاملا",
     "business_type": "نوع العمل"

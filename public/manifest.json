@@ -1,0 +1,25 @@
+{
+  "theme_color": "#eaac27",
+  "background_color": "#f9f9f9",
+  "icons": [
+    {
+      "purpose": "maskable",
+      "sizes": "512x512",
+      "src": "/assets/brand/icon512_maskable.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "any",
+      "sizes": "512x512",
+      "src": "/assets/brand/icon512_rounded.png",
+      "type": "image/png"
+    }
+  ],
+  "orientation": "any",
+  "display": "standalone",
+  "dir": "auto",
+  "lang": "en",
+  "name": "simaat - digital sales",
+  "short_name": "simaat digital sales",
+  "start_url": "/"
+}

@@ -10,7 +10,7 @@ import Image from "next/image";
 import FooterSales from "../FooterSales";
 import { quotesData } from "../../_services/quotesData";
 
-const planningPrice = "/assets/flat-quotes.png";
+const planningPrice = "/assets/brand/simaat_logo.svg";
 
 export default function Wizard() {
   const { currentWizard, setAllAddons } = useRequestQuoteService();
