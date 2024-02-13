@@ -9,7 +9,6 @@ export default async function middleware(request: NextRequest) {
 
   // Step 1: Use the incoming request (example)
   const localeHeader = request.headers.get(LOCALE_HEADER) || defaultLocale;
-  console.log("🚀 ~ middleware ~ localeHeader:", localeHeader);
 
   // Step 2: Create and call the next-intl middleware (example)
   const handleI18nRouting = createIntlMiddleware({

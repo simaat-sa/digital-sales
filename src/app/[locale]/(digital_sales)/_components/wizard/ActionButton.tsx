@@ -1,9 +1,6 @@
 import { Button } from "@/shared/components/ui/button";
 import React from "react";
-import {
-  Wizards,
-  useRequestQuoteService,
-} from "../../_services/requestQuoteService";
+import { useRequestQuoteService } from "../../_services/requestQuoteService";
 import { useTranslations } from "next-intl";
 
 export default function ActionButton() {

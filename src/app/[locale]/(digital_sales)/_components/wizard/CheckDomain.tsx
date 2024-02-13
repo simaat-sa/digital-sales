@@ -22,7 +22,7 @@ export default function CheckDomain() {
             domain=".simaat.app"
           />
         </div>
-        <Button variant="secondary">{t("check")}</Button>
+        <Button variant="outline">{t("check")}</Button>
       </div>
     </HeightMotion>
   );
