@@ -3,6 +3,7 @@ import { useRequestQuoteService } from "../../_services/requestQuoteService";
 import HeightMotion from "@/shared/components/motions/HeighEffect";
 import { useTranslations } from "next-intl";
 import InputBase from "@/shared/components/Inputs/InputBase";
+import InputMobileNumber from "@/shared/components/Inputs/InputMobileNumber";
 
 export default function RegisterForm() {
   const { mobileNumber, showCode, code, onChange, errors } =
@@ -12,13 +13,11 @@ export default function RegisterForm() {
 
   return (
     <div className="w-full flex flex-col gap-12 transition-all duration-300 delay-75">
-      <InputBase
+      <InputMobileNumber
         value={mobileNumber}
         onChange={(e) => {
           onChange("mobileNumber", e.target.value);
         }}
-        placeholder={t("mobile_number")}
-        label={t("mobile_number")}
         error={
           errors.mobileNumber.length
             ? validations("mobile_number_not_valid")

@@ -9,7 +9,6 @@ export default function ActionButton() {
   const t = useTranslations("sales");
 
   return (
-    // <div className="w-full pt-8 border-t border-slate-200 flex justify-between items-center gap-4">
     <div className="w-full flex justify-between items-center gap-4">
       <Button
         onClick={(e) => {
@@ -23,7 +22,7 @@ export default function ActionButton() {
         {actionButton === "next" ? t("next") : null}
         {actionButton === "confirm_pay" ? t("confirm_and_pay") : null}
       </Button>
-      {currentWizard === "requirements" ? (
+      {currentWizard !== "quotes" ? (
         <Button
           onClick={(e) => {
             e.preventDefault();

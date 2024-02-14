@@ -1,6 +1,9 @@
 "use client";
 import React, { useEffect } from "react";
-import { useRequestQuoteService } from "../../_services/requestQuoteService";
+import {
+  Wizards,
+  useRequestQuoteService,
+} from "../../_services/requestQuoteService";
 import ActionButton from "./ActionButton";
 import RegisterForm from "./RegisterForm";
 import RequirementForm from "./RequirementForm";
@@ -9,6 +12,7 @@ import Quotes from "./Quotes";
 import Image from "next/image";
 import FooterSales from "../FooterSales";
 import { quotesData } from "../../_services/quotesData";
+import Summary from "./Summary";
 
 const planningPrice = "/assets/brand/simaat_logo.svg";
 
@@ -21,14 +25,19 @@ export default function Wizard() {
 
   return (
     <>
-      {currentWizard !== "quotes" ? (
+      {(["register", "requirements", "summary"] as Wizards[]).includes(
+        currentWizard
+      ) ? (
         <div className="absolute top-0 right-0 bottom-0 left-0 lg:grid-cols-2 grid-cols-1 z-0 hidden lg:grid">
           <div className="col-span-1 bg-gray-100"></div>
           <div className="col-span-1"></div>
         </div>
       ) : null}
+
       <div className="w-full lg:container mx-auto z-10 relative">
-        {currentWizard !== "quotes" ? (
+        {(["register", "requirements", "domain"] as Wizards[]).includes(
+          currentWizard
+        ) ? (
           <div className="w-full min-h-screen grid grid-cols-2">
             <div className="h-full items-center justify-center hidden lg:flex">
               <Image
@@ -50,7 +59,9 @@ export default function Wizard() {
             </div>
           </div>
         ) : null}
+
         {currentWizard === "quotes" ? <Quotes /> : null}
+        {currentWizard === "summary" ? <Summary /> : null}
       </div>
     </>
   );

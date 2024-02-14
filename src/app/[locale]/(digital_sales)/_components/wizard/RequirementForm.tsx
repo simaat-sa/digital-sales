@@ -19,53 +19,56 @@ export default function RequirementForm() {
   const t = useTranslations("sales");
   const validations = useTranslations("validations");
   const locale = useLocale();
+  console.log("quotePlan", quotePlan);
 
   return (
     <HeightMotion>
-      <div className="flex flex-col gap-4 mb-4">
-        <Label>{t("business_type")}</Label>
-        <Select
-          onValueChange={(value) => onChange("quotePlan", value)}
-          value={quotePlan || "1"}
-          dir={locale === "ar" ? "rtl" : "ltr"}
-        >
-          <SelectTrigger
-            className={cn("w-full", {
-              "border-red-600": errors.quotePlan.length ? true : false,
-            })}
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4">
+          <Label>{t("business_needed")}</Label>
+          <Select
+            defaultValue=""
+            onValueChange={(value) => onChange("quotePlan", value)}
+            value={quotePlan || "1"}
+            dir={locale === "ar" ? "rtl" : "ltr"}
           >
-            <SelectValue placeholder={t("quote_type")} />
-          </SelectTrigger>
-          <SelectContent>
-            {quotesData.map(({ id, name }) => (
-              <SelectItem
-                value={String(id)}
-                onChange={() => onChange("quotePlan", id)}
-                key={String(id)}
-              >
-                {t(name as any)}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        {errors.quotePlan.length ? (
-          <p className="text-sm text-red-600 -mt-4">
-            {validations("quote_type_is_required")}
-          </p>
-        ) : null}
+            <SelectTrigger
+              className={cn("w-full", {
+                "border-red-600": errors.quotePlan.length ? true : false,
+              })}
+            >
+              <SelectValue placeholder={t("quote_type")} />
+            </SelectTrigger>
+            <SelectContent>
+              {quotesData.map(({ id, business_need_label }) => (
+                <SelectItem
+                  value={String(id)}
+                  onChange={() => onChange("quotePlan", id)}
+                  key={String(id)}
+                >
+                  {t(business_need_label as any)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {errors.quotePlan.length ? (
+            <p className="text-sm text-red-600 -mt-4">
+              {validations("quote_type_is_required")}
+            </p>
+          ) : null}
+        </div>
+        <InputBase
+          value={email}
+          onChange={(e) => {
+            onChange("email", e.target.value);
+          }}
+          placeholder={t("email")}
+          label={t("email")}
+          error={errors.email.length ? validations("email_not_valid") : ""}
+          type="email"
+          dir="ltr"
+        />
       </div>
-      <InputBase
-        value={email}
-        onChange={(e) => {
-          onChange("email", e.target.value);
-        }}
-        placeholder={t("email")}
-        label={t("email")}
-        hintLabel={`(${t("optional")})`}
-        error={errors.email.length ? validations("email_not_valid") : ""}
-        type="email"
-        dir="ltr"
-      />
     </HeightMotion>
   );
 }

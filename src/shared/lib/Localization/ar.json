@@ -26,7 +26,21 @@
     "continue_counts": "أستمر و ادفع",
     "s_r": "ر.س",
     "watch_full_video": "مشاهدة الديمو كاملا",
-    "business_type": "نوع العمل"
+    "business_type": "نوع العمل",
+    "business_needed": "حدد أحتياجتك",
+    "real-estate_business_need": "باقة افراد",
+    "offices_business_need": "باقة مكاتب",
+    "companies_business_need": "باقة شركات",
+    "subscribe_now": "أشترك الأن",
+    "presentation_video": "فيديو تقديمي (15 ثانيه)",
+    "demo_video": "عرض الديمو (4 دقايق)",
+    "quotes_title": "اختر خطة لعملك",
+    "order_invoice": "order_invoice",
+    "summary_order": "ملخص الطلب",
+    "addons_hint": "سوف تدفع الإضافات مرة واحدة فقط.",
+    "total": "الأجمالي",
+    "payment": "طرق الدفع",
+    "promo_code": "رمز الخصم"
   },
   "validations": {
     "quote_type_is_required": "نوع العمل مطلوب",

@@ -6,7 +6,12 @@ import { QuoteModel } from "./quotesData";
 
 type ActionButton = "get_code" | "check_code" | "next" | "confirm_pay";
 
-export type Wizards = "register" | "requirements" | "quotes" | "domain";
+export type Wizards =
+  | "register"
+  | "requirements"
+  | "quotes"
+  | "domain"
+  | "summary";
 
 type QuotePlan = "personal" | "office" | "company" | string;
 
@@ -16,7 +21,8 @@ type FieldName =
   | "showCode"
   | "quotePlan"
   | "email"
-  | "domain";
+  | "domain"
+  | "promoCode";
 
 interface IRequestQuoteState {
   currentWizard: Wizards;
@@ -31,6 +37,9 @@ interface IRequestQuoteState {
   domain: string;
   actionButton: ActionButton;
   disableBtn: boolean;
+  paymentMonths: number;
+  promoCode: string;
+  promoCodeValid: boolean;
   errors: {
     mobileNumber: string;
     code: string;
@@ -57,7 +66,7 @@ interface IRequestQuoteActions {
 interface IRequestQuote extends IRequestQuoteState, IRequestQuoteActions {}
 
 const useRequestQuoteService = create<IRequestQuote>((set, get) => ({
-  currentWizard: "register",
+  currentWizard: "summary",
   wizardHistory: [],
   mobileNumber: "",
   code: "",
@@ -69,6 +78,9 @@ const useRequestQuoteService = create<IRequestQuote>((set, get) => ({
   domain: "",
   actionButton: "get_code",
   disableBtn: false,
+  paymentMonths: 1,
+  promoCode: "",
+  promoCodeValid: false,
   errors: {
     mobileNumber: "",
     code: "",

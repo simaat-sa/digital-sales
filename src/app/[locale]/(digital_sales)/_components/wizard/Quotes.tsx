@@ -1,16 +1,10 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Separator } from "@/shared/components/ui/separator";
 import { Button } from "@/shared/components/ui/button";
 import { Label } from "@/shared/components/ui/label";
 import { cn } from "@/shared/lib/utils";
 import { Checkbox } from "@/shared/components/ui/checkbox";
 import Image from "next/image";
-import {
-  AccordionContent,
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/shared/components/ui/accordion";
 import { useRequestQuoteService } from "../../_services/requestQuoteService";
 import { useTranslations } from "next-intl";
 import { quotesData } from "../../_services/quotesData";
@@ -26,7 +20,7 @@ import {
 } from "@/shared/components/ui/dialog";
 
 const checkedIcon = "/assets/svg/icons/CheckBold.svg";
-const VideoStream = "/assets/svg/icons/video-stream.svg";
+const VideoStream = "/assets/svg/icons/media-player.svg";
 
 export default function Quotes() {
   const { quotePlan, addons, onTakeAction, onSelectQuote, onSelectAddon } =
@@ -34,141 +28,171 @@ export default function Quotes() {
   const t = useTranslations("sales");
 
   return (
-    <div className="w-full min-h-screen grid grid-cols-12 items-center gap-6 py-8 px-4 md:px-2 lg:px-0">
-      {quotesData.map(({ id, name, features, addons: addonsList, price }) => (
-        <div
-          className={cn(
-            "flex flex-col gap-y-3 shadow-md rounded-3xl overflow-hidden transition-colors duration-150 bg-white p-4 col-span-12 md:col-span-6 lg:col-span-4",
-            {
-              "bg-gradient-to-r from-slate-200 to-gray-100 shadow-lg":
-                String(id) === quotePlan,
-            }
-          )}
-          key={String(id)}
-        >
-          <div className="w-full flex flex-col justify-center gap-4 min-h-40">
-            <div className="flex flex-nowrap items-center gap-x-4">
-              <h4 className="font-bold text-2xl">{t(name as any)}</h4>
-              {String(id) === quotePlan ? (
-                <span className="text-sm border rounded-md shadow-md p-2">
-                  {t("best_matching")}
-                </span>
-              ) : null}
-            </div>
-            <div className="flex items-center flex-nowrap gap-x-4">
-              <h4 className="text-5xl font-extrabold">{price}</h4>
-              <span>{t("s_r")}</span>
-            </div>
-          </div>
-          <Separator className="w-full mx-auto" />
-          <div className=" flex flex-col gap-4">
-            <ul className="list-none">
-              {features.map((feat, index) => (
-                <li key={index} className="mb-4">
-                  <div className="flex flex-nowrap items-center gap-x-3">
-                    <Image
-                      src={checkedIcon}
-                      alt={"checked"}
-                      width={16}
-                      height={16}
-                    />
-                    <Label className="text-base font-medium">{feat}</Label>
-                  </div>
-                </li>
-              ))}
-            </ul>
-            <Dialog>
-              <DialogTrigger>
-                <div className="flex items-center gap-x-2">
-                  <Image
-                    src={VideoStream}
-                    alt="video stream"
-                    width={16}
-                    height={16}
-                  />
-                  <p className="underline text-sm">{t("watch_full_video")}</p>
-                </div>
-              </DialogTrigger>
-              <DialogContent className="w-screen">
-                <DialogHeader>
-                  <DialogTitle>{t(name as any)}</DialogTitle>
-                </DialogHeader>
-                <DialogDescription className="my-0 py-0">
-                  <div className="w-full overflow-hidden">
-                    <VideoComponent src="https://www.w3schools.com/html/mov_bbb.mp4" />
-                  </div>
-                </DialogDescription>
-              </DialogContent>
-            </Dialog>
-            <div className="w-full max-h-48">
-              <VideoComponent src="https://www.w3schools.com/html/mov_bbb.mp4" />
-            </div>
-            <Accordion type="single" collapsible className="mt-4 lg:mt-0">
-              <AccordionItem value="item-1">
-                <AccordionTrigger>{t("addons")}</AccordionTrigger>
-                <AccordionContent>
-                  <div className="flex flex-wrap w-full gap-2">
-                    {addonsList.map((addon, t) => (
-                      <Label
-                        className="w-full flex flex-nowrap content-center items-center rounded-xl border shadow p-2 cursor-pointer"
-                        key={t}
-                        htmlFor={`${String(`${id} t_${t}`)}`}
-                      >
-                        <Checkbox
-                          id={String(`${id} t_${t}`)}
-                          className="w-6 h-6 rounded-sm"
-                          onCheckedChange={() => {
-                            onSelectAddon(id, addon.id);
-                          }}
-                          checked={addons.get(id)?.includes(addon.id)}
-                        />
-                        <div className="flex flex-nowrap justify-between flex-1 px-4">
-                          <span className="flex-1 cursor-pointer">
-                            {addon.name}
-                          </span>
-                          <span>
-                            <b>{addon.price}</b> $
-                          </span>
-                        </div>
-                      </Label>
-                    ))}
-                  </div>
-                  {name === "companies" ? (
-                    <div className="flex flex-col gap-4 mt-6 p-2">
-                      <a href="#" className="underline">
-                        {t("contact_support")}
-                      </a>
-                      <a href="#" className="underline">
-                        {t("schedule_meeting")}
-                      </a>
-                    </div>
+    <>
+      <div className="flex justify-between w-full py-8">
+        <h2 className="text-3xl font-semibold">{t("quotes_title")}</h2>
+        <Button variant="outline">{t("back")}</Button>
+      </div>
+      <div className=" grid grid-cols-12 items-center gap-6 px-4 md:px-2 lg:px-0">
+        {quotesData.map(
+          ({ id, name, features, addons: addonsList, price, description }) => (
+            <div
+              className={cn(
+                "flex flex-col gap-y-3 shadow-md rounded-3xl overflow-hidden transition-colors duration-150 bg-white p-4 col-span-12 md:col-span-6 lg:col-span-4 border",
+                {
+                  "bg-gradient-to-r from-slate-200 to-gray-100 shadow-lg":
+                    String(id) === quotePlan,
+                }
+              )}
+              key={String(id)}
+            >
+              <div className="w-full flex flex-col justify-center gap-4 min-h-40">
+                <div className="flex flex-nowrap items-center gap-x-4">
+                  <h4 className="font-bold text-2xl">{t(name as any)}</h4>
+                  {String(id) === quotePlan ? (
+                    <span className="text-sm border rounded-md shadow-md p-2">
+                      {t("best_matching")}
+                    </span>
                   ) : null}
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </div>
-          <Button
-            className="w-full h-14 rounded-xl text-lg font-semibold text-center flex flex-nowrap gap-x-2 items-baseline"
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              onSelectQuote(id);
-              onTakeAction();
-            }}
-          >
-            {t("confirm_and_pay")}
-            <span className="text-2xl">
-              {addons.has(id)
-                ? addonsList
-                    .filter((a) => addons.get(id)?.includes(a.id))
-                    .reduce((a, b) => a + b.price, price)
-                : price}
-            </span>
-            {t("s_r")}
-          </Button>
-        </div>
-      ))}
-      <FooterSales />
-    </div>
+                </div>
+                <div className="flex items-center flex-nowrap gap-x-4">
+                  <h4 className="text-5xl font-extrabold">{price}</h4>
+                  <span>{t("s_r")}</span>
+                </div>
+              </div>
+              <Separator className="w-full mx-auto" />
+              <div className=" flex flex-col gap-6">
+                <p>{description}</p>
+                <ul className="list-none">
+                  {features.map((feat, index) => (
+                    <li
+                      key={index}
+                      className={cn("mb-4", {
+                        "mb-0": features.length - 1 === index,
+                      })}
+                    >
+                      <div className="flex flex-nowrap items-center gap-x-3">
+                        <Image
+                          src={checkedIcon}
+                          alt={"checked"}
+                          width={24}
+                          height={24}
+                        />
+                        <Label className="text-base font-medium">{feat}</Label>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+                <Fragment>
+                  <Dialog>
+                    <DialogTrigger className="w-9/12">
+                      <Button
+                        variant="outline"
+                        className="flex justify-start gap-x-6 p-6 w-full border-2"
+                      >
+                        <Image
+                          src={VideoStream}
+                          alt="video stream"
+                          width={24}
+                          height={24}
+                        />
+                        <span>{t("presentation_video")}</span>
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="w-screen">
+                      <DialogHeader>
+                        <DialogTitle>{t("presentation_video")}</DialogTitle>
+                      </DialogHeader>
+                      <DialogDescription className="my-0 py-0">
+                        <div className="w-full overflow-hidden">
+                          <VideoComponent src="https://www.w3schools.com/html/mov_bbb.mp4" />
+                        </div>
+                      </DialogDescription>
+                    </DialogContent>
+                  </Dialog>
+                  <Dialog>
+                    <DialogTrigger className="w-9/12">
+                      <Button
+                        variant="outline"
+                        className="flex justify-start gap-x-6 p-6 w-full border-2"
+                      >
+                        <Image
+                          src={VideoStream}
+                          alt="video stream"
+                          width={24}
+                          height={24}
+                        />
+                        <span>{t("demo_video")}</span>
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="w-screen">
+                      <DialogHeader>
+                        <DialogTitle>{t("demo_video")}</DialogTitle>
+                      </DialogHeader>
+                      <DialogDescription className="my-0 py-0">
+                        <div className="w-full overflow-hidden">
+                          <VideoComponent src="https://www.w3schools.com/html/mov_bbb.mp4" />
+                        </div>
+                      </DialogDescription>
+                    </DialogContent>
+                  </Dialog>
+                </Fragment>
+                <div className="flex flex-wrap w-full gap-2">
+                  {addonsList.map((addon, indexT) => (
+                    <Label
+                      className="w-full flex flex-nowrap content-center items-center align-baseline rounded-xl border shadow p-2 cursor-pointer"
+                      key={indexT}
+                      htmlFor={`${String(`${id} t_${indexT}`)}`}
+                    >
+                      <Checkbox
+                        id={String(`${id} t_${indexT}`)}
+                        className="w-6 h-6 rounded-sm"
+                        onCheckedChange={() => {
+                          onSelectAddon(id, addon.id);
+                        }}
+                        checked={addons.get(id)?.includes(addon.id)}
+                      />
+                      <div className="flex flex-nowrap justify-between items-center flex-1 px-4">
+                        <span className="text-base font-medium flex-1 cursor-pointer">
+                          {addon.name}
+                        </span>
+                        <div className="flex flex-nowrap items-center gap-2">
+                          <span className="text-xl">{addon.price}</span>
+                          <span>{t("s_r")}</span>
+                        </div>
+                      </div>
+                    </Label>
+                  ))}
+                </div>
+                {name === "companies" ? (
+                  <div className="flex flex-col gap-4 p-2">
+                    <a href="#" className="underline">
+                      {t("contact_support")}
+                    </a>
+                    <a href="#" className="underline">
+                      {t("schedule_meeting")}
+                    </a>
+                  </div>
+                ) : null}
+              </div>
+              <Button
+                className="w-full py-7 rounded-xl text-lg font-semibold text-center flex flex-nowrap items-center"
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onSelectQuote(id);
+                  onTakeAction();
+                }}
+              >
+                {t("subscribe_now")}
+              </Button>
+            </div>
+          )
+        )}
+      </div>
+      <div className="my-4">
+        <FooterSales />
+      </div>
+    </>
   );
 }
