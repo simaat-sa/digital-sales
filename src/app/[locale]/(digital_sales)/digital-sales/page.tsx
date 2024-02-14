@@ -1,12 +1,9 @@
 import React from "react";
 import Wizard from "../_components/wizard";
 import { Metadata } from "next";
-import { RootLayoutProps } from "../../layout";
 import { getTranslations } from "next-intl/server";
 
-export async function generateMetadata({
-  params,
-}: RootLayoutProps): Promise<Metadata> {
+export async function generateMetadata(): Promise<Metadata> {
   const translateSales = await getTranslations("sales");
 
   return {
@@ -16,7 +13,7 @@ export async function generateMetadata({
 
 export default function Page() {
   return (
-    <div className="w-full flex flex-col items-center">
+    <div className="flex w-full flex-col items-center">
       <Wizard />
     </div>
   );
