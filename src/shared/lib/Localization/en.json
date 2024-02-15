@@ -40,11 +40,17 @@
     "addons_hint": "addons will pay one time only.",
     "total": "Total",
     "payment": "Payment way",
-    "promo_code": "Promo code"
+    "promo_code": "Promo code",
+    "quote": "Quote",
+    "tax": "a value added tax {amount}%"
   },
   "validations": {
     "quote_type_is_required": "Business Type is required",
     "email_not_valid": "Email is not valid",
     "mobile_number_not_valid": "Mobile number is not valid"
+  },
+  "common": {
+    "resend_code": "Resend code",
+    "countdown": "{time} seconds"
   }
 }

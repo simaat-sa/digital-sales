@@ -40,11 +40,17 @@
     "addons_hint": "سوف تدفع الإضافات مرة واحدة فقط.",
     "total": "الأجمالي",
     "payment": "طرق الدفع",
-    "promo_code": "رمز الخصم"
+    "promo_code": "رمز الخصم",
+    "quote": "باقة",
+    "tax": "ضريبة مضافه وهي {amount}٪"
   },
   "validations": {
     "quote_type_is_required": "نوع العمل مطلوب",
     "email_not_valid": "البريد الألكتروني غير صحيح",
     "mobile_number_not_valid": "الجوال غير صحيح"
+  },
+  "common": {
+    "resend_code": "اعادة أرسال الرمز",
+    "countdown": " {time} ثانية"
   }
 }

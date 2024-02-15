@@ -3,6 +3,9 @@ import { SAUDI_ARABIA_MOBILE_NUMBER_REGEX } from "@/shared/lib/constants";
 import { create } from "zustand";
 import { string } from "yup";
 import { QuoteModel } from "./quotesData";
+import { useMemo } from "react";
+import { quotesData } from "./quotesData";
+import { calculateTax, calculateTotalWithTax } from "@/shared/lib/utils";
 
 type ActionButton = "get_code" | "check_code" | "next" | "confirm_pay";
 
@@ -40,6 +43,9 @@ interface IRequestQuoteState {
   paymentMonths: number;
   promoCode: string;
   promoCodeValid: boolean;
+  promoCodeValue: number;
+  enableReSendCode: boolean;
+  pendingReSendCode: boolean;
   errors: {
     mobileNumber: string;
     code: string;
@@ -61,12 +67,14 @@ interface IRequestQuoteActions {
   onSelectAddon: (quoteId: number, addonId: number) => void;
   onSelectQuote: (id: number) => void;
   onTakeAction: (isBack?: boolean) => void;
+  onSelectPaymentWay: (months: number) => void;
+  onClickResendCode: () => void;
 }
 
 interface IRequestQuote extends IRequestQuoteState, IRequestQuoteActions {}
 
 const useRequestQuoteService = create<IRequestQuote>((set, get) => ({
-  currentWizard: "summary",
+  currentWizard: "register",
   wizardHistory: [],
   mobileNumber: "",
   code: "",
@@ -81,6 +89,9 @@ const useRequestQuoteService = create<IRequestQuote>((set, get) => ({
   paymentMonths: 1,
   promoCode: "",
   promoCodeValid: false,
+  promoCodeValue: 0,
+  enableReSendCode: true,
+  pendingReSendCode: false,
   errors: {
     mobileNumber: "",
     code: "",
@@ -255,11 +266,64 @@ const useRequestQuoteService = create<IRequestQuote>((set, get) => ({
         set(() => ({ actionButton: "confirm_pay" }));
         _setCurrentWizard("domain");
         _onUpdateWizardHistory("quotes");
+      } else if (get().currentWizard === "domain") {
+        _setCurrentWizard("summary");
+        _onUpdateWizardHistory("domain");
       }
     } else {
       _onUpdateWizardHistory(undefined, true);
     }
   },
+  onSelectPaymentWay(months) {
+    set(() => ({
+      paymentMonths: months,
+    }));
+  },
+  onClickResendCode() {
+    set(() => ({
+      enableReSendCode: !get().enableReSendCode,
+    }));
+  },
 }));
 
-export { useRequestQuoteService };
+function useCalcAmounts() {
+  const {
+    quoteSelected,
+    paymentMonths,
+    addons,
+    promoCodeValue,
+    promoCodeValid,
+  } = useRequestQuoteService();
+
+  const totalInvoice = useMemo(() => {
+    const quotePrice = quotesData.find((quote) => quote.id === quoteSelected)!;
+    // const addons = quotePrice.addons;
+
+    let totalByMonths = quotePrice.price * paymentMonths;
+
+    if (promoCodeValid) {
+      totalByMonths += promoCodeValue;
+    }
+
+    const totalAddons = addons
+      .get(quotePrice.id)!
+      .map((id) => quotePrice.addons.find((a) => a.id === id)!.price)
+      .reduce((a, b) => a + b);
+
+    return Math.ceil(calculateTotalWithTax(totalByMonths + totalAddons, 0.5));
+  }, [addons, paymentMonths, promoCodeValid, promoCodeValue, quoteSelected]);
+
+  const totalTax = useMemo(() => {
+    const quotePrice = quotesData.find((quote) => quote.id === quoteSelected)!;
+
+    return calculateTax(quotePrice.price * paymentMonths, 0.5);
+  }, [paymentMonths, quoteSelected]);
+
+  return { totalInvoice, totalTax };
+}
+
+function useGetQuoteSelected(id: number) {
+  return useMemo(() => quotesData.find((q) => q.id === id), [id]);
+}
+
+export { useRequestQuoteService, useGetQuoteSelected, useCalcAmounts };

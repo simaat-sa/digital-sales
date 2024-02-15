@@ -1,5 +1,9 @@
-import React from "react";
-import { useRequestQuoteService } from "../../_services/requestQuoteService";
+import React, { useMemo } from "react";
+import {
+  useCalcAmounts,
+  useGetQuoteSelected,
+  useRequestQuoteService,
+} from "../../_services/requestQuoteService";
 import FooterSales from "../FooterSales";
 import ActionButton from "./ActionButton";
 import { Separator } from "@/shared/components/ui/separator";
@@ -15,10 +19,18 @@ import { Button } from "@/shared/components/ui/button";
 const checkedIcon = "/assets/svg/icons/CheckBold.svg";
 
 export default function Summary() {
-  const { quoteSelected, paymentMonths, promoCode, onChange } =
-    useRequestQuoteService();
+  const {
+    quoteSelected,
+    paymentMonths,
+    promoCode,
+    onChange,
+    onSelectPaymentWay,
+    addons,
+  } = useRequestQuoteService();
   const t = useTranslations("sales");
   const locale = useLocale();
+  const { totalInvoice, totalTax } = useCalcAmounts();
+  const getQuoteSelected = useGetQuoteSelected(quoteSelected!)!;
 
   return (
     <>
@@ -29,14 +41,15 @@ export default function Summary() {
       <div className="w-full lg:container mx-auto z-10 relative">
         <div className="w-full min-h-screen grid grid-cols-2 gap-y-6 lg:gap-2">
           <div className="lg:h-full flex flex-col justify-center col-span-2 lg:col-span-1 px-4 md:px-2 lg:px-0 gap-4">
-            <h2 className="text-lg font-semibold">{t("summary_order")}</h2>
-
+            <h4 className="text-lg font-semibold mt-3">
+              {t("quote")} {t(getQuoteSelected.name as any)}
+            </h4>
             <ul>
-              {quotesData[0].features.map((feat, i) => (
+              {getQuoteSelected.features.map((feat, i) => (
                 <li
                   key={feat}
                   className={cn("mb-4", {
-                    "mb-0": quotesData[0].features.length - 1 === i,
+                    "mb-0": getQuoteSelected.features.length - 1 === i,
                   })}
                 >
                   <div className="flex flex-nowrap items-center gap-x-3">
@@ -54,24 +67,30 @@ export default function Summary() {
 
             <h4 className="text-lg font-semibold">{t("payment")}</h4>
             <div className="w-full md:w-3/5 lg:w-full sm:w-4/5 grid grid-cols-4 gap-6 lg:pl-6">
-              {paymentWay.map((payment, index) => {
-                const price = quotesData.find((quote) => quote.id === 1);
+              {paymentWay.map((payment) => {
+                const quote = quotesData.find(
+                  (quote) => quote.id === getQuoteSelected.id
+                )!;
+                console.log(quote);
                 return (
                   <div
                     key={payment.type}
                     className={cn(
-                      "border border-slate-50 rounded-xl shadow bg-white p-3 cursor-pointer col-span-2 lg:col-span-1 flex flex-col gap-6 justify-center items-center",
+                      "border border-slate-50 rounded-xl shadow bg-white p-3 cursor-pointer col-span-2 lg:col-span-1 flex flex-col gap-6 justify-center items-center transition-colors duration-75 ease-in",
                       {
                         "border-primary-600": payment.months === paymentMonths,
                       }
                     )}
+                    onClick={() => {
+                      onSelectPaymentWay(payment.months);
+                    }}
                   >
                     <span className="font-semibold text-sm">
                       {payment.label[locale as "ar" | "en"]}
                     </span>
                     <div className="flex flex-nowrap items-center align-baseline justify-center gap-2">
                       <span className="text-3xl">
-                        {price?.price * payment.months}
+                        {+quote.price * +payment.months || 0}
                       </span>
                       {t("s_r")}
                     </div>
@@ -88,18 +107,15 @@ export default function Summary() {
                   onChange("promoCode", e.target.value);
                 }}
               />
-              <Button variant="outline">Enter</Button>
+              <Button variant="outline">{t("check")}</Button>
             </div>
           </div>
           <div className="flex flex-col col-span-2 lg:col-span-1 px-4 md:px-2 lg:px-0">
             <div className="w-full md:w-2/4 lg:w-3/5 px-2 md:px-3 lg:px-6 flex flex-col gap-3 mx-auto flex-1 justify-center">
               <h2 className="text-lg font-semibold">{t("summary_order")}</h2>
 
-              <h4>
-                {t(
-                  quotesData.find((quote) => quote.id === quoteSelected)
-                    ?.name as any
-                )}
+              <h4 className="text-lg font-semibold mt-3">
+                {t("quote")} {t(getQuoteSelected.name as any)}
               </h4>
 
               <ul className="list-none w-full flex flex-col gap-4 font-medium">
@@ -112,22 +128,20 @@ export default function Summary() {
                     }
                   </span>
                   <span className="flex gap-2">
-                    <span>
-                      {quotesData.filter((quote) => {
-                        if (quote.id === 1) {
-                          return quote;
-                        } else {
-                          return "";
-                        }
-                      })[0].price * paymentMonths}
-                    </span>
+                    <span>{getQuoteSelected.price * paymentMonths}</span>
                     {t("s_r")}
                   </span>
                 </li>
 
                 <li className="flex justify-between">
-                  <span>tax.</span>
-                  <span className="flex gap-2">12 {t("s_r")}</span>
+                  <span>
+                    {t("tax", {
+                      amount: 0.5,
+                    })}
+                  </span>
+                  <span className="flex gap-2">
+                    {totalTax} {t("s_r")}
+                  </span>
                 </li>
               </ul>
               <div className="flex gap-3 items-center align-baseline mt-4">
@@ -135,20 +149,25 @@ export default function Summary() {
                 <p className="text-xs text-gray-500">({t("addons_hint")})</p>
               </div>
               <ul className="list-none w-full flex flex-col gap-4 font-medium">
-                <li className="flex justify-between">
-                  <span>Addon 1</span>
-                  <span className="flex gap-2">12 {t("s_r")}</span>
-                </li>
+                {addons.get(getQuoteSelected.id)?.map((a) => {
+                  let addon = getQuoteSelected.addons.find((d) => d.id === a)!;
 
-                <li className="flex justify-between">
-                  <span>Addon 2</span>
-                  <span className="flex gap-2">12 {t("s_r")}</span>
-                </li>
+                  return (
+                    <li className="flex justify-between" key={a}>
+                      <span>{addon.name}</span>
+                      <span className="flex gap-2">
+                        {addon.price} {t("s_r")}
+                      </span>
+                    </li>
+                  );
+                })}
               </ul>
               <Separator />
               <div className="flex flex-nowrap justify-between mb-8">
                 <span>{t("total")}</span>
-                <span>1000 {t("s_r")}</span>
+                <span>
+                  {totalInvoice} {t("s_r")}
+                </span>
               </div>
 
               <ActionButton />
