@@ -1,39 +1,41 @@
-import React, { Fragment } from "react";
-import { Separator } from "@/shared/components/ui/separator";
-import { Button } from "@/shared/components/ui/button";
-import { Label } from "@/shared/components/ui/label";
-import { cn } from "@/shared/lib/utils";
-import { Checkbox } from "@/shared/components/ui/checkbox";
-import Image from "next/image";
-import { useRequestQuoteService } from "../../_services/requestQuoteService";
-import { useTranslations } from "next-intl";
-import { quotesData } from "../../_services/quotesData";
 import { VideoComponent } from "@/shared/components/VideoComponent";
-import FooterSales from "../FooterSales";
+import { Button } from "@/shared/components/ui/button";
+import { Checkbox } from "@/shared/components/ui/checkbox";
 import {
-  DialogDescription,
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/shared/components/ui/dialog";
+import { Label } from "@/shared/components/ui/label";
+import { Separator } from "@/shared/components/ui/separator";
+import { cn } from "@/shared/lib/utils";
+import { useTranslations } from "next-intl";
+import Image from "next/image";
+import { Fragment } from "react";
+import { useQuotePricingService } from "../../_services/QuotePricingService";
+import { quotesData } from "../../_services/quotesData";
+import FooterSales from "../FooterSales";
 
 const checkedIcon = "/assets/svg/icons/CheckBold.svg";
 const VideoStream = "/assets/svg/icons/media-player.svg";
 
 export default function Quotes() {
   const { quotePlan, addons, onTakeAction, onSelectQuote, onSelectAddon } =
-    useRequestQuoteService();
+    useQuotePricingService();
   const t = useTranslations("sales");
 
   return (
     <>
-      <div className="flex justify-between w-full py-8">
+      <div className="flex justify-between items-center w-full h-[8rem] px-4 lg:px-0">
         <h2 className="text-3xl font-semibold">{t("quotes_title")}</h2>
-        <Button variant="outline">{t("back")}</Button>
+        <Button variant="outline" onClick={() => onTakeAction(true)}>
+          {t("back")}
+        </Button>
       </div>
-      <div className=" grid grid-cols-12 items-center gap-6 px-4 md:px-2 lg:px-0">
+      <div className=" grid grid-cols-12 items-start gap-6 px-4 md:px-2 lg:px-0">
         {quotesData.map(
           ({ id, name, features, addons: addonsList, price, description }) => (
             <div
@@ -48,19 +50,25 @@ export default function Quotes() {
             >
               <div className="w-full flex flex-col justify-center gap-4 min-h-40">
                 <div className="flex flex-nowrap items-center gap-x-4">
-                  <h4 className="font-bold text-2xl">{t(name as any)}</h4>
+                  <h4 className="font-bold text-2xl">
+                    {t("quote")} {t(name as any)}
+                  </h4>
                   {String(id) === quotePlan ? (
-                    <span className="text-sm border rounded-md shadow-md p-2">
+                    <span className="text-sm font-medium border rounded shadow-md flex items-center p-1">
                       {t("best_matching")}
                     </span>
                   ) : null}
                 </div>
                 <div className="flex items-center flex-nowrap gap-x-4">
                   <h4 className="text-5xl font-extrabold">{price}</h4>
-                  <span>{t("s_r")}</span>
+                  <span>{t("s_r_monthly")}</span>
                 </div>
               </div>
-              <Separator className="w-full mx-auto" />
+              <Separator
+                className={cn("w-full mx-auto", {
+                  "bg-slate-300": String(id) === quotePlan,
+                })}
+              />
               <div className=" flex flex-col gap-6">
                 <p>{description}</p>
                 <ul className="list-none">

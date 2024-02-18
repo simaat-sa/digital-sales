@@ -1,16 +1,19 @@
-import React, { useState } from "react";
-import { Input, InputProps } from "../ui/input";
+import { cn } from "@/shared/lib/utils";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 import Countdown from "react-countdown";
+import { Input, InputProps } from "../ui/input";
 
 interface InputCodeProps extends InputProps {
   timeLeft: number;
   onResendCode: () => Promise<boolean>;
+  error?: string;
 }
 
 export default function InputCode({
   timeLeft,
   onResendCode,
+  error,
   ...props
 }: InputCodeProps) {
   const [resendCode, setResendCode] = useState<boolean>(true);
@@ -19,8 +22,18 @@ export default function InputCode({
 
   return (
     <div className="flex flex-col gap-3">
-      <Input {...props} />
-      <div>
+      <div className="flex flex-col gap-4">
+        <Input
+          className={cn({
+            "border-red-600": error?.length ? true : false,
+          })}
+          {...props}
+        />
+        {error?.length ? (
+          <p className="text-sm text-red-600 -mt-3">{error}</p>
+        ) : null}
+      </div>
+      {!props.disabled ? (
         <Countdown
           date={Date.now() + timeLeft}
           renderer={({ seconds, completed, api }) => {
@@ -56,7 +69,7 @@ export default function InputCode({
           }}
           autoStart={false}
         />
-      </div>
+      ) : null}
     </div>
   );
 }

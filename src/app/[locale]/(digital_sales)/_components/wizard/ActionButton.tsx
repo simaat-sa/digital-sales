@@ -1,11 +1,10 @@
 import { Button } from "@/shared/components/ui/button";
-import React from "react";
-import { useRequestQuoteService } from "../../_services/requestQuoteService";
 import { useTranslations } from "next-intl";
+import { useQuotePricingService } from "../../_services/QuotePricingService";
 
 export default function ActionButton() {
   const { actionButton, currentWizard, onTakeAction } =
-    useRequestQuoteService();
+    useQuotePricingService();
   const t = useTranslations("sales");
 
   return (

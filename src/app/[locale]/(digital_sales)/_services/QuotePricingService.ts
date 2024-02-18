@@ -1,11 +1,10 @@
 "use client";
 import { SAUDI_ARABIA_MOBILE_NUMBER_REGEX } from "@/shared/lib/constants";
-import { create } from "zustand";
-import { string } from "yup";
-import { QuoteModel } from "./quotesData";
-import { useMemo } from "react";
-import { quotesData } from "./quotesData";
 import { calculateTax, calculateTotalWithTax } from "@/shared/lib/utils";
+import { useMemo } from "react";
+import { ValidationError, object, string } from "yup";
+import { create } from "zustand";
+import { QuoteModel, quotesData } from "./quotesData";
 
 type ActionButton = "get_code" | "check_code" | "next" | "confirm_pay";
 
@@ -24,6 +23,8 @@ type FieldName =
   | "showCode"
   | "quotePlan"
   | "email"
+  | "firstName"
+  | "lastName"
   | "domain"
   | "promoCode";
 
@@ -35,9 +36,12 @@ interface IRequestQuoteState {
   showCode: boolean;
   quotePlan: QuotePlan;
   email: string;
+  firstName: string;
+  lastName: string;
   quoteSelected: number | null;
   addons: Map<string | number, any[]>;
   domain: string;
+  verifiedDomain: boolean;
   actionButton: ActionButton;
   disableBtn: boolean;
   paymentMonths: number;
@@ -46,12 +50,23 @@ interface IRequestQuoteState {
   promoCodeValue: number;
   enableReSendCode: boolean;
   pendingReSendCode: boolean;
+  dialogPaymentStatus: boolean;
+  disable: {
+    mobileNumber: boolean;
+    email: boolean;
+    domain: boolean;
+    firstName: boolean;
+    lastName: boolean;
+    code: boolean;
+  };
   errors: {
     mobileNumber: string;
     code: string;
     quotePlan: string;
     email: string;
     domain: string;
+    firstName: string;
+    lastName: string;
   };
 }
 
@@ -61,7 +76,10 @@ interface IRequestQuoteActions {
   _checkCode: () => void;
   _onUpdateWizardHistory: (wizard?: Wizards, isBack?: boolean) => void;
   _isMobileNumberValid: () => boolean;
-  _isRequirementsValid: () => boolean;
+  _isRequirementsValid: () => Promise<boolean>;
+  _onChangeCode: (name: FieldName, value: string) => void;
+  _disableField: (name: FieldName, value: boolean) => void;
+  _onVerifyPromoCode: () => void;
   setAllAddons: (listAddons: QuoteModel[]) => void;
   onChange: (name: FieldName, value: string | number | boolean) => void;
   onSelectAddon: (quoteId: number, addonId: number) => void;
@@ -69,11 +87,14 @@ interface IRequestQuoteActions {
   onTakeAction: (isBack?: boolean) => void;
   onSelectPaymentWay: (months: number) => void;
   onClickResendCode: () => void;
+  onCheckPromoCode: () => void;
+  onVerifyDomain: () => void;
+  onToggleDialogPaymentStatus: (status: boolean) => void;
 }
 
 interface IRequestQuote extends IRequestQuoteState, IRequestQuoteActions {}
 
-const useRequestQuoteService = create<IRequestQuote>((set, get) => ({
+const useQuotePricingService = create<IRequestQuote>((set, get) => ({
   currentWizard: "register",
   wizardHistory: [],
   mobileNumber: "",
@@ -81,6 +102,8 @@ const useRequestQuoteService = create<IRequestQuote>((set, get) => ({
   showCode: false,
   quotePlan: "",
   email: "",
+  firstName: "",
+  lastName: "",
   quoteSelected: null,
   addons: new Map(),
   domain: "",
@@ -92,12 +115,24 @@ const useRequestQuoteService = create<IRequestQuote>((set, get) => ({
   promoCodeValue: 0,
   enableReSendCode: true,
   pendingReSendCode: false,
+  verifiedDomain: false,
+  dialogPaymentStatus: false,
+  disable: {
+    domain: false,
+    email: false,
+    firstName: false,
+    lastName: false,
+    mobileNumber: false,
+    code: false,
+  },
   errors: {
     mobileNumber: "",
     code: "",
     quotePlan: "",
     email: "",
     domain: "",
+    firstName: "",
+    lastName: "",
   },
 
   _setCurrentWizard(wizard) {
@@ -117,11 +152,24 @@ const useRequestQuoteService = create<IRequestQuote>((set, get) => ({
     }
   },
   _checkCode() {
-    // validated the code OTP and call api to check.
-    return set(() => ({
-      currentWizard: "requirements",
-      actionButton: "next",
-    }));
+    const code = get().code;
+    if (code.length === 4) {
+      get()._disableField("code", true);
+      setTimeout(() => {
+        set(() => ({
+          currentWizard: "requirements",
+          actionButton: "next",
+        }));
+        get()._disableField("code", false);
+      }, 3000);
+    } else {
+      return set(() => ({
+        errors: {
+          ...get().errors,
+          code: "code_required",
+        },
+      }));
+    }
   },
   _onUpdateWizardHistory(wizard, isBack) {
     if (!isBack && wizard) {
@@ -161,32 +209,61 @@ const useRequestQuoteService = create<IRequestQuote>((set, get) => ({
 
     return isValid;
   },
-  _isRequirementsValid() {
+  _disableField(name, value) {
+    set(() => ({
+      disable: {
+        ...get().disable,
+        [name]: value,
+      },
+    }));
+  },
+  async _isRequirementsValid() {
     let quotePlan = get().quotePlan;
     let email = get().email;
+    let firstName = get().firstName;
+    let lastName = get().lastName;
     let errors = get().errors;
-    let quotePlanSelect = quotePlan.length > 0;
-    let isEmailValid = string().email().required().isValidSync(email);
 
-    if (!quotePlanSelect) {
-      set(() => ({
-        errors: {
-          ...errors,
-          quotePlan: "quote_type_is_required",
-        },
-      }));
-    }
+    const schema = object({
+      quotePlan: string().required("quote_type_is_required"),
+      firstName: string().required("first_name_required"),
+      lastName: string().required("last_name_required"),
+      email: string().email().required("email_not_valid"),
+    });
 
-    if (email && !isEmailValid) {
-      set(() => ({
-        errors: {
-          ...errors,
-          email: "email_not_valid",
-        },
-      }));
-    }
+    return new Promise((resolve, reject) => {
+      schema
+        .validate(
+          {
+            quotePlan,
+            email,
+            firstName,
+            lastName,
+          },
+          { abortEarly: false }
+        )
+        .then(() => {
+          return resolve(true);
+        })
+        .catch(async (error: ValidationError) => {
+          let stackErrors: { [key: string]: string } = {};
 
-    return email ? isEmailValid && quotePlanSelect : quotePlanSelect;
+          await error.inner.map((message) => {
+            stackErrors = {
+              ...stackErrors,
+              [message.path as any]: message.message,
+            };
+          });
+
+          set(() => ({
+            errors: {
+              ...errors,
+              ...stackErrors,
+            },
+          }));
+          return reject(false);
+        });
+    });
   },
   setAllAddons(listAddons) {
     let list = new Map();
@@ -200,12 +277,25 @@ const useRequestQuoteService = create<IRequestQuote>((set, get) => ({
   },
   onChange(name, value) {
     let errors = get().errors;
-    return set(() => ({
+
+    set(() => ({
       [name]: value,
       errors: {
         ...errors,
         [name]: "",
       },
+    }));
+  },
+  _onChangeCode(name, value) {
+    get().onChange(name, value);
+
+    if (name === "code") {
+      get()._checkCode();
+    }
+  },
+  _onVerifyPromoCode() {
+    set(() => ({
+      promoCodeValid: true,
     }));
   },
   onSelectAddon(quoteId, addonId) {
@@ -239,7 +329,6 @@ const useRequestQuoteService = create<IRequestQuote>((set, get) => ({
     let _onUpdateWizardHistory = get()._onUpdateWizardHistory;
     let _isRequirementsValid = get()._isRequirementsValid;
     let _getCode = get()._getCode;
-    let _checkCode = get()._checkCode;
 
     if (!isBack) {
       if (get().currentWizard === "register") {
@@ -249,7 +338,6 @@ const useRequestQuoteService = create<IRequestQuote>((set, get) => ({
             break;
 
           case "check_code":
-            _checkCode();
             _onUpdateWizardHistory("register");
             break;
 
@@ -257,11 +345,10 @@ const useRequestQuoteService = create<IRequestQuote>((set, get) => ({
             break;
         }
       } else if (get().currentWizard === "requirements") {
-        let isValidStep = _isRequirementsValid();
-        if (isValidStep) {
+        _isRequirementsValid().then(() => {
           _setCurrentWizard("quotes");
           _onUpdateWizardHistory("requirements");
-        }
+        });
       } else if (get().currentWizard === "quotes") {
         set(() => ({ actionButton: "confirm_pay" }));
         _setCurrentWizard("domain");
@@ -269,6 +356,9 @@ const useRequestQuoteService = create<IRequestQuote>((set, get) => ({
       } else if (get().currentWizard === "domain") {
         _setCurrentWizard("summary");
         _onUpdateWizardHistory("domain");
+      } else if (get().currentWizard === "summary") {
+        _onUpdateWizardHistory("summary");
+        get().onToggleDialogPaymentStatus(true);
       }
     } else {
       _onUpdateWizardHistory(undefined, true);
@@ -284,6 +374,27 @@ const useRequestQuoteService = create<IRequestQuote>((set, get) => ({
       enableReSendCode: !get().enableReSendCode,
     }));
   },
+  onCheckPromoCode() {
+    get()._onVerifyPromoCode();
+  },
+  onVerifyDomain() {
+    set(() => ({
+      disable: {
+        ...get().disable,
+        domain: true,
+      },
+    }));
+    setTimeout(() => {
+      set(() => ({
+        verifiedDomain: true,
+      }));
+    }, 2000);
+  },
+  onToggleDialogPaymentStatus(status) {
+    set(() => ({
+      dialogPaymentStatus: status,
+    }));
+  },
 }));
 
 function useCalcAmounts() {
@@ -293,22 +404,25 @@ function useCalcAmounts() {
     addons,
     promoCodeValue,
     promoCodeValid,
-  } = useRequestQuoteService();
+  } = useQuotePricingService();
 
   const totalInvoice = useMemo(() => {
     const quotePrice = quotesData.find((quote) => quote.id === quoteSelected)!;
-    // const addons = quotePrice.addons;
+    let addonsSelected = addons
+      .get(quotePrice?.id)!
+      .map((id) => quotePrice.addons.find((a) => a.id === id)!.price);
 
-    let totalByMonths = quotePrice.price * paymentMonths;
+    let totalAddons = 0;
+
+    let totalByMonths = quotePrice?.price * paymentMonths;
 
     if (promoCodeValid) {
       totalByMonths += promoCodeValue;
     }
 
-    const totalAddons = addons
-      .get(quotePrice.id)!
-      .map((id) => quotePrice.addons.find((a) => a.id === id)!.price)
-      .reduce((a, b) => a + b);
+    if (addonsSelected.length) {
+      totalAddons = addonsSelected.reduce((a, b) => a + b);
+    }
 
     return Math.ceil(calculateTotalWithTax(totalByMonths + totalAddons, 0.5));
   }, [addons, paymentMonths, promoCodeValid, promoCodeValue, quoteSelected]);
@@ -326,4 +440,4 @@ function useGetQuoteSelected(id: number) {
   return useMemo(() => quotesData.find((q) => q.id === id), [id]);
 }
 
-export { useRequestQuoteService, useGetQuoteSelected, useCalcAmounts };
+export { useCalcAmounts, useGetQuoteSelected, useQuotePricingService };

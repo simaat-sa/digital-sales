@@ -17,14 +17,15 @@
     "select": "Select",
     "check": "Check",
     "confirm_and_pay": "Confirm and Pay",
-    "ar": "Arabic",
-    "en": "English",
+    "ar": "عربي",
+    "en": "أنجليزي",
     "optional": "optional",
     "companies": "Companies",
     "offices": "Offices",
     "real-estate": "Real-Estate",
     "continue_counts": "Continue and Pay",
     "s_r": "S.R",
+    "s_r_monthly": "S.R / monthly",
     "watch_full_video": "Watch the full video",
     "business_type": "Business type",
     "business_needed": "Business needed",
@@ -42,12 +43,17 @@
     "payment": "Payment way",
     "promo_code": "Promo code",
     "quote": "Quote",
-    "tax": "a value added tax {amount}%"
+    "tax": "a value added tax {amount}%",
+    "firstName": "First name",
+    "lastName": "Last name"
   },
   "validations": {
     "quote_type_is_required": "Business Type is required",
     "email_not_valid": "Email is not valid",
-    "mobile_number_not_valid": "Mobile number is not valid"
+    "mobile_number_not_valid": "Mobile number is not valid",
+    "first_name_required": "First name is required",
+    "last_name_required": "Last name is required",
+    "code_required": "code required"
   },
   "common": {
     "resend_code": "Resend code",

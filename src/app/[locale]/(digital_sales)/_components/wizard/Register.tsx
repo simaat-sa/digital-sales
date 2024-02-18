@@ -1,10 +1,8 @@
-import React from "react";
-import { useRequestQuoteService } from "../../_services/requestQuoteService";
+import InputCode from "@/shared/components/Inputs/InputCode";
+import InputMobileNumber from "@/shared/components/Inputs/InputMobileNumber";
 import HeightMotion from "@/shared/components/motions/HeighEffect";
 import { useTranslations } from "next-intl";
-import InputBase from "@/shared/components/Inputs/InputBase";
-import InputMobileNumber from "@/shared/components/Inputs/InputMobileNumber";
-import InputCode from "@/shared/components/Inputs/InputCode";
+import { useQuotePricingService } from "../../_services/QuotePricingService";
 
 export default function RegisterForm() {
   const {
@@ -12,11 +10,10 @@ export default function RegisterForm() {
     showCode,
     code,
     errors,
-    enableReSendCode,
+    disable,
     onChange,
-    onClickResendCode,
-  } = useRequestQuoteService();
-  const t = useTranslations("sales");
+    _onChangeCode,
+  } = useQuotePricingService();
   const validations = useTranslations("validations");
 
   return (
@@ -38,7 +35,7 @@ export default function RegisterForm() {
           <InputCode
             value={code}
             onChange={(e) => {
-              onChange("code", e.target.value);
+              _onChangeCode("code", e.target.value);
             }}
             placeholder="# # # #"
             dir="ltr"
@@ -48,6 +45,8 @@ export default function RegisterForm() {
               });
             }}
             timeLeft={59000}
+            error={errors.code ? validations(errors.code as any) : ""}
+            disabled={disable.code}
           />
         </HeightMotion>
       ) : null}

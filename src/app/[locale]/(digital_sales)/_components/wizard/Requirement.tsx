@@ -1,3 +1,5 @@
+import InputBase from "@/shared/components/Inputs/InputBase";
+import HeightMotion from "@/shared/components/motions/HeighEffect";
 import { Label } from "@/shared/components/ui/label";
 import {
   Select,
@@ -6,20 +8,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import React from "react";
-import { useRequestQuoteService } from "../../_services/requestQuoteService";
-import HeightMotion from "@/shared/components/motions/HeighEffect";
-import { useLocale, useTranslations } from "next-intl";
-import { quotesData } from "../../_services/quotesData";
 import { cn } from "@/shared/lib/utils";
-import InputBase from "@/shared/components/Inputs/InputBase";
+import { useLocale, useTranslations } from "next-intl";
+import { useQuotePricingService } from "../../_services/QuotePricingService";
+import { quotesData } from "../../_services/quotesData";
 
 export default function RequirementForm() {
-  const { quotePlan, email, onChange, errors } = useRequestQuoteService();
+  const { quotePlan, email, firstName, lastName, errors, onChange } =
+    useQuotePricingService();
   const t = useTranslations("sales");
   const validations = useTranslations("validations");
   const locale = useLocale();
-  console.log("quotePlan", quotePlan);
+  console.log("errors: ", errors);
 
   return (
     <HeightMotion>
@@ -27,9 +27,8 @@ export default function RequirementForm() {
         <div className="flex flex-col gap-4">
           <Label>{t("business_needed")}</Label>
           <Select
-            defaultValue=""
             onValueChange={(value) => onChange("quotePlan", value)}
-            value={quotePlan || "1"}
+            value={quotePlan}
             dir={locale === "ar" ? "rtl" : "ltr"}
           >
             <SelectTrigger
@@ -37,7 +36,7 @@ export default function RequirementForm() {
                 "border-red-600": errors.quotePlan.length ? true : false,
               })}
             >
-              <SelectValue placeholder={t("quote_type")} />
+              <SelectValue placeholder={t("business_needed")} />
             </SelectTrigger>
             <SelectContent>
               {quotesData.map(({ id, business_need_label }) => (
@@ -57,6 +56,36 @@ export default function RequirementForm() {
             </p>
           ) : null}
         </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="col-span-2 md:col-span-1">
+            <InputBase
+              value={firstName}
+              onChange={(e) => {
+                onChange("firstName", e.target.value);
+              }}
+              placeholder={t("firstName")}
+              label={t("firstName")}
+              error={
+                errors.firstName.length
+                  ? validations("first_name_required")
+                  : ""
+              }
+            />
+          </div>
+          <div className="col-span-2 md:col-span-1">
+            <InputBase
+              value={lastName}
+              onChange={(e) => {
+                onChange("lastName", e.target.value);
+              }}
+              placeholder={t("lastName")}
+              label={t("lastName")}
+              error={
+                errors.lastName.length ? validations("last_name_required") : ""
+              }
+            />
+          </div>
+        </div>
         <InputBase
           value={email}
           onChange={(e) => {
@@ -67,6 +96,7 @@ export default function RequirementForm() {
           error={errors.email.length ? validations("email_not_valid") : ""}
           type="email"
           dir="ltr"
+          className="placeholder:rtl:text-right"
         />
       </div>
     </HeightMotion>

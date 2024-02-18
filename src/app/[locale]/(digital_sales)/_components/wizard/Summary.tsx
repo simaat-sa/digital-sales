@@ -1,32 +1,43 @@
-import React, { useMemo } from "react";
+import InputBase from "@/shared/components/Inputs/InputBase";
+import { Button } from "@/shared/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/shared/components/ui/dialog";
+import { Label } from "@/shared/components/ui/label";
+import { Separator } from "@/shared/components/ui/separator";
+import { cn } from "@/shared/lib/utils";
+import { useLocale, useTranslations } from "next-intl";
+import Image from "next/image";
 import {
   useCalcAmounts,
   useGetQuoteSelected,
-  useRequestQuoteService,
-} from "../../_services/requestQuoteService";
+  useQuotePricingService,
+} from "../../_services/QuotePricingService";
+import { paymentWay } from "../../_services/paymentWay";
+import { quotesData } from "../../_services/quotesData";
 import FooterSales from "../FooterSales";
 import ActionButton from "./ActionButton";
-import { Separator } from "@/shared/components/ui/separator";
-import { useLocale, useTranslations } from "next-intl";
-import { paymentWay } from "../../_services/paymentWay";
-import { cn } from "@/shared/lib/utils";
-import { quotesData } from "../../_services/quotesData";
-import Image from "next/image";
-import { Label } from "@/shared/components/ui/label";
-import InputBase from "@/shared/components/Inputs/InputBase";
-import { Button } from "@/shared/components/ui/button";
 
 const checkedIcon = "/assets/svg/icons/CheckBold.svg";
+const checkedDecagramIcon = "/assets/svg/icons/checked-decagram.svg";
 
 export default function Summary() {
   const {
     quoteSelected,
     paymentMonths,
     promoCode,
+    addons,
+    promoCodeValid,
+    dialogPaymentStatus,
+    onCheckPromoCode,
     onChange,
     onSelectPaymentWay,
-    addons,
-  } = useRequestQuoteService();
+    onToggleDialogPaymentStatus,
+  } = useQuotePricingService();
   const t = useTranslations("sales");
   const locale = useLocale();
   const { totalInvoice, totalTax } = useCalcAmounts();
@@ -98,7 +109,7 @@ export default function Summary() {
                 );
               })}
             </div>
-            <div className="w-full md:w-4/5 lg:w-full flex items-end gap-4">
+            <div className="w-full md:w-4/5 lg:w-full flex items-end gap-3">
               <InputBase
                 label={t("promo_code")}
                 placeholder={t("promo_code")}
@@ -106,8 +117,22 @@ export default function Summary() {
                 onChange={(e) => {
                   onChange("promoCode", e.target.value);
                 }}
+                disabled={promoCodeValid}
               />
-              <Button variant="outline">{t("check")}</Button>
+              {!promoCodeValid ? (
+                <Button variant="outline" onClick={() => onCheckPromoCode()}>
+                  {t("check")}
+                </Button>
+              ) : (
+                <Image
+                  src={checkedDecagramIcon}
+                  width={24}
+                  height={24}
+                  alt="verified"
+                  className="mb-3"
+                  loading="lazy"
+                />
+              )}
             </div>
           </div>
           <div className="flex flex-col col-span-2 lg:col-span-1 px-4 md:px-2 lg:px-0">
@@ -176,6 +201,21 @@ export default function Summary() {
           </div>
         </div>
       </div>
+      <Dialog
+        open={dialogPaymentStatus}
+        onOpenChange={(open) => {
+          onToggleDialogPaymentStatus(open);
+        }}
+      >
+        <DialogContent className="w-screen">
+          <DialogHeader>
+            <DialogTitle>Payment</DialogTitle>
+          </DialogHeader>
+          <DialogDescription className="my-0 py-0">
+            <div className="w-full overflow-hidden">Payment card iframe...</div>
+          </DialogDescription>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

@@ -1,8 +1,8 @@
-import React from "react";
-import { Input, InputProps } from "../ui/input";
-import { Label } from "../ui/label";
+import { countryCodes } from "@/shared/lib/countryCodes";
 import { cn } from "@/shared/lib/utils";
 import { useTranslations } from "next-intl";
+import { Input, InputProps } from "../ui/input";
+import { Label } from "../ui/label";
 import {
   Select,
   SelectContent,
@@ -10,13 +10,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { countryCodes } from "@/shared/lib/countryCodes";
 
 interface InputMobileNumberProps extends InputProps {
   error?: string;
 }
 
 export default function InputMobileNumber({
+  error,
   ...props
 }: InputMobileNumberProps) {
   const t = useTranslations("sales");
@@ -27,7 +27,12 @@ export default function InputMobileNumber({
         <Label>{t("mobile_number")}</Label>
       </div>
       <div
-        className="flex flex-nowrap border shadow rounded bg-white ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 overflow-hidden"
+        className={cn(
+          "flex flex-nowrap border shadow rounded bg-white ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 overflow-hidden",
+          {
+            "border-red-600": error?.length ? true : false,
+          }
+        )}
         dir="ltr"
       >
         <Select value="966">
@@ -49,7 +54,7 @@ export default function InputMobileNumber({
           className={cn(
             "rtl:direction-normal placeholder:rtl:text-right shadow-none border-0 rounded-none focus-visible:ring-0",
             {
-              "border-red-600": props.error?.length ? true : false,
+              "border-red-600": error?.length ? true : false,
             }
           )}
           dir="ltr"
@@ -58,8 +63,8 @@ export default function InputMobileNumber({
           {...props}
         />
       </div>
-      {props.error?.length ? (
-        <p className="text-sm text-red-600 -mt-4">{props.error}</p>
+      {error?.length ? (
+        <p className="text-sm text-red-600 -mt-3">{error}</p>
       ) : null}
     </div>
   );

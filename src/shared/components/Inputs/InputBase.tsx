@@ -1,7 +1,7 @@
-import React, { ChangeEvent } from "react";
-import { Label } from "../ui/label";
-import { Input, InputProps } from "../ui/input";
 import { cn } from "@/shared/lib/utils";
+import { ChangeEvent } from "react";
+import { Input, InputProps } from "../ui/input";
+import { Label } from "../ui/label";
 
 interface InputBaseProps extends InputProps {
   label?: string;
@@ -31,13 +31,13 @@ export default function InputBase({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className={cn("rtl:direction-normal placeholder:rtl:text-right", {
+        className={cn("", {
           "border-red-600": error?.length ? true : false,
         })}
         {...props}
       />
       {error?.length ? (
-        <p className="text-sm text-red-600 -mt-4">{error}</p>
+        <p className="text-sm text-red-600 -mt-3">{error}</p>
       ) : null}
     </div>
   );

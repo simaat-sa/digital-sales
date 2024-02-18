@@ -1,23 +1,24 @@
 "use client";
-import React, { useEffect } from "react";
+import Image from "next/image";
+import { useEffect } from "react";
 import {
   Wizards,
-  useRequestQuoteService,
-} from "../../_services/requestQuoteService";
-import ActionButton from "./ActionButton";
-import RegisterForm from "./RegisterForm";
-import RequirementForm from "./RequirementForm";
-import CheckDomain from "./CheckDomain";
-import Quotes from "./Quotes";
-import Image from "next/image";
-import FooterSales from "../FooterSales";
+  useQuotePricingService,
+} from "../../_services/QuotePricingService";
 import { quotesData } from "../../_services/quotesData";
+import FooterSales from "../FooterSales";
+import ActionButton from "./ActionButton";
+import CheckDomain from "./Domain";
+import Quotes from "./Quotes";
+import RegisterForm from "./Register";
+import RequirementForm from "./Requirement";
 import Summary from "./Summary";
 
 const planningPrice = "/assets/brand/simaat_logo.svg";
 
 export default function Wizard() {
-  const { currentWizard, setAllAddons } = useRequestQuoteService();
+  const { currentWizard, showCode, setAllAddons, onTakeAction } =
+    useQuotePricingService();
 
   useEffect(() => {
     setAllAddons(quotesData);
@@ -53,7 +54,10 @@ export default function Wizard() {
                 {currentWizard === "register" ? <RegisterForm /> : null}
                 {currentWizard === "requirements" ? <RequirementForm /> : null}
                 {currentWizard === "domain" ? <CheckDomain /> : null}
-                <ActionButton />
+                {(currentWizard === "register" && !showCode) ||
+                currentWizard !== "register" ? (
+                  <ActionButton />
+                ) : null}
               </div>
               <FooterSales />
             </div>

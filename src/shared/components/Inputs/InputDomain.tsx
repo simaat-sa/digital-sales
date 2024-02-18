@@ -1,17 +1,16 @@
-import React from "react";
-import { Input } from "@/shared/components/ui/input";
+import { Input, InputProps } from "@/shared/components/ui/input";
+import { ChangeEvent } from "react";
 import { Label } from "../ui/label";
 
-interface InputDomainProps {
-  value: string;
-  onChange: (value: string) => void;
+interface InputDomainProps extends InputProps {
   domain: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function InputDomain({
   domain,
-  value,
   onChange,
+  ...props
 }: InputDomainProps) {
   return (
     <div
@@ -19,11 +18,12 @@ export default function InputDomain({
       dir="ltr"
     >
       <Input
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
+        value={props.value}
+        onChange={onChange}
         className="flex-1"
+        {...props}
       />
-      <Label className="px-2">{domain}</Label>
+      <Label className="px-2 text-lg lg:text-xl">{domain}</Label>
     </div>
   );
 }
