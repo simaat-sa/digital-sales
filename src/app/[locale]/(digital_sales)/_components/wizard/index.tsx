@@ -12,6 +12,7 @@ import CheckDomain from "./Domain";
 import Quotes from "./Quotes";
 import RegisterForm from "./Register";
 import RequirementForm from "./Requirement";
+import Success from "./Success";
 import Summary from "./Summary";
 
 const planningPrice = "/assets/brand/simaat_logo.svg";
@@ -67,6 +68,7 @@ export default function Wizard() {
         {currentWizard === "quotes" ? <Quotes /> : null}
         {currentWizard === "summary" ? <Summary /> : null}
       </div>
+      {currentWizard === "success" ? <Success /> : null}
     </>
   );
 }

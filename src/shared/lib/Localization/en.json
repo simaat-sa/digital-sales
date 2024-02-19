@@ -45,7 +45,10 @@
     "quote": "Quote",
     "tax": "a value added tax {amount}%",
     "firstName": "First name",
-    "lastName": "Last name"
+    "lastName": "Last name",
+    "success_title": "Subscribed successfully",
+    "success_desc": "You will receive an email with the details of your subscription",
+    "auto_redirect": "Will automatically redirect after seconds"
   },
   "validations": {
     "quote_type_is_required": "Business Type is required",

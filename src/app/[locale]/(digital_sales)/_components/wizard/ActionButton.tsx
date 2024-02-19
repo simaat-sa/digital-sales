@@ -1,26 +1,69 @@
 import { Button } from "@/shared/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/shared/components/ui/dialog";
 import { useTranslations } from "next-intl";
 import { useQuotePricingService } from "../../_services/QuotePricingService";
+import PaymentIFrame from "./PaymentIFrame";
 
 export default function ActionButton() {
-  const { actionButton, currentWizard, onTakeAction } =
-    useQuotePricingService();
+  const {
+    actionButton,
+    currentWizard,
+    dialogPaymentStatus,
+    onTakeAction,
+    onToggleDialogPaymentStatus,
+  } = useQuotePricingService();
   const t = useTranslations("sales");
 
   return (
     <div className="w-full flex justify-between items-center gap-4">
-      <Button
-        onClick={(e) => {
-          e.preventDefault();
-          onTakeAction();
-        }}
-        aria-label="register"
-      >
-        {actionButton === "get_code" ? t("get_code") : null}
-        {actionButton === "check_code" ? t("check_code") : null}
-        {actionButton === "next" ? t("next") : null}
-        {actionButton === "confirm_pay" ? t("confirm_and_pay") : null}
-      </Button>
+      {currentWizard !== "summary" ? (
+        <Button
+          onClick={(e) => {
+            e.preventDefault();
+            onTakeAction();
+          }}
+          aria-label="register"
+        >
+          {actionButton === "get_code" ? t("get_code") : null}
+          {actionButton === "check_code" ? t("check_code") : null}
+          {actionButton === "next" ? t("next") : null}
+          {actionButton === "confirm_pay" ? t("confirm_and_pay") : null}
+        </Button>
+      ) : (
+        <Dialog
+          open={dialogPaymentStatus}
+          onOpenChange={(open) => {
+            onToggleDialogPaymentStatus(open);
+          }}
+        >
+          <DialogTrigger>
+            <Button
+              onClick={(e) => {
+                e.preventDefault();
+                onToggleDialogPaymentStatus(open);
+              }}
+              aria-label="confirm"
+            >
+              {actionButton === "confirm_pay" ? t("confirm_and_pay") : null}
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="w-[30rem]">
+            <DialogHeader>
+              <DialogTitle>Payment</DialogTitle>
+            </DialogHeader>
+            <DialogDescription className="my-0 py-0">
+              <PaymentIFrame />
+            </DialogDescription>
+          </DialogContent>
+        </Dialog>
+      )}
       {currentWizard !== "quotes" ? (
         <Button
           onClick={(e) => {

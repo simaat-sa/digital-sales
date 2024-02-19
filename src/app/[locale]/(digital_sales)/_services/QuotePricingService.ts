@@ -13,7 +13,8 @@ export type Wizards =
   | "requirements"
   | "quotes"
   | "domain"
-  | "summary";
+  | "summary"
+  | "success";
 
 type QuotePlan = "personal" | "office" | "company" | string;
 
@@ -161,14 +162,7 @@ const useQuotePricingService = create<IRequestQuote>((set, get) => ({
           actionButton: "next",
         }));
         get()._disableField("code", false);
-      }, 3000);
-    } else {
-      return set(() => ({
-        errors: {
-          ...get().errors,
-          code: "code_required",
-        },
-      }));
+      }, 2000);
     }
   },
   _onUpdateWizardHistory(wizard, isBack) {
@@ -350,13 +344,15 @@ const useQuotePricingService = create<IRequestQuote>((set, get) => ({
           _onUpdateWizardHistory("requirements");
         });
       } else if (get().currentWizard === "quotes") {
-        set(() => ({ actionButton: "confirm_pay" }));
+        set(() => ({ actionButton: "next" }));
         _setCurrentWizard("domain");
         _onUpdateWizardHistory("quotes");
       } else if (get().currentWizard === "domain") {
         _setCurrentWizard("summary");
         _onUpdateWizardHistory("domain");
+        set(() => ({ actionButton: "confirm_pay" }));
       } else if (get().currentWizard === "summary") {
+        _setCurrentWizard("success");
         _onUpdateWizardHistory("summary");
         get().onToggleDialogPaymentStatus(true);
       }

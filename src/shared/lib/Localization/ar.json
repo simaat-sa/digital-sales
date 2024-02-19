@@ -45,7 +45,10 @@
     "quote": "باقة",
     "tax": "ضريبة مضافه وهي {amount}٪",
     "firstName": "أسم الأول",
-    "lastName": "أسم الأخير"
+    "lastName": "أسم الأخير",
+    "success_title": "تم الاشتراك بنجاح",
+    "success_desc": "سوف تتلقى رسالة بريد إلكتروني تحتوي على تفاصيل اشتراكك.",
+    "auto_redirect": "سيتم إعادة التوجيه تلقائيًا بعد ثوانٍ."
   },
   "validations": {
     "quote_type_is_required": "نوع العمل مطلوب",

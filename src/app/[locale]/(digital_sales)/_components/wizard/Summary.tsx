@@ -1,12 +1,5 @@
 import InputBase from "@/shared/components/Inputs/InputBase";
 import { Button } from "@/shared/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/shared/components/ui/dialog";
 import { Label } from "@/shared/components/ui/label";
 import { Separator } from "@/shared/components/ui/separator";
 import { cn } from "@/shared/lib/utils";
@@ -32,11 +25,9 @@ export default function Summary() {
     promoCode,
     addons,
     promoCodeValid,
-    dialogPaymentStatus,
     onCheckPromoCode,
     onChange,
     onSelectPaymentWay,
-    onToggleDialogPaymentStatus,
   } = useQuotePricingService();
   const t = useTranslations("sales");
   const locale = useLocale();
@@ -201,21 +192,6 @@ export default function Summary() {
           </div>
         </div>
       </div>
-      <Dialog
-        open={dialogPaymentStatus}
-        onOpenChange={(open) => {
-          onToggleDialogPaymentStatus(open);
-        }}
-      >
-        <DialogContent className="w-screen">
-          <DialogHeader>
-            <DialogTitle>Payment</DialogTitle>
-          </DialogHeader>
-          <DialogDescription className="my-0 py-0">
-            <div className="w-full overflow-hidden">Payment card iframe...</div>
-          </DialogDescription>
-        </DialogContent>
-      </Dialog>
     </>
   );
 }
