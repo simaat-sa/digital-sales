@@ -18,7 +18,7 @@ import Summary from "./Summary";
 const planningPrice = "/assets/brand/simaat_logo.svg";
 
 export default function Wizard() {
-  const { currentWizard, showCode, setAllAddons, onTakeAction } =
+  const { currentWizard, showCode, actionButton, wizardHistory, setAllAddons } =
     useQuotePricingService();
 
   useEffect(() => {
@@ -27,9 +27,9 @@ export default function Wizard() {
 
   return (
     <>
-      {(["register", "requirements", "summary"] as Wizards[]).includes(
-        currentWizard
-      ) ? (
+      {(
+        ["register", "requirements", "summary", "domain"] as Wizards[]
+      ).includes(currentWizard) ? (
         <div className="absolute top-0 right-0 bottom-0 left-0 lg:grid-cols-2 grid-cols-1 z-0 hidden lg:grid">
           <div className="col-span-1 bg-gray-100"></div>
           <div className="col-span-1"></div>
@@ -40,7 +40,7 @@ export default function Wizard() {
         {(["register", "requirements", "domain"] as Wizards[]).includes(
           currentWizard
         ) ? (
-          <div className="w-full min-h-screen grid grid-cols-2">
+          <div className="w-full h-screen min-h-screen grid grid-cols-2">
             <div className="h-full items-center justify-center hidden lg:flex">
               <Image
                 src={planningPrice}

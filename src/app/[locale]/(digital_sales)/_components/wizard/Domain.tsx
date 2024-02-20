@@ -14,6 +14,9 @@ export default function CheckDomain() {
 
   return (
     <HeightMotion>
+      <h3 className="text-3xl font-semibold mb-8">
+        {t("confirm_domain_title")}
+      </h3>
       <div className="flex flex-nowrap gap-4 items-end">
         <div className="flex-1 flex flex-col gap-4">
           <InputDomain
@@ -29,7 +32,7 @@ export default function CheckDomain() {
             onClick={() => onVerifyDomain()}
             disabled={disable.domain}
           >
-            {t("check")}
+            {t("verify")}
           </Button>
         ) : (
           <Image

@@ -16,6 +16,7 @@ export default function ActionButton() {
     actionButton,
     currentWizard,
     dialogPaymentStatus,
+    verifiedDomain,
     onTakeAction,
     onToggleDialogPaymentStatus,
   } = useQuotePricingService();
@@ -30,6 +31,13 @@ export default function ActionButton() {
             onTakeAction();
           }}
           aria-label="register"
+          disabled={
+            currentWizard === "domain"
+              ? !verifiedDomain
+                ? true
+                : false
+              : false
+          }
         >
           {actionButton === "get_code" ? t("get_code") : null}
           {actionButton === "check_code" ? t("check_code") : null}
@@ -47,7 +55,7 @@ export default function ActionButton() {
             <Button
               onClick={(e) => {
                 e.preventDefault();
-                onToggleDialogPaymentStatus(open);
+                onToggleDialogPaymentStatus(true);
               }}
               aria-label="confirm"
             >

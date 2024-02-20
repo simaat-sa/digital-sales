@@ -35,7 +35,7 @@ export default function InputMobileNumber({
         )}
         dir="ltr"
       >
-        <Select value="966">
+        <Select value="966" disabled={props.disabled}>
           <SelectTrigger className="max-w-[5rem] border-0 focus-visible:ring-0 rounded-none pr-0 mr-0">
             <SelectValue className="max-w-[5rem] focus-visible:outline-none focus-visible:border-0 outline-none border-0 focus:outline-none focus:border-0" />
           </SelectTrigger>

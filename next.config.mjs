@@ -9,6 +9,12 @@ const nextConfig = {
   images: {
     formats: ["image/webp"],
     minimumCacheTTL: 60,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "simaat.app",
+      },
+    ],
   },
 };
 

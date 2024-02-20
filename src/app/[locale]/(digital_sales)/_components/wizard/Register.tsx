@@ -14,10 +14,17 @@ export default function RegisterForm() {
     onChange,
     _onChangeCode,
   } = useQuotePricingService();
+  const t = useTranslations("sales");
   const validations = useTranslations("validations");
 
   return (
     <div className="w-full flex flex-col gap-12 transition-all duration-300 delay-75">
+      <div className="text-center">
+        <h2 className="text-4xl font-semibold mb-4">
+          {t("register_main_title")}
+        </h2>
+        <p className="text-xl">{t("register_main_desc")}</p>
+      </div>
       <InputMobileNumber
         value={mobileNumber}
         onChange={(e) => {
@@ -32,6 +39,11 @@ export default function RegisterForm() {
 
       {showCode ? (
         <HeightMotion>
+          <p className="text-sm text-gray-600 mb-4">
+            {t("resend_code_notice", {
+              mobileNumber: mobileNumber,
+            })}
+          </p>
           <InputCode
             value={code}
             onChange={(e) => {

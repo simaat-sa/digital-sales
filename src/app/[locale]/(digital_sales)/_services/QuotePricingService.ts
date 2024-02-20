@@ -6,6 +6,8 @@ import { ValidationError, object, string } from "yup";
 import { create } from "zustand";
 import { QuoteModel, quotesData } from "./quotesData";
 
+const taxNumber = 15;
+
 type ActionButton = "get_code" | "check_code" | "next" | "confirm_pay";
 
 export type Wizards =
@@ -23,6 +25,7 @@ type FieldName =
   | "code"
   | "showCode"
   | "quotePlan"
+  | "organizeName"
   | "email"
   | "firstName"
   | "lastName"
@@ -36,6 +39,7 @@ interface IRequestQuoteState {
   code: string;
   showCode: boolean;
   quotePlan: QuotePlan;
+  organizeName: string;
   email: string;
   firstName: string;
   lastName: string;
@@ -68,6 +72,7 @@ interface IRequestQuoteState {
     domain: string;
     firstName: string;
     lastName: string;
+    organizeName: string;
   };
 }
 
@@ -103,6 +108,7 @@ const useQuotePricingService = create<IRequestQuote>((set, get) => ({
   showCode: false,
   quotePlan: "",
   email: "",
+  organizeName: "",
   firstName: "",
   lastName: "",
   quoteSelected: null,
@@ -113,7 +119,7 @@ const useQuotePricingService = create<IRequestQuote>((set, get) => ({
   paymentMonths: 1,
   promoCode: "",
   promoCodeValid: false,
-  promoCodeValue: 0,
+  promoCodeValue: 100,
   enableReSendCode: true,
   pendingReSendCode: false,
   verifiedDomain: false,
@@ -134,6 +140,7 @@ const useQuotePricingService = create<IRequestQuote>((set, get) => ({
     domain: "",
     firstName: "",
     lastName: "",
+    organizeName: "",
   },
 
   _setCurrentWizard(wizard) {
@@ -160,9 +167,10 @@ const useQuotePricingService = create<IRequestQuote>((set, get) => ({
         set(() => ({
           currentWizard: "requirements",
           actionButton: "next",
+          wizardHistory: ["register"],
         }));
         get()._disableField("code", false);
-      }, 2000);
+      }, 1200);
     }
   },
   _onUpdateWizardHistory(wizard, isBack) {
@@ -216,14 +224,41 @@ const useQuotePricingService = create<IRequestQuote>((set, get) => ({
     let email = get().email;
     let firstName = get().firstName;
     let lastName = get().lastName;
+    let organizeName = get().organizeName;
     let errors = get().errors;
+    let schema;
 
-    const schema = object({
-      quotePlan: string().required("quote_type_is_required"),
-      firstName: string().required("first_name_required"),
-      lastName: string().required("last_name_required"),
-      email: string().email().required("email_not_valid"),
+    let schemaBase = object({
+      quotePlan: string().trim().required("quote_type_is_required"),
+      email: string().trim().email().required("email_not_valid"),
     });
+
+    let schemaPersonal = object({
+      quotePlan: string().trim().required("quote_type_is_required"),
+      firstName: string().trim().required("first_name_required"),
+      lastName: string().trim().required("last_name_required"),
+      email: string().trim().email().required("email_not_valid"),
+    });
+
+    const schemaNotPersonal = object({
+      quotePlan: string().required("quote_type_is_required"),
+      organizeName: string()
+        .trim()
+        .required(
+          quotePlan === "2" ? "office_name_required" : "company_name_required"
+        ),
+      email: string().trim().email().required("email_not_valid"),
+    });
+
+    if (quotePlan) {
+      if (quotePlan === "1") {
+        schema = schemaPersonal;
+      } else {
+        schema = schemaNotPersonal;
+      }
+    } else {
+      schema = schemaBase;
+    }
 
     return new Promise((resolve, reject) => {
       schema
@@ -233,6 +268,7 @@ const useQuotePricingService = create<IRequestQuote>((set, get) => ({
             email,
             firstName,
             lastName,
+            organizeName,
           },
           { abortEarly: false }
         )
@@ -243,6 +279,8 @@ const useQuotePricingService = create<IRequestQuote>((set, get) => ({
           let stackErrors: { [key: string]: string } = {};
 
           await error.inner.map((message) => {
+            console.log("message", message.path, "  ", message.message);
+
             stackErrors = {
               ...stackErrors,
               [message.path as any]: message.message,
@@ -279,6 +317,31 @@ const useQuotePricingService = create<IRequestQuote>((set, get) => ({
         [name]: "",
       },
     }));
+
+    if (name === "quotePlan") {
+      set(() => ({
+        organizeName: "",
+        firstName: "",
+        lastName: "",
+        errors: {
+          ...get().errors,
+          firstName: "",
+          lastName: "",
+          organizeName: "",
+        },
+      }));
+    }
+    if (name === "mobileNumber") {
+      set(() => ({
+        showCode: false,
+        code: "",
+        actionButton: "get_code",
+        disable: {
+          ...get().disable,
+          code: false,
+        },
+      }));
+    }
   },
   _onChangeCode(name, value) {
     get().onChange(name, value);
@@ -326,17 +389,10 @@ const useQuotePricingService = create<IRequestQuote>((set, get) => ({
 
     if (!isBack) {
       if (get().currentWizard === "register") {
-        switch (get().actionButton) {
-          case "get_code":
-            _getCode();
-            break;
-
-          case "check_code":
-            _onUpdateWizardHistory("register");
-            break;
-
-          default:
-            break;
+        if (get().actionButton === "get_code") {
+          _getCode();
+        } else if (get().actionButton === "check_code") {
+          _onUpdateWizardHistory("register");
         }
       } else if (get().currentWizard === "requirements") {
         _isRequirementsValid().then(() => {
@@ -344,7 +400,19 @@ const useQuotePricingService = create<IRequestQuote>((set, get) => ({
           _onUpdateWizardHistory("requirements");
         });
       } else if (get().currentWizard === "quotes") {
-        set(() => ({ actionButton: "next" }));
+        set(() => ({
+          actionButton: "next",
+          domain:
+            get().quotePlan === "1"
+              ? get()
+                  .quotePlan.replace(/\s/g, "")
+                  .replace(/\./g, "")
+                  .toLowerCase()
+              : get()
+                  .organizeName.replace(/\s/g, "")
+                  .replace(/\./g, "")
+                  .toLowerCase(),
+        }));
         _setCurrentWizard("domain");
         _onUpdateWizardHistory("quotes");
       } else if (get().currentWizard === "domain") {
@@ -412,21 +480,23 @@ function useCalcAmounts() {
 
     let totalByMonths = quotePrice?.price * paymentMonths;
 
-    if (promoCodeValid) {
-      totalByMonths += promoCodeValue;
-    }
-
     if (addonsSelected.length) {
       totalAddons = addonsSelected.reduce((a, b) => a + b);
     }
 
-    return Math.ceil(calculateTotalWithTax(totalByMonths + totalAddons, 0.5));
+    return promoCodeValid
+      ? Math.ceil(
+          calculateTotalWithTax(totalByMonths + totalAddons, taxNumber)
+        ) + promoCodeValue
+      : Math.ceil(
+          calculateTotalWithTax(totalByMonths + totalAddons, taxNumber)
+        );
   }, [addons, paymentMonths, promoCodeValid, promoCodeValue, quoteSelected]);
 
   const totalTax = useMemo(() => {
     const quotePrice = quotesData.find((quote) => quote.id === quoteSelected)!;
 
-    return calculateTax(quotePrice.price * paymentMonths, 0.5);
+    return calculateTax(quotePrice.price * paymentMonths, taxNumber);
   }, [paymentMonths, quoteSelected]);
 
   return { totalInvoice, totalTax };

@@ -25,6 +25,7 @@ export default function Summary() {
     promoCode,
     addons,
     promoCodeValid,
+    promoCodeValue,
     onCheckPromoCode,
     onChange,
     onSelectPaymentWay,
@@ -66,14 +67,27 @@ export default function Summary() {
                 </li>
               ))}
             </ul>
-
+            <div className="flex justify-between">
+              <div className="flex flex-1 flex-col justify-center gap-4">
+                <h2 className="text-xl font-medium">{t("guarantee_title")}</h2>
+                <p className="text-lg font-medium text-neutral-600">
+                  {t("guarantee_subtitle")}
+                </p>
+              </div>
+              <Image
+                src="https://simaat.app/wp-content/uploads/elementor/thumbs/Money_back_guarantee-pze0w29nbaesrsrmlyr5tg8eetudlbtnrueu8eeq4w.png"
+                alt={t("guarantee_title")}
+                width={170}
+                height={170}
+                loading="lazy"
+              />
+            </div>
             <h4 className="text-lg font-semibold">{t("payment")}</h4>
             <div className="w-full md:w-3/5 lg:w-full sm:w-4/5 grid grid-cols-4 gap-6 lg:pl-6">
               {paymentWay.map((payment) => {
                 const quote = quotesData.find(
                   (quote) => quote.id === getQuoteSelected.id
                 )!;
-                console.log(quote);
                 return (
                   <div
                     key={payment.type}
@@ -112,7 +126,7 @@ export default function Summary() {
               />
               {!promoCodeValid ? (
                 <Button variant="outline" onClick={() => onCheckPromoCode()}>
-                  {t("check")}
+                  {t("apply")}
                 </Button>
               ) : (
                 <Image
@@ -152,32 +166,49 @@ export default function Summary() {
                 <li className="flex justify-between">
                   <span>
                     {t("tax", {
-                      amount: 0.5,
+                      amount: 15,
                     })}
                   </span>
                   <span className="flex gap-2">
                     {totalTax} {t("s_r")}
                   </span>
                 </li>
-              </ul>
-              <div className="flex gap-3 items-center align-baseline mt-4">
-                <h4 className="text-lg font-serif">{t("addons")}</h4>
-                <p className="text-xs text-gray-500">({t("addons_hint")})</p>
-              </div>
-              <ul className="list-none w-full flex flex-col gap-4 font-medium">
-                {addons.get(getQuoteSelected.id)?.map((a) => {
-                  let addon = getQuoteSelected.addons.find((d) => d.id === a)!;
 
-                  return (
-                    <li className="flex justify-between" key={a}>
-                      <span>{addon.name}</span>
-                      <span className="flex gap-2">
-                        {addon.price} {t("s_r")}
-                      </span>
-                    </li>
-                  );
-                })}
+                {promoCodeValid ? (
+                  <li className="flex justify-between">
+                    <span>{t("promo_value")}</span>
+                    <span className="flex gap-2">
+                      {promoCodeValue} {t("s_r")}
+                    </span>
+                  </li>
+                ) : null}
               </ul>
+              {addons.get(getQuoteSelected.id)?.length ? (
+                <>
+                  <div className="flex gap-3 items-center align-baseline mt-4">
+                    <h4 className="text-lg font-semibold">{t("addons")}</h4>
+                    <p className="text-xs text-gray-500">
+                      ({t("addons_hint")})
+                    </p>
+                  </div>
+                  <ul className="list-none w-full flex flex-col gap-4 font-medium">
+                    {addons.get(getQuoteSelected.id)?.map((a) => {
+                      let addon = getQuoteSelected.addons.find(
+                        (d) => d.id === a
+                      )!;
+
+                      return (
+                        <li className="flex justify-between" key={a}>
+                          <span>{addon.name}</span>
+                          <span className="flex gap-2">
+                            {addon.price} {t("s_r")}
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </>
+              ) : null}
               <Separator />
               <div className="flex flex-nowrap justify-between mb-8">
                 <span>{t("total")}</span>

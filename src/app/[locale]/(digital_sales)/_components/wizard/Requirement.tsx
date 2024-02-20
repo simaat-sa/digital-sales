@@ -13,17 +13,105 @@ import { useLocale, useTranslations } from "next-intl";
 import { useQuotePricingService } from "../../_services/QuotePricingService";
 import { quotesData } from "../../_services/quotesData";
 
+function InputName() {
+  const {
+    quotePlan,
+    email,
+    firstName,
+    lastName,
+    organizeName,
+    errors,
+    onChange,
+  } = useQuotePricingService();
+  const validations = useTranslations("validations");
+  const t = useTranslations("sales");
+
+  switch (quotePlan) {
+    case "1":
+      return (
+        <div className="grid grid-cols-2 gap-4">
+          <div className="col-span-2 md:col-span-1">
+            <InputBase
+              value={firstName}
+              onChange={(e) => {
+                onChange("firstName", e.target.value);
+              }}
+              placeholder={t("firstName")}
+              label={t("firstName")}
+              error={
+                errors.firstName.length
+                  ? validations(errors.firstName as any)
+                  : ""
+              }
+            />
+          </div>
+          <div className="col-span-2 md:col-span-1">
+            <InputBase
+              value={lastName}
+              onChange={(e) => {
+                onChange("lastName", e.target.value);
+              }}
+              placeholder={t("lastName")}
+              label={t("lastName")}
+              error={
+                errors.lastName.length
+                  ? validations(errors.lastName as any)
+                  : ""
+              }
+            />
+          </div>
+        </div>
+      );
+
+    case "2":
+      return (
+        <InputBase
+          value={organizeName}
+          onChange={(e) => {
+            onChange("organizeName", e.target.value);
+          }}
+          placeholder={t("office_name")}
+          label={t("office_name")}
+          error={
+            errors.organizeName.length
+              ? validations(errors.organizeName as any)
+              : ""
+          }
+        />
+      );
+
+    case "3":
+      return (
+        <InputBase
+          value={organizeName}
+          onChange={(e) => {
+            onChange("organizeName", e.target.value);
+          }}
+          placeholder={t("company_name")}
+          label={t("company_name")}
+          error={
+            errors.organizeName.length
+              ? validations(errors.organizeName as any)
+              : ""
+          }
+        />
+      );
+    default:
+      return <></>;
+  }
+}
+
 export default function RequirementForm() {
   const { quotePlan, email, firstName, lastName, errors, onChange } =
     useQuotePricingService();
   const t = useTranslations("sales");
   const validations = useTranslations("validations");
   const locale = useLocale();
-  console.log("errors: ", errors);
 
   return (
     <HeightMotion>
       <div className="flex flex-col gap-6">
+        <h3 className="text-3xl font-semibold">{t("personal_info")}</h3>
         <div className="flex flex-col gap-4">
           <Label>{t("business_needed")}</Label>
           <Select
@@ -56,36 +144,9 @@ export default function RequirementForm() {
             </p>
           ) : null}
         </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="col-span-2 md:col-span-1">
-            <InputBase
-              value={firstName}
-              onChange={(e) => {
-                onChange("firstName", e.target.value);
-              }}
-              placeholder={t("firstName")}
-              label={t("firstName")}
-              error={
-                errors.firstName.length
-                  ? validations("first_name_required")
-                  : ""
-              }
-            />
-          </div>
-          <div className="col-span-2 md:col-span-1">
-            <InputBase
-              value={lastName}
-              onChange={(e) => {
-                onChange("lastName", e.target.value);
-              }}
-              placeholder={t("lastName")}
-              label={t("lastName")}
-              error={
-                errors.lastName.length ? validations("last_name_required") : ""
-              }
-            />
-          </div>
-        </div>
+        <HeightMotion>
+          <InputName />
+        </HeightMotion>
         <InputBase
           value={email}
           onChange={(e) => {

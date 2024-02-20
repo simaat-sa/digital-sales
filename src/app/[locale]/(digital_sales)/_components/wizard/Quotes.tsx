@@ -21,6 +21,8 @@ import FooterSales from "../FooterSales";
 
 const checkedIcon = "/assets/svg/icons/CheckBold.svg";
 const VideoStream = "/assets/svg/icons/media-player.svg";
+const CalenderIcon = "/assets/svg/icons/Calender.svg";
+const CallIcon = "/assets/svg/icons/Call.svg";
 
 export default function Quotes() {
   const { quotePlan, addons, onTakeAction, onSelectQuote, onSelectAddon } =
@@ -174,12 +176,47 @@ export default function Quotes() {
                 </div>
                 {name === "companies" ? (
                   <div className="flex flex-col gap-4 p-2">
-                    <a href="#" className="underline">
-                      {t("contact_support")}
-                    </a>
-                    <a href="#" className="underline">
-                      {t("schedule_meeting")}
-                    </a>
+                    <Dialog>
+                      <DialogTrigger className="w-9/12 flex flex-nowrap gap-4">
+                        <Image
+                          src={CallIcon}
+                          alt={t("order_call")}
+                          width={20}
+                          height={20}
+                          loading="lazy"
+                        />
+                        {t("order_call")}
+                      </DialogTrigger>
+                      <DialogContent className="w-screen md:w-[18rem] lg:w-[30rem]">
+                        <DialogHeader>
+                          <DialogTitle>{t("order_call")}</DialogTitle>
+                        </DialogHeader>
+                        <DialogDescription className="my-0 py-0">
+                          <div className="w-full overflow-hidden"></div>
+                        </DialogDescription>
+                      </DialogContent>
+                    </Dialog>
+
+                    <Dialog>
+                      <DialogTrigger className="w-9/12 flex flex-nowrap gap-4">
+                        <Image
+                          src={CalenderIcon}
+                          alt={t("schedule_meeting")}
+                          width={20}
+                          height={20}
+                          loading="lazy"
+                        />
+                        {t("schedule_meeting")}
+                      </DialogTrigger>
+                      <DialogContent className="w-screen md:w-[18rem] lg:w-[30rem]">
+                        <DialogHeader>
+                          <DialogTitle>{t("schedule_meeting")}</DialogTitle>
+                        </DialogHeader>
+                        <DialogDescription className="my-0 py-0">
+                          <div className="w-full overflow-hidden"></div>
+                        </DialogDescription>
+                      </DialogContent>
+                    </Dialog>
                   </div>
                 ) : null}
               </div>
