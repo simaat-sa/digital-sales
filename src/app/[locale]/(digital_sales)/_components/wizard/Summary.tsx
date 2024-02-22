@@ -44,9 +44,9 @@ export default function Summary() {
       <div className="w-full lg:container mx-auto z-10 relative">
         <div className="w-full min-h-screen grid grid-cols-2 gap-y-6 lg:gap-2">
           <div className="lg:h-full flex flex-col justify-center col-span-2 lg:col-span-1 px-4 md:px-2 lg:px-0 gap-4">
-            <h4 className="text-lg font-semibold mt-3">
+            <h2 className="text-lg font-semibold mt-3">
               {t("quote")} {t(getQuoteSelected.name as any)}
-            </h4>
+            </h2>
             <ul>
               {getQuoteSelected.features.map((feat, i) => (
                 <li
@@ -142,7 +142,9 @@ export default function Summary() {
           </div>
           <div className="flex flex-col col-span-2 lg:col-span-1 px-4 md:px-2 lg:px-0">
             <div className="w-full md:w-2/4 lg:w-3/5 px-2 md:px-3 lg:px-6 flex flex-col gap-3 mx-auto flex-1 justify-center">
-              <h2 className="text-lg font-semibold">{t("summary_order")}</h2>
+              <h3 className="text-3xl font-semibold mb-8">
+                {t("summary_order")}
+              </h3>
 
               <h4 className="text-lg font-semibold mt-3">
                 {t("quote")} {t(getQuoteSelected.name as any)}
@@ -177,8 +179,8 @@ export default function Summary() {
                 {promoCodeValid ? (
                   <li className="flex justify-between">
                     <span>{t("promo_value")}</span>
-                    <span className="flex gap-2">
-                      {promoCodeValue} {t("s_r")}
+                    <span className="flex gap-2 text-red-600">
+                      {promoCodeValue} - {t("s_r")}
                     </span>
                   </li>
                 ) : null}
@@ -212,9 +214,11 @@ export default function Summary() {
               <Separator />
               <div className="flex flex-nowrap justify-between mb-8">
                 <span>{t("total")}</span>
-                <span>
-                  {totalInvoice} {t("s_r")}
-                </span>
+
+                <div className="flex flex-nowrap items-center align-baseline justify-center gap-2">
+                  <span className="text-4xl font-medium">{totalInvoice}</span>
+                  {t("s_r")}
+                </div>
               </div>
 
               <ActionButton />

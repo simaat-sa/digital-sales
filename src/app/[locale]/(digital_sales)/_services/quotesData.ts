@@ -18,7 +18,7 @@ export const quotesData: QuoteModel[] = [
   {
     id: 1,
     name: "real-estate",
-    business_need_label: "real-estate_business_need",
+    business_need_label: "personal_needed",
     addons: [
       { name: "أضافة 1", price: 10, id: 1 },
       { name: "أضافة 2", price: 12, id: 2 },
@@ -40,7 +40,7 @@ export const quotesData: QuoteModel[] = [
   {
     id: 2,
     name: "offices",
-    business_need_label: "offices_business_need",
+    business_need_label: "office_needed",
     addons: [
       { name: "أضافة 1", price: 10, id: 1 },
       { name: "أضافة 2", price: 12, id: 2 },
@@ -62,7 +62,7 @@ export const quotesData: QuoteModel[] = [
   {
     id: 3,
     name: "companies",
-    business_need_label: "companies_business_need",
+    business_need_label: "company_needed",
     addons: [
       { name: "أضافة 1", price: 10, id: 1 },
       { name: "أضافة 2", price: 15, id: 2 },
