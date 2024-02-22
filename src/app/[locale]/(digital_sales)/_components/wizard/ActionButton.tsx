@@ -34,8 +34,6 @@ export default function ActionButton() {
           disabled={
             currentWizard === "domain"
               ? !verifiedDomain
-                ? true
-                : false
               : false
           }
         >
