@@ -23,6 +23,7 @@ const checkedIcon = "/assets/svg/icons/CheckBold.svg";
 const VideoStream = "/assets/svg/icons/media-player.svg";
 const CalenderIcon = "/assets/svg/icons/Calender.svg";
 const CallIcon = "/assets/svg/icons/Call.svg";
+const externalLink = "/assets/svg/icons/Linkexternal.svg";
 
 export default function Quotes() {
   const { quotePlan, addons, onTakeAction, onSelectQuote, onSelectAddon } =
@@ -146,6 +147,24 @@ export default function Quotes() {
                       </DialogDescription>
                     </DialogContent>
                   </Dialog>
+                  <a
+                    href="https://demo.simaat.sa/"
+                    target="_blank"
+                    className="w-9/12"
+                  >
+                    <Button
+                      variant="outline"
+                      className="flex justify-start gap-x-6 p-6 w-full border-2"
+                    >
+                      <Image
+                        src={externalLink}
+                        alt="video stream"
+                        width={24}
+                        height={24}
+                      />
+                      <span>{t("try_by_yourself")}</span>
+                    </Button>
+                  </a>
                 </Fragment>
                 <div className="flex flex-wrap w-full gap-2">
                   {addonsList.map((addon, indexT) => (

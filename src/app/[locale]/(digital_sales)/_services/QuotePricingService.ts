@@ -487,7 +487,7 @@ function useCalcAmounts() {
     return promoCodeValid
       ? Math.ceil(
           calculateTotalWithTax(totalByMonths + totalAddons, taxNumber)
-        ) + promoCodeValue
+        ) - promoCodeValue
       : Math.ceil(
           calculateTotalWithTax(totalByMonths + totalAddons, taxNumber)
         );
