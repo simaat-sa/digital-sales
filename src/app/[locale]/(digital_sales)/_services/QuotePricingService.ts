@@ -2,7 +2,7 @@
 import { SAUDI_ARABIA_MOBILE_NUMBER_REGEX } from "@/shared/lib/constants";
 import { calculateTax, calculateTotalWithTax } from "@/shared/lib/utils";
 import { useMemo } from "react";
-import {ValidationError, object, string, ObjectSchema} from "yup";
+import { ObjectSchema, ValidationError, object, string } from "yup";
 import { create } from "zustand";
 import { QuoteModel, quotesData } from "./quotesData";
 
@@ -226,7 +226,7 @@ const useQuotePricingService = create<IRequestQuote>((set, get) => ({
     let lastName = get().lastName;
     let organizeName = get().organizeName;
     let errors = get().errors;
-    let schema: ObjectSchema<any>;
+    let schema: ObjectSchema<Record<string, string>>;
 
     let schemaBase = object({
       quotePlan: string().trim().required("quote_type_is_required"),
