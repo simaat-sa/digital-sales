@@ -1,9 +1,10 @@
-import type { Metadata } from "next";
-import { unstable_setRequestLocale } from "next-intl/server";
-import { LocaleType } from "@/shared/types/locale";
-import { NextIntlClientProvider, useMessages } from "next-intl";
 import "@/shared/assets/css/globals.css";
+import NextAuthProvider from "@/shared/components/AuthNextProvider";
 import ReactQueryProvider from "@/shared/lib/ReactQueryProvider";
+import { LocaleType } from "@/shared/types/locale";
+import type { Metadata } from "next";
+import { NextIntlClientProvider, useMessages } from "next-intl";
+import { unstable_setRequestLocale } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -29,11 +30,13 @@ export default function RootLayout({
   return (
     <html lang={locale} dir={locale === "en" ? "ltr" : "rtl"}>
       <body suppressHydrationWarning={true}>
-        <NextIntlClientProvider messages={messages}>
-          <ReactQueryProvider>
-            <main>{children}</main>
-          </ReactQueryProvider>
-        </NextIntlClientProvider>
+        <NextAuthProvider>
+          <NextIntlClientProvider messages={messages}>
+            <ReactQueryProvider>
+              <main>{children}</main>
+            </ReactQueryProvider>
+          </NextIntlClientProvider>
+        </NextAuthProvider>
       </body>
     </html>
   );

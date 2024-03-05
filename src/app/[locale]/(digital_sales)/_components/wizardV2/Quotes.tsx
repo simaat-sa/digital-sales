@@ -1,6 +1,5 @@
 import { VideoComponent } from "@/shared/components/VideoComponent";
 import { Button } from "@/shared/components/ui/button";
-import { Checkbox } from "@/shared/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -15,7 +14,7 @@ import { cn } from "@/shared/lib/utils";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Fragment } from "react";
-import { useQuotePricingService } from "../../_services/QuotePricingService";
+import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2";
 import { quotesData } from "../../_services/quotesData";
 import FooterSales from "../FooterSales";
 
@@ -26,13 +25,13 @@ const CallIcon = "/assets/svg/icons/Call.svg";
 const externalLink = "/assets/svg/icons/Linkexternal.svg";
 
 export default function Quotes() {
-  const { quotePlan, addons, onTakeAction, onSelectQuote, onSelectAddon } =
-    useQuotePricingService();
+  const { quotePlan, onTakeAction, onSelectQuote } = useQuotePricingServiceV2();
   const t = useTranslations("sales");
+  const tv2 = useTranslations("v2.sales");
 
   return (
     <>
-      <div className="flex justify-between items-center w-full h-[8rem] px-4 lg:px-0">
+      <div className="flex h-[8rem] w-full items-center justify-between px-4 lg:px-0">
         <h2 className="text-3xl font-medium">{t("quotes_title")}</h2>
         <Button variant="outline" onClick={() => onTakeAction(true)}>
           {t("back")}
@@ -43,32 +42,32 @@ export default function Quotes() {
           ({ id, name, features, addons: addonsList, price, description }) => (
             <div
               className={cn(
-                "flex flex-col gap-y-3 shadow-md rounded-3xl overflow-hidden transition-colors duration-150 bg-white p-4 col-span-12 md:col-span-6 lg:col-span-4 border",
+                "col-span-12 flex flex-col gap-y-3 overflow-hidden rounded-3xl border bg-white p-4 shadow-md transition-colors duration-150 md:col-span-6 lg:col-span-4",
                 {
                   "bg-gradient-to-r from-slate-200 to-gray-100 shadow-lg":
                     String(id) === quotePlan,
-                }
+                },
               )}
               key={String(id)}
             >
-              <div className="w-full flex flex-col justify-center gap-4 min-h-40">
-                <div className="flex flex-nowrap items-center justify-between gap-x-4 w-full">
-                  <h4 className="font-medium text-2xl">
+              <div className="flex min-h-40 w-full flex-col justify-center gap-4">
+                <div className="flex w-full flex-nowrap items-center justify-between gap-x-4">
+                  <h4 className="text-2xl font-medium">
                     {t("quote")} {t(name as any)}
                   </h4>
                   {String(id) === quotePlan ? (
-                    <span className="font-medium border rounded-md shadow-md shadow-slate-200 flex items-center p-2 bg-primary text-white">
+                    <span className="flex items-center rounded-md border bg-primary p-2 font-medium text-white shadow-md shadow-slate-200">
                       {t("best_matching")}
                     </span>
                   ) : null}
                 </div>
-                <div className="flex items-center flex-nowrap gap-x-4">
+                <div className="flex flex-nowrap items-center gap-x-4">
                   <h4 className="text-5xl font-medium">{price}</h4>
                   <span>{t("s_r_monthly")}</span>
                 </div>
               </div>
               <Separator
-                className={cn("w-full mx-auto", {
+                className={cn("mx-auto w-full", {
                   "bg-slate-300": String(id) === quotePlan,
                 })}
               />
@@ -99,7 +98,7 @@ export default function Quotes() {
                     <DialogTrigger className="w-9/12">
                       <Button
                         variant="outline"
-                        className="flex justify-start gap-x-6 p-6 w-full border-2"
+                        className="flex w-full justify-start gap-x-6 border-2 p-6"
                       >
                         <Image
                           src={VideoStream}
@@ -125,7 +124,7 @@ export default function Quotes() {
                     <DialogTrigger className="w-9/12">
                       <Button
                         variant="outline"
-                        className="flex justify-start gap-x-6 p-6 w-full border-2"
+                        className="flex w-full justify-start gap-x-6 border-2 p-6"
                       >
                         <Image
                           src={VideoStream}
@@ -154,7 +153,7 @@ export default function Quotes() {
                   >
                     <Button
                       variant="outline"
-                      className="flex justify-start gap-x-6 p-6 w-full border-2"
+                      className="flex w-full justify-start gap-x-6 border-2 p-6"
                     >
                       <Image
                         src={externalLink}
@@ -166,37 +165,11 @@ export default function Quotes() {
                     </Button>
                   </a>
                 </Fragment>
-                <div className="flex flex-wrap w-full gap-2">
-                  {addonsList.map((addon, indexT) => (
-                    <Label
-                      className="w-full flex flex-nowrap content-center items-center align-baseline rounded-xl border shadow p-2 cursor-pointer"
-                      key={indexT}
-                      htmlFor={`${String(`${id} t_${indexT}`)}`}
-                    >
-                      <Checkbox
-                        id={String(`${id} t_${indexT}`)}
-                        className="w-6 h-6 rounded-sm"
-                        onCheckedChange={() => {
-                          onSelectAddon(id, addon.id);
-                        }}
-                        checked={addons.get(id)?.includes(addon.id)}
-                      />
-                      <div className="flex flex-nowrap justify-between items-center flex-1 px-4">
-                        <span className="text-base font-medium flex-1 cursor-pointer">
-                          {addon.name}
-                        </span>
-                        <div className="flex flex-nowrap items-center gap-2">
-                          <span className="text-xl">{addon.price}</span>
-                          <span>{t("s_r")}</span>
-                        </div>
-                      </div>
-                    </Label>
-                  ))}
-                </div>
+
                 {name === "companies" ? (
                   <div className="flex flex-col gap-4 p-2">
                     <Dialog>
-                      <DialogTrigger className="w-9/12 flex flex-nowrap gap-4">
+                      <DialogTrigger className="flex w-9/12 flex-nowrap gap-4">
                         <Image
                           src={CallIcon}
                           alt={t("order_call")}
@@ -217,7 +190,7 @@ export default function Quotes() {
                     </Dialog>
 
                     <Dialog>
-                      <DialogTrigger className="w-9/12 flex flex-nowrap gap-4">
+                      <DialogTrigger className="flex w-9/12 flex-nowrap gap-4">
                         <Image
                           src={CalenderIcon}
                           alt={t("schedule_meeting")}
@@ -240,7 +213,7 @@ export default function Quotes() {
                 ) : null}
               </div>
               <Button
-                className="w-full py-7 rounded-xl text-lg font-medium text-center flex flex-nowrap items-center"
+                className="flex w-full flex-nowrap items-center rounded-xl py-7 text-center text-lg font-medium"
                 type="button"
                 onClick={(e) => {
                   e.preventDefault();
@@ -248,10 +221,10 @@ export default function Quotes() {
                   onTakeAction();
                 }}
               >
-                {t("subscribe_now")}
+                {tv2("custom_your_quote")}
               </Button>
             </div>
-          )
+          ),
         )}
       </div>
       <div className="my-4">

@@ -10,7 +10,7 @@ import {
 } from "@/shared/components/ui/select";
 import { cn } from "@/shared/lib/utils";
 import { useLocale, useTranslations } from "next-intl";
-import { useQuotePricingService } from "../../_services/QuotePricingService";
+import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2";
 import { quotesData } from "../../_services/quotesData";
 
 function InputName() {
@@ -22,7 +22,7 @@ function InputName() {
     organizeName,
     errors,
     onChange,
-  } = useQuotePricingService();
+  } = useQuotePricingServiceV2();
   const validations = useTranslations("validations");
   const t = useTranslations("sales");
 
@@ -102,8 +102,13 @@ function InputName() {
 }
 
 export default function RequirementForm() {
-  const { quotePlan, email, firstName, lastName, errors, onChange } =
-    useQuotePricingService();
+  const {
+    quotePlan,
+    email,
+    errors,
+    onChange,
+    verifiedEmail,
+  } = useQuotePricingServiceV2();
   const t = useTranslations("sales");
   const validations = useTranslations("validations");
   const locale = useLocale();
@@ -139,7 +144,7 @@ export default function RequirementForm() {
             </SelectContent>
           </Select>
           {errors.quotePlan.length ? (
-            <p className="text-sm text-red-600 -mt-4">
+            <p className="-mt-4 text-sm text-red-600">
               {validations("quote_type_is_required")}
             </p>
           ) : null}
@@ -158,6 +163,7 @@ export default function RequirementForm() {
           type="email"
           dir="ltr"
           className="placeholder:rtl:text-right"
+          disabled={verifiedEmail}
         />
       </div>
     </HeightMotion>

@@ -1,12 +1,12 @@
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useEffect } from "react";
-import { useQuotePricingService } from "../../_services/QuotePricingService";
+import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2";
 
 const paymentFormImg = "/assets/online_payments_forms.png";
 
 export default function PaymentIFrame() {
-  const { onTakeAction } = useQuotePricingService();
+  const { onTakeAction } = useQuotePricingServiceV2();
   const t = useTranslations("sales");
 
   useEffect(() => {
@@ -16,7 +16,7 @@ export default function PaymentIFrame() {
   }, [onTakeAction]);
 
   return (
-    <p className="text-3xl w-full flex flex-col justify-center items-center">
+    <p className="flex w-full flex-col items-center justify-center text-3xl">
       <Image
         src={paymentFormImg}
         alt={t("simulate_payment_successfully")}
@@ -24,7 +24,7 @@ export default function PaymentIFrame() {
         height={400}
         loading="lazy"
       />
-      <p className="font-medium text-center">
+      <p className="text-center font-medium">
         {t("simulate_payment_successfully")}
       </p>
     </p>

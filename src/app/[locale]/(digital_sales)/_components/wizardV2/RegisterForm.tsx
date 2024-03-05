@@ -1,8 +1,9 @@
 import InputCode from "@/shared/components/Inputs/InputCode";
 import InputMobileNumber from "@/shared/components/Inputs/InputMobileNumber";
+import SocialAuth from "@/shared/components/SocialAuth";
 import HeightMotion from "@/shared/components/motions/HeighEffect";
 import { useTranslations } from "next-intl";
-import { useQuotePricingService } from "../../_services/QuotePricingService";
+import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2";
 
 export default function RegisterForm() {
   const {
@@ -13,18 +14,21 @@ export default function RegisterForm() {
     disable,
     onChange,
     _onChangeCode,
-  } = useQuotePricingService();
+  } = useQuotePricingServiceV2();
   const t = useTranslations("sales");
   const validations = useTranslations("validations");
 
   return (
-    <div className="w-full flex flex-col gap-12 transition-all duration-300 delay-75">
+    <div className="flex w-full flex-col gap-12 transition-all delay-75 duration-300">
       <div className="text-center">
-        <h2 className="text-4xl font-medium mb-4">
+        <h2 className="mb-4 text-4xl font-medium">
           {t("register_main_title")}
         </h2>
         <p className="text-xl">{t("register_main_desc")}</p>
       </div>
+
+      <SocialAuth />
+
       <InputMobileNumber
         value={mobileNumber}
         onChange={(e) => {
@@ -39,7 +43,7 @@ export default function RegisterForm() {
 
       {showCode ? (
         <HeightMotion>
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="mb-4 text-sm text-gray-600">
             {t("resend_code_notice", {
               mobileNumber: mobileNumber,
             })}

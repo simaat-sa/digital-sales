@@ -1,14 +1,13 @@
-"use client";
 import { SAUDI_ARABIA_MOBILE_NUMBER_REGEX } from "@/shared/lib/constants";
 import { calculateTax, calculateTotalWithTax } from "@/shared/lib/utils";
 import { useMemo } from "react";
+import { mountStoreDevtool } from "simple-zustand-devtools";
 import { ObjectSchema, ValidationError, object, string } from "yup";
 import { create } from "zustand";
-import { QuoteModel, quotesData } from "./quotesData";
+import { FieldName, QuotePlan, taxNumber } from "./QuotePricingService";
+import { AddonV2, quotesData } from "./quotesData";
 
-const taxNumber = 15;
-
-export type ActionButton = "get_code" | "check_code" | "next" | "confirm_pay";
+type registerWay = "MobileNumber" | "SocialMedia" | "";
 
 export type Wizards =
   | "register"
@@ -16,23 +15,16 @@ export type Wizards =
   | "quotes"
   | "domain"
   | "summary"
+  | "custom_quote"
   | "success";
 
-export type QuotePlan = "personal" | "office" | "company" | string;
+export type ActionButtonV2 = "get_code" | "check_code" | "next" | "confirm_pay";
 
-export type FieldName =
-  | "mobileNumber"
-  | "code"
-  | "showCode"
-  | "quotePlan"
-  | "organizeName"
-  | "email"
-  | "firstName"
-  | "lastName"
-  | "domain"
-  | "promoCode";
+interface QuotePricingStateType {
+  registerWay: registerWay;
 
-interface IRequestQuoteState {
+  customQuotesSelected: AddonV2[];
+  actionButton: ActionButtonV2;
   currentWizard: Wizards;
   wizardHistory: Wizards[];
   mobileNumber: string;
@@ -44,10 +36,8 @@ interface IRequestQuoteState {
   firstName: string;
   lastName: string;
   quoteSelected: number | null;
-  addons: Map<string | number, any[]>;
   domain: string;
   verifiedDomain: boolean;
-  actionButton: ActionButton;
   disableBtn: boolean;
   paymentMonths: number;
   promoCode: string;
@@ -56,6 +46,7 @@ interface IRequestQuoteState {
   enableReSendCode: boolean;
   pendingReSendCode: boolean;
   dialogPaymentStatus: boolean;
+  verifiedEmail: boolean;
   disable: {
     mobileNumber: boolean;
     email: boolean;
@@ -79,45 +70,46 @@ interface IRequestQuoteState {
 interface IRequestQuoteActions {
   _setCurrentWizard: (wizard: Wizards) => void;
   _getCode: () => void;
-  _checkCode: () => void;
   _onUpdateWizardHistory: (wizard?: Wizards, isBack?: boolean) => void;
+  onSelectCustomAddon: (addon: AddonV2) => void;
+  onTakeAction: (isBack?: boolean) => void;
+  resetV2: () => void;
+  _checkCode: () => void;
   _isMobileNumberValid: () => boolean;
   _isRequirementsValid: () => Promise<boolean>;
   _onChangeCode: (name: FieldName, value: string) => void;
   _disableField: (name: FieldName, value: boolean) => void;
   _onVerifyPromoCode: () => void;
-  setAllAddons: (listAddons: QuoteModel[]) => void;
   onChange: (name: FieldName, value: string | number | boolean) => void;
-  onSelectAddon: (quoteId: number, addonId: number) => void;
   onSelectQuote: (id: number) => void;
-  onTakeAction: (isBack?: boolean) => void;
   onSelectPaymentWay: (months: number) => void;
   onClickResendCode: () => void;
   onCheckPromoCode: () => void;
   onVerifyDomain: () => void;
   onToggleDialogPaymentStatus: (status: boolean) => void;
+  onLoginWithGoogle: (email?: string) => void;
   reset: () => void;
 }
 
-export interface IRequestQuote
-  extends IRequestQuoteState,
-    IRequestQuoteActions {}
+interface QuotePricingV2 extends QuotePricingStateType, IRequestQuoteActions {}
 
-const useQuotePricingService = create<IRequestQuote>((set, get) => ({
+const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
+  registerWay: "",
   currentWizard: "register",
+  customQuotesSelected: [],
+  actionButton: "get_code",
   wizardHistory: [],
   mobileNumber: "",
   code: "",
   showCode: false,
   quotePlan: "",
   email: "",
+  verifiedDomain: false,
   organizeName: "",
   firstName: "",
   lastName: "",
   quoteSelected: null,
-  addons: new Map(),
   domain: "",
-  actionButton: "get_code",
   disableBtn: false,
   paymentMonths: 1,
   promoCode: "",
@@ -125,7 +117,6 @@ const useQuotePricingService = create<IRequestQuote>((set, get) => ({
   promoCodeValue: 100,
   enableReSendCode: true,
   pendingReSendCode: false,
-  verifiedDomain: false,
   dialogPaymentStatus: false,
   disable: {
     domain: false,
@@ -135,6 +126,7 @@ const useQuotePricingService = create<IRequestQuote>((set, get) => ({
     mobileNumber: false,
     code: false,
   },
+  verifiedEmail: false,
   errors: {
     mobileNumber: "",
     code: "",
@@ -145,7 +137,21 @@ const useQuotePricingService = create<IRequestQuote>((set, get) => ({
     lastName: "",
     organizeName: "",
   },
-
+  onLoginWithGoogle(email) {
+    set(() => ({
+      email: email,
+      verifiedEmail: true,
+    }));
+  },
+  onSelectCustomAddon(addon) {
+    set(() => ({
+      customQuotesSelected: !get().customQuotesSelected.find(
+        (item) => item.id === addon.id,
+      )
+        ? [...get().customQuotesSelected, addon]
+        : get().customQuotesSelected.filter((item) => item.id !== addon.id),
+    }));
+  },
   _setCurrentWizard(wizard) {
     return set(() => ({
       currentWizard: wizard,
@@ -300,16 +306,7 @@ const useQuotePricingService = create<IRequestQuote>((set, get) => ({
         });
     });
   },
-  setAllAddons(listAddons) {
-    let list = new Map();
-    listAddons.map((q) => {
-      list.set(q.id, []);
-    });
 
-    set(() => ({
-      addons: list,
-    }));
-  },
   onChange(name, value) {
     let errors = get().errors;
 
@@ -358,32 +355,13 @@ const useQuotePricingService = create<IRequestQuote>((set, get) => ({
       promoCodeValid: true,
     }));
   },
-  onSelectAddon(quoteId, addonId) {
-    const allAddons = get().addons;
-    let addonsById = get().addons.get(quoteId);
 
-    if (addonsById?.includes(addonId)) {
-      allAddons.set(
-        quoteId,
-        addonsById.filter((a) => a !== addonId),
-      );
-    } else {
-      if (addonsById) {
-        allAddons.set(quoteId, [...addonsById, addonId]);
-      } else {
-        allAddons.set(quoteId, [addonId]);
-      }
-    }
-
-    set(() => ({
-      addons: allAddons.set(quoteId, allAddons.get(quoteId)!),
-    }));
-  },
   onSelectQuote(id) {
     set(() => ({
       quoteSelected: id,
     }));
   },
+  resetV2() {},
   onTakeAction(isBack) {
     let _setCurrentWizard = get()._setCurrentWizard;
     let _onUpdateWizardHistory = get()._onUpdateWizardHistory;
@@ -403,25 +381,24 @@ const useQuotePricingService = create<IRequestQuote>((set, get) => ({
           _onUpdateWizardHistory("requirements");
         });
       } else if (get().currentWizard === "quotes") {
-        set(() => ({
-          actionButton: "next",
-          domain:
-            get().quotePlan === "1"
-              ? get()
-                  .quotePlan.replace(/\s/g, "")
-                  .replace(/\./g, "")
-                  .toLowerCase()
-              : get()
-                  .organizeName.replace(/\s/g, "")
-                  .replace(/\./g, "")
-                  .toLowerCase(),
-        }));
-        _setCurrentWizard("domain");
+        _setCurrentWizard("custom_quote");
         _onUpdateWizardHistory("quotes");
+      } else if (get().currentWizard === "custom_quote") {
+        set(() => ({
+          actionButton: "confirm_pay",
+          domain:
+            get().firstName.trim() + get().lastName.trim() ||
+            get().organizeName.trim() ||
+            "",
+        }));
+
+        _setCurrentWizard("domain");
+        _onUpdateWizardHistory("custom_quote");
+        set(() => ({ actionButton: "next" }));
       } else if (get().currentWizard === "domain") {
+        set(() => ({ actionButton: "confirm_pay" }));
         _setCurrentWizard("summary");
         _onUpdateWizardHistory("domain");
-        set(() => ({ actionButton: "confirm_pay" }));
       } else if (get().currentWizard === "summary") {
         _setCurrentWizard("success");
         _onUpdateWizardHistory("summary");
@@ -463,24 +440,23 @@ const useQuotePricingService = create<IRequestQuote>((set, get) => ({
     }));
   },
   reset() {
-    set(useQuotePricingService.getInitialState());
+    set(useQuotePricingServiceV2.getInitialState());
   },
 }));
 
-function useCalcAmounts() {
+function useCalcAmountsV2() {
   const {
-    quoteSelected,
+    customQuotesSelected,
     paymentMonths,
-    addons,
     promoCodeValue,
     promoCodeValid,
-  } = useQuotePricingService();
+    quoteSelected,
+  } = useQuotePricingServiceV2();
 
   const totalInvoice = useMemo(() => {
     const quotePrice = quotesData.find((quote) => quote.id === quoteSelected)!;
-    let addonsSelected = addons
-      .get(quotePrice?.id)!
-      .map((id) => quotePrice.addons.find((a) => a.id === id)!.price);
+
+    let addonsSelected = customQuotesSelected.map((Item) => Item.price);
 
     let totalAddons = 0;
 
@@ -490,13 +466,29 @@ function useCalcAmounts() {
       totalAddons = addonsSelected.reduce((a, b) => a + b);
     }
 
+    console.log("🚀 ~ totalInvoice ~ addonsSelected:", addonsSelected);
+    console.log("🚀 ~ totalInvoice ~ totalAddons:", totalAddons);
+    console.log("🚀 ~ totalInvoice ~ totalByMonths:", totalByMonths);
+    console.log(
+      "🚀 ~ totalInvoice ~ calculateTotalWithTax:",
+      calculateTotalWithTax(totalByMonths + totalAddons, taxNumber),
+    );
+
     return promoCodeValid
-      ? Math.ceil(calculateTotalWithTax(totalByMonths, taxNumber)) -
-          promoCodeValue
+      ? Math.ceil(
+          calculateTotalWithTax(totalByMonths + totalAddons, taxNumber),
+        ) - promoCodeValue
       : Math.ceil(
-          calculateTotalWithTax(totalByMonths, taxNumber) + totalAddons,
+          calculateTotalWithTax(totalByMonths + totalAddons, taxNumber),
         );
-  }, [addons, paymentMonths, promoCodeValid, promoCodeValue, quoteSelected]);
+  }, [
+    customQuotesSelected,
+    paymentMonths,
+    promoCodeValid,
+    promoCodeValue,
+    quoteSelected,
+  ]);
+  console.log("🚀 ~ totalInvoice ~ totalInvoice:", totalInvoice);
 
   const totalTax = useMemo(() => {
     const quotePrice = quotesData.find((quote) => quote.id === quoteSelected)!;
@@ -504,16 +496,31 @@ function useCalcAmounts() {
     return calculateTax(quotePrice.price * paymentMonths, taxNumber);
   }, [paymentMonths, quoteSelected]);
 
-  return { totalInvoice, totalTax };
+  const invoiceTotalWithoutTax = useMemo(() => {
+    const quotePrice = quotesData.find((quote) => quote.id === quoteSelected)!;
+
+    let addonsSelected = customQuotesSelected.map((Item) => Item.price);
+
+    let totalAddons = 0;
+
+    let totalByMonths = quotePrice?.price * paymentMonths;
+
+    if (addonsSelected.length) {
+      totalAddons = addonsSelected.reduce((a, b) => a + b);
+    }
+
+    return totalByMonths + totalAddons;
+  }, [customQuotesSelected, paymentMonths, quoteSelected]);
+
+  return { totalInvoice, totalTax, invoiceTotalWithoutTax };
 }
 
-function useGetQuoteSelected(id: number) {
+function useGetQuoteSelectedV2(id: number) {
   return useMemo(() => quotesData.find((q) => q.id === id), [id]);
 }
 
-export {
-  taxNumber,
-  useCalcAmounts,
-  useGetQuoteSelected,
-  useQuotePricingService,
-};
+export { useCalcAmountsV2, useGetQuoteSelectedV2, useQuotePricingServiceV2 };
+
+if (process.env.NODE_ENV === "development") {
+  mountStoreDevtool("QuotePricingServiceV2", useQuotePricingServiceV2);
+}

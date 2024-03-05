@@ -44,7 +44,7 @@ export default function Summary() {
       <div className="w-full lg:container mx-auto z-10 relative">
         <div className="w-full min-h-screen grid grid-cols-2 gap-y-6 lg:gap-2">
           <div className="lg:h-full flex flex-col justify-center col-span-2 lg:col-span-1 px-4 md:px-2 lg:px-0 gap-4">
-            <h2 className="text-lg font-semibold mt-3">
+            <h2 className="text-lg font-medium mt-3">
               {t("quote")} {t(getQuoteSelected.name as any)}
             </h2>
             <ul>
@@ -82,7 +82,7 @@ export default function Summary() {
                 loading="lazy"
               />
             </div>
-            <h4 className="text-lg font-semibold">{t("payment")}</h4>
+            <h4 className="text-lg font-medium">{t("payment")}</h4>
             <div className="w-full md:w-3/5 lg:w-full sm:w-4/5 grid grid-cols-4 gap-6 lg:pl-6">
               {paymentWay.map((payment) => {
                 const quote = quotesData.find(
@@ -101,7 +101,7 @@ export default function Summary() {
                       onSelectPaymentWay(payment.months);
                     }}
                   >
-                    <span className="font-semibold text-sm">
+                    <span className="font-medium text-sm">
                       {payment.label[locale as "ar" | "en"]}
                     </span>
                     <div className="flex flex-nowrap items-center align-baseline justify-center gap-2">
@@ -142,11 +142,11 @@ export default function Summary() {
           </div>
           <div className="flex flex-col col-span-2 lg:col-span-1 px-4 md:px-2 lg:px-0">
             <div className="w-full md:w-2/4 lg:w-3/5 px-2 md:px-3 lg:px-6 flex flex-col gap-3 mx-auto flex-1 justify-center">
-              <h3 className="text-3xl font-semibold mb-8">
+              <h3 className="text-3xl font-medium mb-8">
                 {t("summary_order")}
               </h3>
 
-              <h4 className="text-lg font-semibold mt-3">
+              <h4 className="text-lg font-medium mt-3">
                 {t("quote")} {t(getQuoteSelected.name as any)}
               </h4>
 
@@ -188,7 +188,7 @@ export default function Summary() {
               {addons.get(getQuoteSelected.id)?.length ? (
                 <>
                   <div className="flex gap-3 items-center align-baseline mt-4">
-                    <h4 className="text-lg font-semibold">{t("addons")}</h4>
+                    <h4 className="text-lg font-medium">{t("addons")}</h4>
                     <p className="text-xs text-gray-500">
                       ({t("addons_hint")})
                     </p>
