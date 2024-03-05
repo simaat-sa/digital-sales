@@ -345,13 +345,13 @@ const useQuotePricingService = create<IRequestQuote>((set, get) => ({
         },
       }));
     }
-  },
-  _onChangeCode(name, value) {
-    get().onChange(name, value);
-
     if (name === "code") {
       get()._checkCode();
     }
+  },
+  _onChangeCode(name, value) {
+    get().onChange(name, value);
+    get()._checkCode();
   },
   _onVerifyPromoCode() {
     set(() => ({

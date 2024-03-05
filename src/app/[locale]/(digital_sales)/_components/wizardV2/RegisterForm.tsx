@@ -1,9 +1,7 @@
-import InputCode from "@/shared/components/Inputs/InputCode";
-import InputMobileNumber from "@/shared/components/Inputs/InputMobileNumber";
 import SocialAuth from "@/shared/components/SocialAuth";
-import HeightMotion from "@/shared/components/motions/HeighEffect";
 import { useTranslations } from "next-intl";
 import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2";
+import MobileNumberWithCode from "../MobileNumberWithCode";
 
 export default function RegisterForm() {
   const {
@@ -29,43 +27,16 @@ export default function RegisterForm() {
 
       <SocialAuth />
 
-      <InputMobileNumber
+      <MobileNumberWithCode
         value={mobileNumber}
-        onChange={(e) => {
-          onChange("mobileNumber", e.target.value);
+        onChange={onChange}
+        errors={{
+          mobileNumber: errors.mobileNumber,
+          code: errors.code,
         }}
-        error={
-          errors.mobileNumber.length
-            ? validations("mobile_number_not_valid")
-            : ""
-        }
+        code={code}
+        showCode={showCode}
       />
-
-      {showCode ? (
-        <HeightMotion>
-          <p className="mb-4 text-sm text-gray-600">
-            {t("resend_code_notice", {
-              mobileNumber: mobileNumber,
-            })}
-          </p>
-          <InputCode
-            value={code}
-            onChange={(e) => {
-              _onChangeCode("code", e.target.value);
-            }}
-            placeholder="# # # #"
-            dir="ltr"
-            onResendCode={() => {
-              return new Promise((resolve) => {
-                resolve(true);
-              });
-            }}
-            timeLeft={59000}
-            error={errors.code ? validations(errors.code as any) : ""}
-            disabled={disable.code}
-          />
-        </HeightMotion>
-      ) : null}
     </div>
   );
 }

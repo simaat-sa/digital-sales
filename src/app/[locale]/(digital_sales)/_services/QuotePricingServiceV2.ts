@@ -47,6 +47,7 @@ interface QuotePricingStateType {
   pendingReSendCode: boolean;
   dialogPaymentStatus: boolean;
   verifiedEmail: boolean;
+  verifiedMobile: boolean;
   disable: {
     mobileNumber: boolean;
     email: boolean;
@@ -127,6 +128,7 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
     code: false,
   },
   verifiedEmail: false,
+  verifiedMobile: false,
   errors: {
     mobileNumber: "",
     code: "",
@@ -141,6 +143,8 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
     set(() => ({
       email: email,
       verifiedEmail: true,
+      registerWay: "SocialMedia",
+      actionButton: "get_code",
     }));
   },
   onSelectCustomAddon(addon) {
@@ -172,14 +176,28 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
     const code = get().code;
     if (code.length === 4) {
       get()._disableField("code", true);
-      setTimeout(() => {
-        set(() => ({
-          currentWizard: "requirements",
-          actionButton: "next",
-          wizardHistory: ["register"],
-        }));
-        get()._disableField("code", false);
-      }, 1200);
+      if (get().currentWizard === "register") {
+        setTimeout(() => {
+          set(() => ({
+            currentWizard: "requirements",
+            actionButton: "next",
+            wizardHistory: ["register"],
+            verifiedMobile: true,
+          }));
+          get()._disableField("code", false);
+        }, 1200);
+      } else if (get().currentWizard === "requirements") {
+        setTimeout(() => {
+          set(() => ({
+            actionButton: "next",
+            verifiedMobile: true,
+            disable: {
+              ...get().disable,
+              mobileNumber: true,
+            },
+          }));
+        }, 1200);
+      }
     }
   },
   _onUpdateWizardHistory(wizard, isBack) {
@@ -342,6 +360,10 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
         },
       }));
     }
+
+    if (name === "code") {
+      get()._checkCode();
+    }
   },
   _onChangeCode(name, value) {
     get().onChange(name, value);
@@ -376,10 +398,16 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
           _onUpdateWizardHistory("register");
         }
       } else if (get().currentWizard === "requirements") {
-        _isRequirementsValid().then(() => {
-          _setCurrentWizard("quotes");
-          _onUpdateWizardHistory("requirements");
-        });
+        if (get().verifiedMobile) {
+          _isRequirementsValid().then(() => {
+            _setCurrentWizard("quotes");
+            _onUpdateWizardHistory("requirements");
+          });
+        } else {
+          if (get().actionButton === "get_code") {
+            _getCode();
+          }
+        }
       } else if (get().currentWizard === "quotes") {
         _setCurrentWizard("custom_quote");
         _onUpdateWizardHistory("quotes");
@@ -466,14 +494,6 @@ function useCalcAmountsV2() {
       totalAddons = addonsSelected.reduce((a, b) => a + b);
     }
 
-    console.log("🚀 ~ totalInvoice ~ addonsSelected:", addonsSelected);
-    console.log("🚀 ~ totalInvoice ~ totalAddons:", totalAddons);
-    console.log("🚀 ~ totalInvoice ~ totalByMonths:", totalByMonths);
-    console.log(
-      "🚀 ~ totalInvoice ~ calculateTotalWithTax:",
-      calculateTotalWithTax(totalByMonths + totalAddons, taxNumber),
-    );
-
     return promoCodeValid
       ? Math.ceil(
           calculateTotalWithTax(totalByMonths + totalAddons, taxNumber),
@@ -488,7 +508,6 @@ function useCalcAmountsV2() {
     promoCodeValue,
     quoteSelected,
   ]);
-  console.log("🚀 ~ totalInvoice ~ totalInvoice:", totalInvoice);
 
   const totalTax = useMemo(() => {
     const quotePrice = quotesData.find((quote) => quote.id === quoteSelected)!;

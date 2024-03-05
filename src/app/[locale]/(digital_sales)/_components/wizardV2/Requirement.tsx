@@ -12,6 +12,7 @@ import { cn } from "@/shared/lib/utils";
 import { useLocale, useTranslations } from "next-intl";
 import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2";
 import { quotesData } from "../../_services/quotesData";
+import MobileNumberWithCode from "../MobileNumberWithCode";
 
 function InputName() {
   const {
@@ -108,6 +109,10 @@ export default function RequirementForm() {
     errors,
     onChange,
     verifiedEmail,
+    mobileNumber,
+    code,
+    showCode,
+    disable,
   } = useQuotePricingServiceV2();
   const t = useTranslations("sales");
   const validations = useTranslations("validations");
@@ -164,6 +169,21 @@ export default function RequirementForm() {
           dir="ltr"
           className="placeholder:rtl:text-right"
           disabled={verifiedEmail}
+        />
+
+        <MobileNumberWithCode
+          value={mobileNumber}
+          onChange={onChange}
+          errors={{
+            mobileNumber: errors.mobileNumber,
+            code: errors.code,
+          }}
+          code={code}
+          showCode={showCode}
+          disable={{
+            mobileNumber: disable.mobileNumber,
+            code: disable.code,
+          }}
         />
       </div>
     </HeightMotion>

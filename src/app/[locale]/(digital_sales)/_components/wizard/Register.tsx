@@ -1,67 +1,35 @@
-import InputCode from "@/shared/components/Inputs/InputCode";
-import InputMobileNumber from "@/shared/components/Inputs/InputMobileNumber";
-import HeightMotion from "@/shared/components/motions/HeighEffect";
 import { useTranslations } from "next-intl";
 import { useQuotePricingService } from "../../_services/QuotePricingService";
+import MobileNumberWithCode from "../MobileNumberWithCode";
 
 export default function RegisterForm() {
-  const {
-    mobileNumber,
-    showCode,
-    code,
-    errors,
-    disable,
-    onChange,
-    _onChangeCode,
-  } = useQuotePricingService();
+  const { mobileNumber, showCode, code, errors, disable, onChange } =
+    useQuotePricingService();
   const t = useTranslations("sales");
   const validations = useTranslations("validations");
 
   return (
-    <div className="w-full flex flex-col gap-12 transition-all duration-300 delay-75">
+    <div className="flex w-full flex-col gap-12 transition-all delay-75 duration-300">
       <div className="text-center">
-        <h2 className="text-4xl font-medium mb-4">
+        <h2 className="mb-4 text-4xl font-medium">
           {t("register_main_title")}
         </h2>
         <p className="text-xl">{t("register_main_desc")}</p>
       </div>
-      <InputMobileNumber
+      <MobileNumberWithCode
         value={mobileNumber}
-        onChange={(e) => {
-          onChange("mobileNumber", e.target.value);
+        onChange={onChange}
+        errors={{
+          mobileNumber: errors.mobileNumber,
+          code: errors.code,
         }}
-        error={
-          errors.mobileNumber.length
-            ? validations("mobile_number_not_valid")
-            : ""
-        }
+        disable={{
+          mobileNumber: disable.mobileNumber,
+          code: disable.code,
+        }}
+        code={code}
+        showCode={showCode}
       />
-
-      {showCode ? (
-        <HeightMotion>
-          <p className="text-sm text-gray-600 mb-4">
-            {t("resend_code_notice", {
-              mobileNumber: mobileNumber,
-            })}
-          </p>
-          <InputCode
-            value={code}
-            onChange={(e) => {
-              _onChangeCode("code", e.target.value);
-            }}
-            placeholder="# # # #"
-            dir="ltr"
-            onResendCode={() => {
-              return new Promise((resolve) => {
-                resolve(true);
-              });
-            }}
-            timeLeft={59000}
-            error={errors.code ? validations(errors.code as any) : ""}
-            disabled={disable.code}
-          />
-        </HeightMotion>
-      ) : null}
     </div>
   );
 }
