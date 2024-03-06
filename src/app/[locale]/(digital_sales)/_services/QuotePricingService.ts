@@ -406,15 +406,9 @@ const useQuotePricingService = create<IRequestQuote>((set, get) => ({
         set(() => ({
           actionButton: "next",
           domain:
-            get().quotePlan === "1"
-              ? get()
-                  .quotePlan.replace(/\s/g, "")
-                  .replace(/\./g, "")
-                  .toLowerCase()
-              : get()
-                  .organizeName.replace(/\s/g, "")
-                  .replace(/\./g, "")
-                  .toLowerCase(),
+            get().firstName.trim() + get().lastName.trim() ||
+            get().organizeName.trim() ||
+            "",
         }));
         _setCurrentWizard("domain");
         _onUpdateWizardHistory("quotes");

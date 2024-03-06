@@ -96,7 +96,7 @@ export default function CustomQuote() {
                 {t("quote")}{" "}
                 {t(
                   quotesData.find((item) => item.id === quoteSelected)
-                    ?.business_need_label as any,
+                    ?.name as any,
                 )}
               </span>
               <span className="flex gap-2">

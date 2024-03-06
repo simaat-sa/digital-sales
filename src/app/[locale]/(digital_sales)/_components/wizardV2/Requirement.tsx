@@ -158,34 +158,39 @@ export default function RequirementForm() {
         <HeightMotion>
           <InputName />
         </HeightMotion>
-        <InputBase
-          value={email}
-          onChange={(e) => {
-            onChange("email", e.target.value);
-          }}
-          placeholder={t("email")}
-          label={t("email")}
-          error={errors.email.length ? validations("email_not_valid") : ""}
-          type="email"
-          dir="ltr"
-          className="placeholder:rtl:text-right"
-          disabled={verifiedEmail ? true : disable.email}
-        />
 
-        <MobileNumberWithCode
-          value={mobileNumber}
-          onChange={onChange}
-          errors={{
-            mobileNumber: errors.mobileNumber,
-            code: errors.code,
-          }}
-          code={code}
-          showCode={verifiedMobile ? false : showCode}
-          disable={{
-            mobileNumber: verifiedMobile ? true : disable.mobileNumber,
-            code: disable.code,
-          }}
-        />
+        {!verifiedEmail ? (
+          <InputBase
+            value={email}
+            onChange={(e) => {
+              onChange("email", e.target.value);
+            }}
+            placeholder={t("email")}
+            label={t("email")}
+            error={errors.email.length ? validations("email_not_valid") : ""}
+            type="email"
+            dir="ltr"
+            className="placeholder:rtl:text-right"
+            disabled={verifiedEmail ? true : disable.email}
+          />
+        ) : null}
+
+        {!verifiedMobile ? (
+          <MobileNumberWithCode
+            value={mobileNumber}
+            onChange={onChange}
+            errors={{
+              mobileNumber: errors.mobileNumber,
+              code: errors.code,
+            }}
+            code={code}
+            showCode={verifiedMobile ? false : showCode}
+            disable={{
+              mobileNumber: verifiedMobile ? true : disable.mobileNumber,
+              code: disable.code,
+            }}
+          />
+        ) : null}
       </div>
     </HeightMotion>
   );
