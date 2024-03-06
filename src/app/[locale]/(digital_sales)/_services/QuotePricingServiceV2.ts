@@ -512,8 +512,19 @@ function useCalcAmountsV2() {
   const totalTax = useMemo(() => {
     const quotePrice = quotesData.find((quote) => quote.id === quoteSelected)!;
 
-    return calculateTax(quotePrice.price * paymentMonths, taxNumber);
-  }, [paymentMonths, quoteSelected]);
+    let addonsSelected = customQuotesSelected.map((Item) => Item.price);
+
+    let totalAddons = 0;
+
+    if (addonsSelected.length) {
+      totalAddons = addonsSelected.reduce((a, b) => a + b);
+    }
+
+    return calculateTax(
+      quotePrice.price * paymentMonths + totalAddons,
+      taxNumber,
+    );
+  }, [customQuotesSelected, paymentMonths, quoteSelected]);
 
   const invoiceTotalWithoutTax = useMemo(() => {
     const quotePrice = quotesData.find((quote) => quote.id === quoteSelected)!;
@@ -522,14 +533,12 @@ function useCalcAmountsV2() {
 
     let totalAddons = 0;
 
-    let totalByMonths = quotePrice?.price * paymentMonths;
-
     if (addonsSelected.length) {
       totalAddons = addonsSelected.reduce((a, b) => a + b);
     }
 
-    return totalByMonths + totalAddons;
-  }, [customQuotesSelected, paymentMonths, quoteSelected]);
+    return quotePrice.price + totalAddons;
+  }, [customQuotesSelected, quoteSelected]);
 
   return { totalInvoice, totalTax, invoiceTotalWithoutTax };
 }

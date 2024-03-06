@@ -109,6 +109,7 @@ export default function RequirementForm() {
     errors,
     onChange,
     verifiedEmail,
+    verifiedMobile,
     mobileNumber,
     code,
     showCode,
@@ -168,7 +169,7 @@ export default function RequirementForm() {
           type="email"
           dir="ltr"
           className="placeholder:rtl:text-right"
-          disabled={verifiedEmail}
+          disabled={verifiedEmail ? true : disable.email}
         />
 
         <MobileNumberWithCode
@@ -179,9 +180,9 @@ export default function RequirementForm() {
             code: errors.code,
           }}
           code={code}
-          showCode={showCode}
+          showCode={verifiedMobile ? false : showCode}
           disable={{
-            mobileNumber: disable.mobileNumber,
+            mobileNumber: verifiedMobile ? true : disable.mobileNumber,
             code: disable.code,
           }}
         />

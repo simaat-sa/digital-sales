@@ -21,7 +21,6 @@ export default function Wizard() {
   const { showCode } = useQuotePricingServiceV2();
   const { currentWizard } = useQuotePricingServiceV2();
   const { data: userSession } = useSession();
-  console.log("🚀 ~ Wizard ~ userSession:", userSession?.user?.email);
 
   return (
     <>
