@@ -42,9 +42,9 @@ export default function Summary() {
         <div className="col-span-1 bg-gray-100"></div>
         <div className="col-span-1"></div>
       </div>
-      <div className="relative z-10 mx-auto w-full lg:container">
+      <div className="container relative z-10">
         <div className="grid min-h-screen w-full grid-cols-2 gap-y-6 lg:gap-2">
-          <div className="col-span-2 flex flex-col justify-center gap-4 px-4 md:px-2 lg:col-span-1 lg:h-full lg:px-0">
+          <div className="col-span-2 flex flex-col justify-center gap-4 md:px-2 lg:col-span-1 lg:h-full lg:px-0">
             <h2 className="mt-3 text-lg font-medium">
               {t("quote")} {t(getQuoteSelected.name as any)}
             </h2>
@@ -107,13 +107,13 @@ export default function Summary() {
               />
             </div>
           </div>
-          <div className="col-span-2 flex flex-col px-4 md:px-2 lg:col-span-1 lg:px-0">
+          <div className="col-span-2 flex flex-col md:px-2 lg:col-span-1 lg:px-0">
             <div className="mx-auto flex w-full flex-1 flex-col justify-center gap-4 px-2 md:px-3 lg:px-6">
               <label className="text-lg font-medium">
                 {t("summary_order")}
               </label>
               <h4 className="text-lg font-medium">{t("payment")}</h4>
-              <div className="grid w-full grid-cols-4 gap-6">
+              <div className="grid w-full grid-cols-4 gap-4 lg:gap-6">
                 {paymentWay.map((payment) => {
                   const quote = quotesData.find(
                     (quote) => quote.id === getQuoteSelected.id,

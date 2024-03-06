@@ -82,7 +82,8 @@
   },
   "common": {
     "resend_code": "اعادة أرسال الرمز",
-    "countdown": " {time} ثانية"
+    "countdown": " {time} ثانية",
+    "continue_with_google": "تسجيل الدخول عن طريق جوجل"
   },
   "v2": {
     "sales": {

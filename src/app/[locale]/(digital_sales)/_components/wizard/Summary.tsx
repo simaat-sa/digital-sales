@@ -37,14 +37,14 @@ export default function Summary() {
 
   return (
     <>
-      <div className="absolute top-0 right-0 bottom-0 left-0 lg:grid-cols-2 grid-cols-1 z-0 hidden lg:grid">
+      <div className="absolute bottom-0 left-0 right-0 top-0 z-0 hidden grid-cols-1 lg:grid lg:grid-cols-2">
         <div className="col-span-1 bg-gray-100"></div>
         <div className="col-span-1"></div>
       </div>
-      <div className="w-full lg:container mx-auto z-10 relative">
-        <div className="w-full min-h-screen grid grid-cols-2 gap-y-6 lg:gap-2">
-          <div className="lg:h-full flex flex-col justify-center col-span-2 lg:col-span-1 px-4 md:px-2 lg:px-0 gap-4">
-            <h2 className="text-lg font-medium mt-3">
+      <div className="container relative z-10">
+        <div className="grid min-h-screen w-full grid-cols-2 gap-y-6 lg:gap-2">
+          <div className="col-span-2 flex flex-col justify-center gap-4 px-4 md:px-2 lg:col-span-1 lg:h-full lg:px-0">
+            <h2 className="mt-3 text-lg font-medium">
               {t("quote")} {t(getQuoteSelected.name as any)}
             </h2>
             <ul>
@@ -83,28 +83,28 @@ export default function Summary() {
               />
             </div>
             <h4 className="text-lg font-medium">{t("payment")}</h4>
-            <div className="w-full md:w-3/5 lg:w-full sm:w-4/5 grid grid-cols-4 gap-6 lg:pl-6">
+            <div className="grid w-full grid-cols-4 gap-6 sm:w-4/5 md:w-3/5 lg:w-full lg:pl-6">
               {paymentWay.map((payment) => {
                 const quote = quotesData.find(
-                  (quote) => quote.id === getQuoteSelected.id
+                  (quote) => quote.id === getQuoteSelected.id,
                 )!;
                 return (
                   <div
                     key={payment.type}
                     className={cn(
-                      "border border-slate-50 rounded-xl shadow bg-white p-3 cursor-pointer col-span-2 lg:col-span-1 flex flex-col gap-6 justify-center items-center transition-colors duration-75 ease-in",
+                      "col-span-2 flex cursor-pointer flex-col items-center justify-center gap-6 rounded-xl border border-slate-50 bg-white p-3 shadow transition-colors duration-75 ease-in lg:col-span-1",
                       {
                         "border-primary-600": payment.months === paymentMonths,
-                      }
+                      },
                     )}
                     onClick={() => {
                       onSelectPaymentWay(payment.months);
                     }}
                   >
-                    <span className="font-medium text-sm">
+                    <span className="text-sm font-medium">
                       {payment.label[locale as "ar" | "en"]}
                     </span>
-                    <div className="flex flex-nowrap items-center align-baseline justify-center gap-2">
+                    <div className="flex flex-nowrap items-center justify-center gap-2 align-baseline">
                       <span className="text-3xl">
                         {+quote.price * +payment.months || 0}
                       </span>
@@ -114,7 +114,7 @@ export default function Summary() {
                 );
               })}
             </div>
-            <div className="w-full md:w-4/5 lg:w-full flex items-end gap-3">
+            <div className="flex w-full items-end gap-3 md:w-4/5 lg:w-full">
               <InputBase
                 label={t("promo_code")}
                 placeholder={t("promo_code")}
@@ -140,22 +140,22 @@ export default function Summary() {
               )}
             </div>
           </div>
-          <div className="flex flex-col col-span-2 lg:col-span-1 px-4 md:px-2 lg:px-0">
-            <div className="w-full md:w-2/4 lg:w-3/5 px-2 md:px-3 lg:px-6 flex flex-col gap-3 mx-auto flex-1 justify-center">
-              <h3 className="text-3xl font-medium mb-8">
+          <div className="col-span-2 flex flex-col px-4 md:px-2 lg:col-span-1 lg:px-0">
+            <div className="mx-auto flex w-full flex-1 flex-col justify-center gap-3 px-2 md:w-2/4 md:px-3 lg:w-3/5 lg:px-6">
+              <h3 className="mb-8 text-3xl font-medium">
                 {t("summary_order")}
               </h3>
 
-              <h4 className="text-lg font-medium mt-3">
+              <h4 className="mt-3 text-lg font-medium">
                 {t("quote")} {t(getQuoteSelected.name as any)}
               </h4>
 
-              <ul className="list-none w-full flex flex-col gap-4 font-medium">
+              <ul className="flex w-full list-none flex-col gap-4 font-medium">
                 <li className="flex justify-between">
                   <span>
                     {
                       paymentWay.find(
-                        (payment) => payment.months === paymentMonths
+                        (payment) => payment.months === paymentMonths,
                       )?.label[locale as "ar" | "en"]
                     }
                   </span>
@@ -187,16 +187,16 @@ export default function Summary() {
               </ul>
               {addons.get(getQuoteSelected.id)?.length ? (
                 <>
-                  <div className="flex gap-3 items-center align-baseline mt-4">
+                  <div className="mt-4 flex items-center gap-3 align-baseline">
                     <h4 className="text-lg font-medium">{t("addons")}</h4>
                     <p className="text-xs text-gray-500">
                       ({t("addons_hint")})
                     </p>
                   </div>
-                  <ul className="list-none w-full flex flex-col gap-4 font-medium">
+                  <ul className="flex w-full list-none flex-col gap-4 font-medium">
                     {addons.get(getQuoteSelected.id)?.map((a) => {
                       let addon = getQuoteSelected.addons.find(
-                        (d) => d.id === a
+                        (d) => d.id === a,
                       )!;
 
                       return (
@@ -212,10 +212,10 @@ export default function Summary() {
                 </>
               ) : null}
               <Separator />
-              <div className="flex flex-nowrap justify-between mb-8">
+              <div className="mb-8 flex flex-nowrap justify-between">
                 <span>{t("total")}</span>
 
-                <div className="flex flex-nowrap items-center align-baseline justify-center gap-2">
+                <div className="flex flex-nowrap items-center justify-center gap-2 align-baseline">
                   <span className="text-4xl font-medium">{totalInvoice}</span>
                   {t("s_r")}
                 </div>

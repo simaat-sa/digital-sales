@@ -4,15 +4,8 @@ import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2"
 import MobileNumberWithCode from "../MobileNumberWithCode";
 
 export default function RegisterForm() {
-  const {
-    mobileNumber,
-    showCode,
-    code,
-    errors,
-    disable,
-    onChange,
-    _onChangeCode,
-  } = useQuotePricingServiceV2();
+  const { mobileNumber, showCode, code, errors, onChange } =
+    useQuotePricingServiceV2();
   const t = useTranslations("sales");
   const validations = useTranslations("validations");
 

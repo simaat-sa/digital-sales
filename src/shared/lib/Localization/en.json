@@ -82,7 +82,8 @@
   },
   "common": {
     "resend_code": "Resend code",
-    "countdown": "{time} seconds"
+    "countdown": "{time} seconds",
+    "continue_with_google" : "Continue with google"
   },
   "v2": {
     "sales": {

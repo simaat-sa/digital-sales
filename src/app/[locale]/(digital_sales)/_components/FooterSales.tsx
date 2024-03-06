@@ -9,7 +9,7 @@ export default function FooterSales() {
   const { reset } = useQuotePricingService();
 
   return (
-    <footer className="container mx-auto flex h-14 items-center justify-between">
+    <footer className="container flex h-14 items-center justify-between">
       <Link
         href={
           !pathname.includes("/v2") ? "/v2/digital-sales" : "/v1/digital-sales"

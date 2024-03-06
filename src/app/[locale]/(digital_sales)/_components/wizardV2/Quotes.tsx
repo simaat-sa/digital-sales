@@ -13,7 +13,6 @@ import { Separator } from "@/shared/components/ui/separator";
 import { cn } from "@/shared/lib/utils";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { Fragment } from "react";
 import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2";
 import { quotesData } from "../../_services/quotesData";
 import FooterSales from "../FooterSales";
@@ -93,78 +92,76 @@ export default function Quotes() {
                     </li>
                   ))}
                 </ul>
-                <Fragment>
-                  <Dialog>
-                    <DialogTrigger className="w-9/12">
-                      <Button
-                        variant="outline"
-                        className="flex w-full justify-start gap-x-6 border-2 p-6"
-                      >
-                        <Image
-                          src={VideoStream}
-                          alt="video stream"
-                          width={24}
-                          height={24}
-                        />
-                        <span>{t("presentation_video")}</span>
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="w-screen">
-                      <DialogHeader>
-                        <DialogTitle>{t("presentation_video")}</DialogTitle>
-                      </DialogHeader>
-                      <DialogDescription className="my-0 py-0">
-                        <div className="w-full overflow-hidden">
-                          <VideoComponent src="https://www.w3schools.com/html/mov_bbb.mp4" />
-                        </div>
-                      </DialogDescription>
-                    </DialogContent>
-                  </Dialog>
-                  <Dialog>
-                    <DialogTrigger className="w-9/12">
-                      <Button
-                        variant="outline"
-                        className="flex w-full justify-start gap-x-6 border-2 p-6"
-                      >
-                        <Image
-                          src={VideoStream}
-                          alt="video stream"
-                          width={24}
-                          height={24}
-                        />
-                        <span>{t("demo_video")}</span>
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="w-screen">
-                      <DialogHeader>
-                        <DialogTitle>{t("demo_video")}</DialogTitle>
-                      </DialogHeader>
-                      <DialogDescription className="my-0 py-0">
-                        <div className="w-full overflow-hidden">
-                          <VideoComponent src="https://www.w3schools.com/html/mov_bbb.mp4" />
-                        </div>
-                      </DialogDescription>
-                    </DialogContent>
-                  </Dialog>
-                  <a
-                    href="https://demo.simaat.sa/"
-                    target="_blank"
-                    className="w-9/12"
-                  >
+                <Dialog>
+                  <DialogTrigger className="w-full lg:w-9/12">
                     <Button
                       variant="outline"
                       className="flex w-full justify-start gap-x-6 border-2 p-6"
                     >
                       <Image
-                        src={externalLink}
+                        src={VideoStream}
                         alt="video stream"
                         width={24}
                         height={24}
                       />
-                      <span>{t("try_by_yourself")}</span>
+                      <span>{t("presentation_video")}</span>
                     </Button>
-                  </a>
-                </Fragment>
+                  </DialogTrigger>
+                  <DialogContent className="w-screen">
+                    <DialogHeader>
+                      <DialogTitle>{t("presentation_video")}</DialogTitle>
+                    </DialogHeader>
+                    <DialogDescription className="my-0 py-0">
+                      <div className="w-full overflow-hidden">
+                        <VideoComponent src="https://www.w3schools.com/html/mov_bbb.mp4" />
+                      </div>
+                    </DialogDescription>
+                  </DialogContent>
+                </Dialog>
+                <Dialog>
+                  <DialogTrigger className="w-full lg:w-9/12">
+                    <Button
+                      variant="outline"
+                      className="flex w-full justify-start gap-x-6 border-2 p-6"
+                    >
+                      <Image
+                        src={VideoStream}
+                        alt="video stream"
+                        width={24}
+                        height={24}
+                      />
+                      <span>{t("demo_video")}</span>
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="w-screen">
+                    <DialogHeader>
+                      <DialogTitle>{t("demo_video")}</DialogTitle>
+                    </DialogHeader>
+                    <DialogDescription className="my-0 py-0">
+                      <div className="w-full overflow-hidden">
+                        <VideoComponent src="https://www.w3schools.com/html/mov_bbb.mp4" />
+                      </div>
+                    </DialogDescription>
+                  </DialogContent>
+                </Dialog>
+                <a
+                  href="https://demo.simaat.sa/"
+                  target="_blank"
+                  className="w-full lg:w-9/12"
+                >
+                  <Button
+                    variant="outline"
+                    className="flex w-full justify-start gap-x-6 border-2 p-6"
+                  >
+                    <Image
+                      src={externalLink}
+                      alt="video stream"
+                      width={24}
+                      height={24}
+                    />
+                    <span>{t("try_by_yourself")}</span>
+                  </Button>
+                </a>
 
                 {name === "companies" ? (
                   <div className="flex flex-col gap-4 p-2">

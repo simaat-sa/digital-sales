@@ -35,7 +35,7 @@ export default function Wizard() {
         </div>
       ) : null}
 
-      <div className="relative z-10 mx-auto w-full lg:container">
+      <div className="relative z-10 container">
         {(["register", "requirements", "domain"] as Wizards[]).includes(
           currentWizard,
         ) ? (

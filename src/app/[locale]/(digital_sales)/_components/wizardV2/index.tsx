@@ -1,6 +1,5 @@
 "use client";
 import FooterSales from "@/app/[locale]/(digital_sales)/_components/FooterSales";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import {
   Wizards,
@@ -19,8 +18,7 @@ const planningPrice = "/assets/brand/simaat_logo.svg";
 
 export default function Wizard() {
   const { showCode } = useQuotePricingServiceV2();
-  const { currentWizard } = useQuotePricingServiceV2();
-  const { data: userSession } = useSession();
+  const { currentWizard, actionButton } = useQuotePricingServiceV2();
 
   return (
     <>
@@ -33,7 +31,7 @@ export default function Wizard() {
         </div>
       ) : null}
 
-      <div className="relative z-10 mx-auto w-full lg:container">
+      <div className="container relative z-10">
         {(["register", "requirements", "domain"] as Wizards[]).includes(
           currentWizard,
         ) ? (
@@ -53,8 +51,18 @@ export default function Wizard() {
                 {currentWizard === "requirements" ? <RequirementForm /> : null}
                 {currentWizard === "domain" ? <CheckDomain /> : null}
 
-                {(currentWizard === "register" && !showCode) ||
-                currentWizard !== "register" ? (
+                {currentWizard === "register" && !showCode ? (
+                  <ActionButtonV2 />
+                ) : null}
+
+                {currentWizard === "requirements" &&
+                actionButton !== "check_code" ? (
+                  <ActionButtonV2 />
+                ) : null}
+
+                {currentWizard === "domain" ||
+                currentWizard === "summary" ||
+                currentWizard === "custom_quote" ? (
                   <ActionButtonV2 />
                 ) : null}
               </div>

@@ -46,7 +46,7 @@ export default function CustomQuote() {
             <div
               key={index}
               className={cn(
-                "col-span-6 flex cursor-pointer flex-wrap rounded bg-slate-50 p-3 shadow md:col-span-4",
+                "col-span-12 flex cursor-pointer flex-wrap rounded bg-slate-50 p-3 shadow md:col-span-4",
               )}
               onClick={(e) => {
                 e.stopPropagation();
