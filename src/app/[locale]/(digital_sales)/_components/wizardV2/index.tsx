@@ -1,28 +1,24 @@
 "use client";
 import FooterSales from "@/app/[locale]/(digital_sales)/_components/FooterSales";
-import ActionButton from "@/app/[locale]/(digital_sales)/_components/wizard/ActionButton";
-import CheckDomain from "@/app/[locale]/(digital_sales)/_components/wizard/Domain";
-import Quotes from "@/app/[locale]/(digital_sales)/_components/wizard/Quotes";
-import RegisterForm from "@/app/[locale]/(digital_sales)/_components/wizard/Register";
-import RequirementForm from "@/app/[locale]/(digital_sales)/_components/wizard/Requirement";
-import Success from "@/app/[locale]/(digital_sales)/_components/wizard/Success";
-import Summary from "@/app/[locale]/(digital_sales)/_components/wizard/Summary";
+import Image from "next/image";
 import {
   Wizards,
-  useQuotePricingService,
-} from "@/app/[locale]/(digital_sales)/_services/QuotePricingService";
-import { quotesData } from "@/app/[locale]/(digital_sales)/_services/quotesData";
-import Image from "next/image";
-import { useEffect } from "react";
+  useQuotePricingServiceV2,
+} from "../../_services/QuotePricingServiceV2";
+import ActionButtonV2 from "./ActionButtonV2";
+import CustomQuote from "./CustomQuote";
+import CheckDomain from "./Domain";
+import Quotes from "./Quotes";
+import RegisterForm from "./RegisterForm";
+import RequirementForm from "./Requirement";
+import Success from "./Success";
+import Summary from "./Summary";
 
 const planningPrice = "/assets/brand/simaat_logo.svg";
 
 export default function Wizard() {
-  const { currentWizard, showCode, setAllAddons } = useQuotePricingService();
-
-  useEffect(() => {
-    setAllAddons(quotesData);
-  }, [setAllAddons]);
+  const { showCode } = useQuotePricingServiceV2();
+  const { currentWizard, actionButton } = useQuotePricingServiceV2();
 
   return (
     <>
@@ -35,7 +31,7 @@ export default function Wizard() {
         </div>
       ) : null}
 
-      <div className="relative z-10 container">
+      <div className="container relative z-10">
         {(["register", "requirements", "domain"] as Wizards[]).includes(
           currentWizard,
         ) ? (
@@ -54,16 +50,27 @@ export default function Wizard() {
                 {currentWizard === "register" ? <RegisterForm /> : null}
                 {currentWizard === "requirements" ? <RequirementForm /> : null}
                 {currentWizard === "domain" ? <CheckDomain /> : null}
-                {(currentWizard === "register" && !showCode) ||
-                currentWizard !== "register" ? (
-                  <ActionButton />
+
+                {currentWizard === "register" && !showCode ? (
+                  <ActionButtonV2 />
+                ) : null}
+
+                {currentWizard === "requirements" &&
+                actionButton !== "check_code" ? (
+                  <ActionButtonV2 />
+                ) : null}
+
+                {currentWizard === "domain" ||
+                currentWizard === "summary" ||
+                currentWizard === "custom_quote" ? (
+                  <ActionButtonV2 />
                 ) : null}
               </div>
               <FooterSales />
             </div>
           </div>
         ) : null}
-
+        {currentWizard === "custom_quote" ? <CustomQuote /> : null}
         {currentWizard === "quotes" ? <Quotes /> : null}
         {currentWizard === "summary" ? <Summary /> : null}
       </div>

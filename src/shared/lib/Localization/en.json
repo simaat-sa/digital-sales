@@ -66,7 +66,9 @@
     "guarantee_title": "Guarantee",
     "guarantee_subtitle": "We will either provide added value to your business or refund your subscription fees",
     "simulate_payment_successfully": "Simulate Payment successfully",
-    "try_by_yourself": "Try by your"
+    "try_by_yourself": "Try by your",
+    "v1": "Version 1",
+    "v2": "Version 2"
   },
   "validations": {
     "quote_type_is_required": "Business Type is required",
@@ -80,6 +82,12 @@
   },
   "common": {
     "resend_code": "Resend code",
-    "countdown": "{time} seconds"
+    "countdown": "{time} seconds",
+    "continue_with_google" : "Continue with google"
+  },
+  "v2": {
+    "sales": {
+      "custom_your_quote": "Custom your quote"
+    }
   }
 }

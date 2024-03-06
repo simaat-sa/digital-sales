@@ -6,14 +6,14 @@ import { cn } from "@/shared/lib/utils";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import {
-  useCalcAmounts,
-  useGetQuoteSelected,
-  useQuotePricingService,
-} from "../../_services/QuotePricingService";
+  useCalcAmountsV2,
+  useGetQuoteSelectedV2,
+  useQuotePricingServiceV2,
+} from "../../_services/QuotePricingServiceV2";
 import { paymentWay } from "../../_services/paymentWay";
 import { quotesData } from "../../_services/quotesData";
 import FooterSales from "../FooterSales";
-import ActionButton from "./ActionButton";
+import ActionButtonV2 from "./ActionButtonV2";
 
 const checkedIcon = "/assets/svg/icons/CheckBold.svg";
 const checkedDecagramIcon = "/assets/svg/icons/checked-decagram.svg";
@@ -23,17 +23,18 @@ export default function Summary() {
     quoteSelected,
     paymentMonths,
     promoCode,
-    addons,
     promoCodeValid,
     promoCodeValue,
     onCheckPromoCode,
     onChange,
     onSelectPaymentWay,
-  } = useQuotePricingService();
+    customQuotesSelected,
+  } = useQuotePricingServiceV2();
+
   const t = useTranslations("sales");
   const locale = useLocale();
-  const { totalInvoice, totalTax } = useCalcAmounts();
-  const getQuoteSelected = useGetQuoteSelected(quoteSelected!)!;
+  const { totalInvoice, totalTax } = useCalcAmountsV2();
+  const getQuoteSelected = useGetQuoteSelectedV2(quoteSelected!)!;
 
   return (
     <>
@@ -43,7 +44,7 @@ export default function Summary() {
       </div>
       <div className="container relative z-10">
         <div className="grid min-h-screen w-full grid-cols-2 gap-y-6 lg:gap-2">
-          <div className="col-span-2 flex flex-col justify-center gap-4 px-4 md:px-2 lg:col-span-1 lg:h-full lg:px-0">
+          <div className="col-span-2 flex flex-col justify-center gap-4 md:px-2 lg:col-span-1 lg:h-full lg:px-0">
             <h2 className="mt-3 text-lg font-medium">
               {t("quote")} {t(getQuoteSelected.name as any)}
             </h2>
@@ -67,6 +68,29 @@ export default function Summary() {
                 </li>
               ))}
             </ul>
+            <h2 className="mt-3 text-lg font-medium">{t("addons")}</h2>
+            <ul>
+              {getQuoteSelected.addons.map((addon, i) => (
+                <li
+                  key={addon.id}
+                  className={cn("mb-4", {
+                    "mb-0": getQuoteSelected.features.length - 1 === i,
+                  })}
+                >
+                  <div className="flex flex-nowrap items-center gap-x-3">
+                    <Image
+                      src={checkedIcon}
+                      alt={"checked"}
+                      width={24}
+                      height={24}
+                    />
+                    <Label className="text-base font-medium">
+                      {addon.name}
+                    </Label>
+                  </div>
+                </li>
+              ))}
+            </ul>
             <div className="flex justify-between">
               <div className="flex flex-1 flex-col justify-center gap-4">
                 <h2 className="text-xl font-medium">{t("guarantee_title")}</h2>
@@ -82,73 +106,75 @@ export default function Summary() {
                 loading="lazy"
               />
             </div>
-            <h4 className="text-lg font-medium">{t("payment")}</h4>
-            <div className="grid w-full grid-cols-4 gap-6 sm:w-4/5 md:w-3/5 lg:w-full lg:pl-6">
-              {paymentWay.map((payment) => {
-                const quote = quotesData.find(
-                  (quote) => quote.id === getQuoteSelected.id,
-                )!;
-                return (
-                  <div
-                    key={payment.type}
-                    className={cn(
-                      "col-span-2 flex cursor-pointer flex-col items-center justify-center gap-6 rounded-xl border border-slate-50 bg-white p-3 shadow transition-colors duration-75 ease-in lg:col-span-1",
-                      {
-                        "border-primary-600": payment.months === paymentMonths,
-                      },
-                    )}
-                    onClick={() => {
-                      onSelectPaymentWay(payment.months);
-                    }}
-                  >
-                    <span className="text-sm font-medium">
-                      {payment.label[locale as "ar" | "en"]}
-                    </span>
-                    <div className="flex flex-nowrap items-center justify-center gap-2 align-baseline">
-                      <span className="text-3xl">
-                        {+quote.price * +payment.months || 0}
-                      </span>
-                      {t("s_r")}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="flex w-full items-end gap-3 md:w-4/5 lg:w-full">
-              <InputBase
-                label={t("promo_code")}
-                placeholder={t("promo_code")}
-                value={promoCode}
-                onChange={(e) => {
-                  onChange("promoCode", e.target.value);
-                }}
-                disabled={promoCodeValid}
-              />
-              {!promoCodeValid ? (
-                <Button variant="outline" onClick={() => onCheckPromoCode()}>
-                  {t("apply")}
-                </Button>
-              ) : (
-                <Image
-                  src={checkedDecagramIcon}
-                  width={24}
-                  height={24}
-                  alt="verified"
-                  className="mb-3"
-                  loading="lazy"
-                />
-              )}
-            </div>
           </div>
-          <div className="col-span-2 flex flex-col px-4 md:px-2 lg:col-span-1 lg:px-0">
-            <div className="mx-auto flex w-full flex-1 flex-col justify-center gap-3 px-2 md:w-2/4 md:px-3 lg:w-3/5 lg:px-6">
-              <h3 className="mb-8 text-3xl font-medium">
+          <div className="col-span-2 flex flex-col md:px-2 lg:col-span-1 lg:px-0">
+            <div className="mx-auto flex w-full flex-1 flex-col justify-center gap-4 px-2 md:px-3 lg:px-6">
+              <label className="text-lg font-medium">
                 {t("summary_order")}
-              </h3>
+              </label>
+              <h4 className="text-lg font-medium">{t("payment")}</h4>
+              <div className="grid w-full grid-cols-4 gap-4 lg:gap-6">
+                {paymentWay.map((payment) => {
+                  const quote = quotesData.find(
+                    (quote) => quote.id === getQuoteSelected.id,
+                  )!;
+                  return (
+                    <div
+                      key={payment.type}
+                      className={cn(
+                        "col-span-2 flex cursor-pointer flex-col items-center justify-center gap-6 rounded-xl border border-slate-50 bg-white p-3 shadow transition-colors duration-75 ease-in lg:col-span-1",
+                        {
+                          "border-primary-600":
+                            payment.months === paymentMonths,
+                        },
+                      )}
+                      onClick={() => {
+                        onSelectPaymentWay(payment.months);
+                      }}
+                    >
+                      <span className="text-sm font-medium">
+                        {payment.label[locale as "ar" | "en"]}
+                      </span>
+                      <div className="flex flex-nowrap items-center justify-center gap-2 align-baseline">
+                        <span className="text-3xl">
+                          {+quote.price * +payment.months || 0}
+                        </span>
+                        {t("s_r")}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
 
-              <h4 className="mt-3 text-lg font-medium">
+              <div className="flex w-full items-end gap-3 md:w-4/5 lg:w-full">
+                <InputBase
+                  label={t("promo_code")}
+                  placeholder={t("promo_code")}
+                  value={promoCode}
+                  onChange={(e) => {
+                    onChange("promoCode", e.target.value);
+                  }}
+                  disabled={promoCodeValid}
+                />
+                {!promoCodeValid ? (
+                  <Button variant="outline" onClick={() => onCheckPromoCode()}>
+                    {t("apply")}
+                  </Button>
+                ) : (
+                  <Image
+                    src={checkedDecagramIcon}
+                    width={24}
+                    height={24}
+                    alt="verified"
+                    className="mb-3"
+                    loading="lazy"
+                  />
+                )}
+              </div>
+
+              <label className="text-lg font-medium">
                 {t("quote")} {t(getQuoteSelected.name as any)}
-              </h4>
+              </label>
 
               <ul className="flex w-full list-none flex-col gap-4 font-medium">
                 <li className="flex justify-between">
@@ -185,32 +211,26 @@ export default function Summary() {
                   </li>
                 ) : null}
               </ul>
-              {addons.get(getQuoteSelected.id)?.length ? (
-                <>
-                  <div className="mt-4 flex items-center gap-3 align-baseline">
-                    <h4 className="text-lg font-medium">{t("addons")}</h4>
-                    <p className="text-xs text-gray-500">
-                      ({t("addons_hint")})
-                    </p>
-                  </div>
-                  <ul className="flex w-full list-none flex-col gap-4 font-medium">
-                    {addons.get(getQuoteSelected.id)?.map((a) => {
-                      let addon = getQuoteSelected.addons.find(
-                        (d) => d.id === a,
-                      )!;
 
-                      return (
-                        <li className="flex justify-between" key={a}>
-                          <span>{addon.name}</span>
-                          <span className="flex gap-2">
-                            {addon.price} {t("s_r")}
-                          </span>
-                        </li>
-                      );
-                    })}
+              {customQuotesSelected.length ? (
+                <>
+                  <label className="text-lg font-medium">{t("addons")}</label>
+                  <ul>
+                    {customQuotesSelected.map((quote) => (
+                      <li
+                        className="flex justify-between font-medium"
+                        key={quote.id}
+                      >
+                        <span>{quote.name}</span>
+                        <span className="flex gap-2">
+                          {quote.price} {t("s_r")}
+                        </span>
+                      </li>
+                    ))}
                   </ul>
                 </>
               ) : null}
+
               <Separator />
               <div className="mb-8 flex flex-nowrap justify-between">
                 <span>{t("total")}</span>
@@ -221,7 +241,7 @@ export default function Summary() {
                 </div>
               </div>
 
-              <ActionButton />
+              <ActionButtonV2 />
             </div>
             <FooterSales />
           </div>

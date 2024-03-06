@@ -1,6 +1,6 @@
+import { defaultLocale, locales } from "@/shared/lib/navigation";
 import createIntlMiddleware from "next-intl/middleware";
 import { NextRequest } from "next/server";
-import { locales, defaultLocale } from "@/shared/lib/navigation";
 
 const LOCALE_HEADER = "SIMAAT_LOCALE";
 

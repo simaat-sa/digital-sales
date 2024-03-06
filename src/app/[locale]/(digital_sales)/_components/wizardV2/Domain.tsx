@@ -3,20 +3,20 @@ import HeightMotion from "@/shared/components/motions/HeighEffect";
 import { Button } from "@/shared/components/ui/button";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { useQuotePricingService } from "../../_services/QuotePricingService";
+import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2";
 
 const checkedDecagramIcon = "/assets/svg/icons/checked-decagram.svg";
 
 export default function CheckDomain() {
   const { domain, verifiedDomain, disable, onChange, onVerifyDomain } =
-    useQuotePricingService();
+    useQuotePricingServiceV2();
   const t = useTranslations("sales");
 
   return (
     <HeightMotion>
-      <h3 className="text-3xl font-medium mb-8">{t("confirm_domain_title")}</h3>
-      <div className="flex flex-nowrap gap-4 items-end">
-        <div className="flex-1 flex flex-col gap-4">
+      <h3 className="mb-8 text-3xl font-medium">{t("confirm_domain_title")}</h3>
+      <div className="flex flex-nowrap items-end gap-4">
+        <div className="flex flex-1 flex-col gap-4">
           <InputDomain
             value={domain}
             onChange={(e) => onChange("domain", e.target.value)}

@@ -22,7 +22,7 @@
     "optional": "أختياري",
     "companies": "شركات",
     "offices": "مكاتب",
-    "real-estate": "عقارات",
+    "real-estate": "عقاري",
     "continue_counts": "أستمر و ادفع",
     "s_r": "ر.س",
     "s_r_monthly": "ر.س / شهري",
@@ -56,7 +56,7 @@
     "company_name": "أسم الشركة",
     "personal_name": "اسم مالك فرد",
     "register_main_title": "منصة سمات",
-    "register_main_desc": "الجيل القادم من الحدمات العقارية",
+    "register_main_desc": "الجيل القادم من الخدمات العقارية",
     "resend_code_notice": "ادخل رمز التحقق المرسل الي ( {mobileNumber}+ ) في رساله نصية",
     "order_call": "طلب أتصال",
     "personal_info": "بيانات الشخصية",
@@ -66,7 +66,9 @@
     "guarantee_title": "ضمان ذهبي مدته 21 يومًا",
     "guarantee_subtitle": "إما أن نقدم قيمة مضافة لأعمالكم أو نعيد لكم رسوم الإشتراك",
     "simulate_payment_successfully": "محاكاة الدفع بنجاح",
-    "try_by_yourself": "جربها بنفسك (تجربة مجانية)"
+    "try_by_yourself": "جربها بنفسك (تجربة مجانية)",
+    "v1": "نسخة تجربية 1",
+    "v2": "نسخة تجربية 2"
   },
   "validations": {
     "quote_type_is_required": "نوع العمل مطلوب",
@@ -80,6 +82,12 @@
   },
   "common": {
     "resend_code": "اعادة أرسال الرمز",
-    "countdown": " {time} ثانية"
+    "countdown": " {time} ثانية",
+    "continue_with_google": "تسجيل الدخول عن طريق جوجل"
+  },
+  "v2": {
+    "sales": {
+      "custom_your_quote": "خصص باقتك"
+    }
   }
 }

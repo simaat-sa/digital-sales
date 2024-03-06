@@ -1,9 +1,11 @@
-import type { Metadata } from "next";
-import { unstable_setRequestLocale } from "next-intl/server";
-import { LocaleType } from "@/shared/types/locale";
-import { NextIntlClientProvider, useMessages } from "next-intl";
 import "@/shared/assets/css/globals.css";
 import ReactQueryProvider from "@/shared/lib/ReactQueryProvider";
+import SessionProviderAuth from "@/shared/lib/SessionProvider";
+import { LocaleType } from "@/shared/types/locale";
+import type { Metadata } from "next";
+import { getServerSession } from "next-auth";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages, unstable_setRequestLocale } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,14 +18,15 @@ export type RootLayoutProps = {
   params: { locale: LocaleType };
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
   params: { locale },
 }: Readonly<{
   children: React.ReactNode;
   params: { locale: LocaleType };
 }>) {
-  const messages = useMessages();
+  const session = await getServerSession();
+  const messages = await getMessages();
   unstable_setRequestLocale(locale);
 
   return (
@@ -31,7 +34,9 @@ export default function RootLayout({
       <body suppressHydrationWarning={true}>
         <NextIntlClientProvider messages={messages}>
           <ReactQueryProvider>
-            <main>{children}</main>
+            <SessionProviderAuth session={session}>
+              <main>{children}</main>
+            </SessionProviderAuth>
           </ReactQueryProvider>
         </NextIntlClientProvider>
       </body>

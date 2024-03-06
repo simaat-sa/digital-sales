@@ -1,7 +1,6 @@
-import React from "react";
-import Wizard from "../_components/wizard";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import WizardV2 from "../../_components/wizardV2";
 
 export async function generateMetadata(): Promise<Metadata> {
   const translateSales = await getTranslations("sales");
@@ -14,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function Page() {
   return (
     <div className="flex w-full flex-col items-center">
-      <Wizard />
+      <WizardV2 />
     </div>
   );
 }

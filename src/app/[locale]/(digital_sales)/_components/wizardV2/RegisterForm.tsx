@@ -1,10 +1,11 @@
+import SocialAuth from "@/shared/components/SocialAuth";
 import { useTranslations } from "next-intl";
-import { useQuotePricingService } from "../../_services/QuotePricingService";
+import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2";
 import MobileNumberWithCode from "../MobileNumberWithCode";
 
 export default function RegisterForm() {
-  const { mobileNumber, showCode, code, errors, disable, onChange } =
-    useQuotePricingService();
+  const { mobileNumber, showCode, code, errors, onChange } =
+    useQuotePricingServiceV2();
   const t = useTranslations("sales");
   const validations = useTranslations("validations");
 
@@ -16,16 +17,15 @@ export default function RegisterForm() {
         </h2>
         <p className="text-xl">{t("register_main_desc")}</p>
       </div>
+
+      <SocialAuth />
+
       <MobileNumberWithCode
         value={mobileNumber}
         onChange={onChange}
         errors={{
           mobileNumber: errors.mobileNumber,
           code: errors.code,
-        }}
-        disable={{
-          mobileNumber: disable.mobileNumber,
-          code: disable.code,
         }}
         code={code}
         showCode={showCode}
