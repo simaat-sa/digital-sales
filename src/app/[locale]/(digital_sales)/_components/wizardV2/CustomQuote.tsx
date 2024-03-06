@@ -5,11 +5,14 @@ import { Checkbox } from "@/shared/components/ui/checkbox";
 import { ScrollArea } from "@/shared/components/ui/scroll-area";
 import { cn } from "@/shared/lib/utils";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 import {
   useCalcAmountsV2,
   useQuotePricingServiceV2,
 } from "../../_services/QuotePricingServiceV2";
 import { addonsData, quotesData } from "../../_services/quotesData";
+
+const checkedIcon = "/assets/svg/icons/CheckBold.svg";
 
 export default function CustomQuote() {
   const v2t = useTranslations("v2.sales");
@@ -90,7 +93,7 @@ export default function CustomQuote() {
           ))}
         </div>
         {customQuotesSelected.length ? (
-          <div className="sticky top-4 col-span-12 rounded-md border font-medium shadow md:col-span-3">
+          <div className="sticky top-4 col-span-12 rounded-md border font-medium shadow md:col-span-3 ">
             <div className="flex justify-between p-3">
               <span>
                 {t("quote")}{" "}
@@ -106,6 +109,21 @@ export default function CustomQuote() {
                 {t("s_r")}
               </span>
             </div>
+            <ul className="flex flex-col gap-4 p-3 pt-0 text-sm">
+              {quotesData
+                .find((item) => item.id === quoteSelected)
+                ?.features.map((feat, index) => (
+                  <li key={index} className="flex items-center gap-1">
+                    <Image
+                      src={checkedIcon}
+                      alt={"checked"}
+                      width={18}
+                      height={18}
+                    />
+                    <span>{feat}</span>
+                  </li>
+                ))}
+            </ul>
             <HeightMotion>
               <h2 className="px-3 py-1">
                 {t("addons")} ({customQuotesSelected.length})
