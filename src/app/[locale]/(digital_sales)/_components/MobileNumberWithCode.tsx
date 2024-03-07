@@ -7,7 +7,6 @@ import { FieldName } from "../_services/QuotePricingService";
 interface MobileNumberWithCodeProps {
   value: string;
   code: string;
-  onChange: (name: FieldName, value: string) => void;
   errors?: {
     mobileNumber?: string;
     code?: string;
@@ -17,6 +16,8 @@ interface MobileNumberWithCodeProps {
     code?: boolean;
   };
   showCode: boolean;
+  verified?: boolean;
+  onChange: (name: FieldName, value: string) => void;
 }
 
 export default function MobileNumberWithCode({
@@ -25,6 +26,7 @@ export default function MobileNumberWithCode({
   errors,
   disable,
   showCode,
+  verified,
   onChange,
 }: MobileNumberWithCodeProps) {
   const t = useTranslations("sales");
@@ -43,6 +45,7 @@ export default function MobileNumberWithCode({
             : ""
         }
         disabled={disable?.mobileNumber}
+        verified={verified}
       />
 
       {showCode ? (

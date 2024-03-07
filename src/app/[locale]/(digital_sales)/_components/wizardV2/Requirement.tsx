@@ -114,6 +114,7 @@ export default function RequirementForm() {
     code,
     showCode,
     disable,
+    registerWay,
   } = useQuotePricingServiceV2();
   const t = useTranslations("sales");
   const validations = useTranslations("validations");
@@ -159,7 +160,7 @@ export default function RequirementForm() {
           <InputName />
         </HeightMotion>
 
-        {!verifiedEmail ? (
+        {registerWay === "MobileNumber" ? (
           <InputBase
             value={email}
             onChange={(e) => {
@@ -175,7 +176,7 @@ export default function RequirementForm() {
           />
         ) : null}
 
-        {!verifiedMobile ? (
+        {registerWay === "SocialMedia" ? (
           <MobileNumberWithCode
             value={mobileNumber}
             onChange={onChange}
@@ -189,6 +190,7 @@ export default function RequirementForm() {
               mobileNumber: verifiedMobile ? true : disable.mobileNumber,
               code: disable.code,
             }}
+            verified={verifiedMobile}
           />
         ) : null}
       </div>

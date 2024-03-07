@@ -282,8 +282,6 @@ const useQuotePricingService = create<IRequestQuote>((set, get) => ({
           let stackErrors: { [key: string]: string } = {};
 
           await error.inner.map((message) => {
-            console.log("message", message.path, "  ", message.message);
-
             stackErrors = {
               ...stackErrors,
               [message.path as any]: message.message,

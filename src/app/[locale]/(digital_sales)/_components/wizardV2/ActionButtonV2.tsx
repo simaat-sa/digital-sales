@@ -17,8 +17,10 @@ export default function ActionButtonV2() {
     onTakeAction,
     actionButton,
     dialogPaymentStatus,
-    verifiedDomain,
     onToggleDialogPaymentStatus,
+    verifiedMobile,
+    disableBtnNext,
+    registerWay,
   } = useQuotePricingServiceV2();
 
   const t = useTranslations("sales");
@@ -32,7 +34,12 @@ export default function ActionButtonV2() {
             onTakeAction();
           }}
           aria-label="register"
-          disabled={currentWizard === "domain" ? !verifiedDomain : false}
+          disabled={
+            currentWizard === "domain" ||
+            (currentWizard === "requirements" && registerWay === "SocialMedia")
+              ? disableBtnNext
+              : false
+          }
         >
           {actionButton === "get_code" ? t("get_code") : null}
           {actionButton === "check_code" ? t("check_code") : null}
