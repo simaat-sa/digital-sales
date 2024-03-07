@@ -22,7 +22,6 @@ export type ActionButtonV2 = "get_code" | "check_code" | "next" | "confirm_pay";
 
 interface QuotePricingStateType {
   registerWay: registerWay;
-
   customQuotesSelected: AddonV2[];
   actionButton: ActionButtonV2;
   currentWizard: Wizards;
@@ -38,7 +37,7 @@ interface QuotePricingStateType {
   quoteSelected: number | null;
   domain: string;
   verifiedDomain: boolean;
-  disableBtn: boolean;
+  disableBtnNext: boolean;
   paymentMonths: number;
   promoCode: string;
   promoCodeValid: boolean;
@@ -70,7 +69,7 @@ interface QuotePricingStateType {
 
 interface IRequestQuoteActions {
   _setCurrentWizard: (wizard: Wizards) => void;
-  _getCode: () => void;
+  _getCode: (isRegister: boolean) => void;
   _onUpdateWizardHistory: (wizard?: Wizards, isBack?: boolean) => void;
   onSelectCustomAddon: (addon: AddonV2) => void;
   onTakeAction: (isBack?: boolean) => void;
@@ -90,6 +89,8 @@ interface IRequestQuoteActions {
   onToggleDialogPaymentStatus: (status: boolean) => void;
   onLoginWithGoogle: (email?: string) => void;
   reset: () => void;
+  addAddon: (addon: AddonV2) => void;
+  removeAddon: (addonId: number) => void;
 }
 
 interface QuotePricingV2 extends QuotePricingStateType, IRequestQuoteActions {}
@@ -111,7 +112,7 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
   lastName: "",
   quoteSelected: null,
   domain: "",
-  disableBtn: false,
+  disableBtnNext: true,
   paymentMonths: 1,
   promoCode: "",
   promoCodeValid: false,
@@ -156,19 +157,32 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
         : get().customQuotesSelected.filter((item) => item.id !== addon.id),
     }));
   },
+  addAddon(addon) {
+    set(() => ({
+      customQuotesSelected: [...get().customQuotesSelected, addon],
+    }));
+  },
+  removeAddon(addonId) {
+    set(() => ({
+      customQuotesSelected: get().customQuotesSelected.filter(
+        (item) => item.id !== addonId,
+      ),
+    }));
+  },
   _setCurrentWizard(wizard) {
     return set(() => ({
       currentWizard: wizard,
       wizardHistory: [...get().wizardHistory, wizard],
     }));
   },
-  _getCode() {
+  _getCode(isRegister) {
     let isValid = get()._isMobileNumberValid();
 
     if (isValid) {
       return set(() => ({
-        actionButton: "check_code",
+        actionButton: isRegister ? "check_code" : "next",
         showCode: true,
+        disableBtnNext: true,
       }));
     }
   },
@@ -176,6 +190,7 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
     const code = get().code;
     if (code.length === 4) {
       get()._disableField("code", true);
+
       if (get().currentWizard === "register") {
         setTimeout(() => {
           set(() => ({
@@ -183,14 +198,18 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
             actionButton: "next",
             wizardHistory: ["register"],
             verifiedMobile: true,
+            registerWay: "MobileNumber",
           }));
           get()._disableField("code", false);
         }, 1200);
-      } else if (get().currentWizard === "requirements") {
+      }
+
+      if (get().currentWizard === "requirements") {
         setTimeout(() => {
           set(() => ({
             actionButton: "next",
             verifiedMobile: true,
+            disableBtnNext: false,
             disable: {
               ...get().disable,
               mobileNumber: true,
@@ -306,8 +325,6 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
           let stackErrors: { [key: string]: string } = {};
 
           await error.inner.map((message) => {
-            console.log("message", message.path, "  ", message.message);
-
             stackErrors = {
               ...stackErrors,
               [message.path as any]: message.message,
@@ -354,6 +371,7 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
         showCode: false,
         code: "",
         actionButton: "get_code",
+        disableBtnNext: String(value).length ? false : true,
         disable: {
           ...get().disable,
           code: false,
@@ -393,7 +411,7 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
     if (!isBack) {
       if (get().currentWizard === "register") {
         if (get().actionButton === "get_code") {
-          _getCode();
+          _getCode(true);
         } else if (get().actionButton === "check_code") {
           _onUpdateWizardHistory("register");
         }
@@ -404,9 +422,7 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
             _onUpdateWizardHistory("requirements");
           });
         } else {
-          if (get().actionButton === "get_code") {
-            _getCode();
-          }
+          _getCode(false);
         }
       } else if (get().currentWizard === "quotes") {
         _setCurrentWizard("custom_quote");
@@ -459,6 +475,7 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
     setTimeout(() => {
       set(() => ({
         verifiedDomain: true,
+        disableBtnNext: false,
       }));
     }, 2000);
   },

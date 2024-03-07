@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import "@/shared/assets/css/fonts.css";
+@import "@/shared/assets/css/cards.css";
 
 @layer base {
   :root {

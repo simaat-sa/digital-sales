@@ -36,16 +36,16 @@ export default function Quotes() {
           {t("back")}
         </Button>
       </div>
-      <div className=" grid grid-cols-12 items-start gap-6 px-4 md:px-2 lg:px-0">
+      <div className=" card_pricing_plan grid grid-cols-12 items-start gap-6 px-4 md:px-2 lg:px-0">
         {quotesData.map(
           ({ id, name, features, addons: addonsList, price, description }) => (
             <div
               className={cn(
-                "col-span-12 flex flex-col gap-y-3 overflow-hidden rounded-3xl border bg-white p-4 shadow-md transition-colors duration-150 md:col-span-6 lg:col-span-4",
                 {
                   "bg-gradient-to-r from-slate-200 to-gray-100 shadow-lg":
                     String(id) === quotePlan,
                 },
+                "card_pricing_plan_sibling col-span-12 flex flex-col gap-y-3 overflow-hidden rounded-3xl border bg-white p-4 shadow-md transition-colors duration-150 md:col-span-6 lg:col-span-4",
               )}
               key={String(id)}
             >

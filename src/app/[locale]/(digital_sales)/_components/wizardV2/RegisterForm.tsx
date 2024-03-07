@@ -4,10 +4,9 @@ import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2"
 import MobileNumberWithCode from "../MobileNumberWithCode";
 
 export default function RegisterForm() {
-  const { mobileNumber, showCode, code, errors, onChange } =
+  const { mobileNumber, showCode, code, errors, onChange, disable } =
     useQuotePricingServiceV2();
   const t = useTranslations("sales");
-  const validations = useTranslations("validations");
 
   return (
     <div className="flex w-full flex-col gap-12 transition-all delay-75 duration-300">
@@ -26,6 +25,9 @@ export default function RegisterForm() {
         errors={{
           mobileNumber: errors.mobileNumber,
           code: errors.code,
+        }}
+        disable={{
+          code: disable.code,
         }}
         code={code}
         showCode={showCode}

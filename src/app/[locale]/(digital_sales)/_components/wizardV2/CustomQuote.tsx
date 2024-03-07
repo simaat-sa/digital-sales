@@ -22,6 +22,8 @@ export default function CustomQuote() {
     onSelectCustomAddon,
     onTakeAction,
     quoteSelected,
+    addAddon,
+    removeAddon,
   } = useQuotePricingServiceV2();
 
   const { invoiceTotalWithoutTax } = useCalcAmountsV2();
@@ -81,7 +83,9 @@ export default function CustomQuote() {
                 </span>
                 <Checkbox
                   className="h-6 w-6 rounded-sm"
-                  onCheckedChange={() => onSelectCustomAddon(addon)}
+                  onCheckedChange={(checked) => {
+                    !checked ? addAddon(addon) : removeAddon(addon.id);
+                  }}
                   checked={
                     customQuotesSelected.find((item) => item.id === addon.id)
                       ? true
