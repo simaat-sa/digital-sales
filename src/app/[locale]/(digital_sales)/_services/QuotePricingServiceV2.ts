@@ -7,6 +7,8 @@ import { create } from "zustand";
 import { FieldName, QuotePlan, taxNumber } from "./QuotePricingService";
 import { AddonV2, quotesData } from "./quotesData";
 
+const STEPS = 50;
+
 type registerWay = "MobileNumber" | "SocialMedia" | "";
 
 export type Wizards =
@@ -20,12 +22,17 @@ export type Wizards =
 
 export type ActionButtonV2 = "get_code" | "check_code" | "next" | "confirm_pay";
 
+export type CustomQuotesSelected = AddonV2 & {
+  count: number;
+};
+
 interface QuotePricingStateType {
   registerWay: registerWay;
-  customQuotesSelected: AddonV2[];
+  customQuotesSelected: CustomQuotesSelected[];
   actionButton: ActionButtonV2;
   currentWizard: Wizards;
   wizardHistory: Wizards[];
+  country_code: number;
   mobileNumber: string;
   code: string;
   showCode: boolean;
@@ -91,6 +98,9 @@ interface IRequestQuoteActions {
   reset: () => void;
   addAddon: (addon: AddonV2) => void;
   removeAddon: (addonId: number) => void;
+  setIncrement: (addonId: number) => void;
+  setDecrement: (addonId: number) => void;
+  onChangeAddonCounts: (addonId: number, value: number) => void;
 }
 
 interface QuotePricingV2 extends QuotePricingStateType, IRequestQuoteActions {}
@@ -101,6 +111,7 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
   customQuotesSelected: [],
   actionButton: "get_code",
   wizardHistory: [],
+  country_code: 966,
   mobileNumber: "",
   code: "",
   showCode: false,
@@ -153,13 +164,16 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
       customQuotesSelected: !get().customQuotesSelected.find(
         (item) => item.id === addon.id,
       )
-        ? [...get().customQuotesSelected, addon]
+        ? [...get().customQuotesSelected, { ...addon, count: 1 }]
         : get().customQuotesSelected.filter((item) => item.id !== addon.id),
     }));
   },
   addAddon(addon) {
     set(() => ({
-      customQuotesSelected: [...get().customQuotesSelected, addon],
+      customQuotesSelected: [
+        ...get().customQuotesSelected,
+        { ...addon, count: 1 },
+      ],
     }));
   },
   removeAddon(addonId) {
@@ -487,6 +501,36 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
   reset() {
     set(useQuotePricingServiceV2.getInitialState());
   },
+  setDecrement(addonId) {
+    set(() => ({
+      customQuotesSelected: get().customQuotesSelected.map((item) => {
+        if (item.id === addonId && item.count! > 1) {
+          item.count = item.count! < STEPS ? 1 : item.count! - STEPS;
+        }
+        return item;
+      }),
+    }));
+  },
+  setIncrement(addonId) {
+    set(() => ({
+      customQuotesSelected: get().customQuotesSelected.map((item) => {
+        if (item.id === addonId && item.count) {
+          item.count = item.count + STEPS;
+        }
+        return item;
+      }),
+    }));
+  },
+  onChangeAddonCounts(addonId, value) {
+    set(() => ({
+      customQuotesSelected: get().customQuotesSelected.map((item) => {
+        if (item.id === addonId) {
+          item.count = +value;
+        }
+        return item;
+      }),
+    }));
+  },
 }));
 
 function useCalcAmountsV2() {
@@ -529,20 +573,32 @@ function useCalcAmountsV2() {
   const totalTax = useMemo(() => {
     const quotePrice = quotesData.find((quote) => quote.id === quoteSelected)!;
 
-    return calculateTax(quotePrice.price * paymentMonths, taxNumber);
+    return calculateTax(quotePrice?.price * paymentMonths, taxNumber);
   }, [paymentMonths, quoteSelected]);
 
   const invoiceTotalWithoutTax = useMemo(() => {
     const quotePrice = quotesData.find((quote) => quote.id === quoteSelected)!;
 
-    let addonsSelected = customQuotesSelected.map((Item) => Item.price);
+    let addonPlusAndMinus = customQuotesSelected
+      .filter((item) => item.addonType === "PLUS_MINUS")
+      .map((item) => {
+        let range = item.data.find(
+          (r) => r.from <= item.count || r.to >= item.count,
+        );
+        if (range) {
+          return range.price * item.count;
+        } else {
+          return item.count * item.data[0].price;
+        }
+      });
+    console.log("🚀 ~ invoiceTotalWithoutTax ~ addonPlusAndMinus:", addonPlusAndMinus)
 
     let totalAddons = 0;
 
     let totalByMonths = quotePrice?.price * paymentMonths;
 
-    if (addonsSelected.length) {
-      totalAddons = addonsSelected.reduce((a, b) => a + b);
+    if (addonPlusAndMinus.length) {
+      totalAddons = addonPlusAndMinus.reduce((a, b) => a + b);
     }
 
     return totalByMonths + totalAddons;
@@ -555,7 +611,44 @@ function useGetQuoteSelectedV2(id: number) {
   return useMemo(() => quotesData.find((q) => q.id === id), [id]);
 }
 
-export { useCalcAmountsV2, useGetQuoteSelectedV2, useQuotePricingServiceV2 };
+function useCalcTotalAddon(addon: AddonV2) {
+  const { customQuotesSelected } = useQuotePricingServiceV2();
+
+  return useMemo(() => {
+    switch (addon.addonType) {
+      case "PLUS_MINUS":
+        const addonSelected = customQuotesSelected.find(
+          (item) => item.id === addon.id,
+        );
+
+        if (addonSelected) {
+          const filter = addonSelected.data.find(
+            (item) =>
+              item.from <= addonSelected.count &&
+              item.to >= addonSelected.count,
+          );
+
+          if (filter) {
+            return filter.price * addonSelected.count;
+          } else {
+            return addonSelected.price;
+          }
+        } else {
+          return 0;
+        }
+
+      default:
+        return 0;
+    }
+  }, [addon.addonType, addon.id, customQuotesSelected]);
+}
+
+export {
+  useCalcAmountsV2,
+  useCalcTotalAddon,
+  useGetQuoteSelectedV2,
+  useQuotePricingServiceV2,
+};
 
 if (process.env.NODE_ENV === "development") {
   mountStoreDevtool("QuotePricingServiceV2", useQuotePricingServiceV2);

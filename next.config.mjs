@@ -1,7 +1,7 @@
 import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin(
-  `./src/shared/lib/Localization/i18Config.ts`
+  `./src/shared/lib/Localization/i18Config.ts`,
 );
 
 /** @type {import('next').NextConfig} */
@@ -13,6 +13,10 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "simaat.app",
+      },
+      {
+        protocol: "https",
+        hostname: "simaat.sa",
       },
     ],
   },

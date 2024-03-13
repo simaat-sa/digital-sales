@@ -201,15 +201,6 @@ export default function Summary() {
                     {totalTax} {t("s_r")}
                   </span>
                 </li>
-
-                {promoCodeValid ? (
-                  <li className="flex justify-between">
-                    <span>{t("promo_value")}</span>
-                    <span className="flex gap-2 text-red-600">
-                      {promoCodeValue} - {t("s_r")}
-                    </span>
-                  </li>
-                ) : null}
               </ul>
 
               {customQuotesSelected.length ? (
@@ -218,7 +209,7 @@ export default function Summary() {
                   <ul>
                     {customQuotesSelected.map((quote) => (
                       <li
-                        className="flex justify-between font-medium"
+                        className="mb-2 flex justify-between font-medium"
                         key={quote.id}
                       >
                         <span>{quote.name}</span>
@@ -227,6 +218,15 @@ export default function Summary() {
                         </span>
                       </li>
                     ))}
+
+                    {promoCodeValid ? (
+                      <li className="flex justify-between font-medium">
+                        <span>{t("promo_value")}</span>
+                        <span className="flex gap-2 text-red-600">
+                          {promoCodeValue} - {t("s_r")}
+                        </span>
+                      </li>
+                    ) : null}
                   </ul>
                 </>
               ) : null}

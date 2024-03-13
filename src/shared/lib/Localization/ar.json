@@ -87,7 +87,15 @@
   },
   "v2": {
     "sales": {
-      "custom_your_quote": "خصص باقتك"
+      "custom_your_quote": "خصص باقتك",
+      "ejar": "ايجار",
+      "whatsapp": "واتس أب",
+      "mada": "مدي",
+      "users_count": "عدد مستخدمين",
+      "from": "من",
+      "to": "الي",
+      "price": "السعر",
+      "how_the_add-one_is_calculated?": "كيف يتم حساب الإضافة؟"
     }
   }
 }

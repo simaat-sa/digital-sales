@@ -83,11 +83,19 @@
   "common": {
     "resend_code": "Resend code",
     "countdown": "{time} seconds",
-    "continue_with_google" : "Continue with google"
+    "continue_with_google": "Continue with google"
   },
   "v2": {
     "sales": {
-      "custom_your_quote": "Custom your quote"
+      "custom_your_quote": "Custom your quote",
+      "ejar": "Ejar",
+      "whatsapp": "what's App",
+      "mada": "Mada",
+      "users_count": "Users count",
+      "from": "From",
+      "to": "To",
+      "price": "Price",
+      "how_the_add-one_is_calculated?": "how the add-one is calculated?"
     }
   }
 }
