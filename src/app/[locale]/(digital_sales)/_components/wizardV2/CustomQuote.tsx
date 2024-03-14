@@ -2,10 +2,9 @@ import HeightMotion from "@/shared/components/motions/HeighEffect";
 import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/lib/utils";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import {
-  useCalcAmountsV2,
   useCalcTotalAddon,
+  useInvoiceCustomAddons,
   useQuotePricingServiceV2,
 } from "../../_services/QuotePricingServiceV2";
 import {
@@ -15,32 +14,60 @@ import {
   quotesDataV2,
 } from "../../_services/quotesData";
 import { AddonCard } from "./AddonCard";
+import AddonsList from "./AddonsList";
+import FeatList from "./FeatList";
 
 const checkedIcon = "/assets/svg/icons/CheckBold.svg";
 
 function AddonRow({ addon }: { addon: AddonV2 }) {
   const PRICE = useCalcTotalAddon(addon);
   const t = useTranslations("sales");
-  const {customQuotesSelected} = useQuotePricingServiceV2();
+  const { AddonSelected, AddonSelectedDropdown, AddonSelectedPlusMinus } =
+    useQuotePricingServiceV2();
 
-  return (
-    <div className="mb-3 flex w-full items-center justify-between">
-      <span>{addon.name} ({customQuotesSelected.find(item=>item.id === addon.id)?.count})</span>
-      <div className="flex items-center gap-1">
-        <span>{PRICE}</span>
-        <span>{t("s_r")}</span>
-      </div>
-    </div>
-  );
+  switch (addon.addonType) {
+    case "PLUS_MINUS":
+      return (
+        <div className="flex w-full items-center justify-between">
+          <span>
+            {addon.name} (
+            {AddonSelected.find((item) => item.id === addon.id)?.count})
+          </span>
+          <div className="flex items-center gap-1">
+            <span>{PRICE}</span>
+            <span>{t("s_r")}</span>
+          </div>
+        </div>
+      );
+
+    case "DEFAULT":
+      return (
+        <div className="flex w-full items-center justify-between">
+          <span>{addon.name}</span>
+          <div className="flex items-center gap-1">
+            <span>{addon.price}</span>
+            <span>{t("s_r")}</span>
+          </div>
+        </div>
+      );
+
+    default:
+      break;
+  }
 }
 
 export default function CustomQuote() {
   const v2t = useTranslations("v2.sales");
   const t = useTranslations("sales");
-  const { customQuotesSelected, onTakeAction, quoteSelected } =
-    useQuotePricingServiceV2();
+  const {
+    AddonSelected,
+    onTakeAction,
+    quoteSelected,
+    AddonSelectedDropdown,
+    AddonSelectedPlusMinus,
+  } = useQuotePricingServiceV2();
 
-  const { invoiceTotalWithoutTax } = useCalcAmountsV2();
+  const TOTAL = useInvoiceCustomAddons();
 
   return (
     <>
@@ -51,67 +78,69 @@ export default function CustomQuote() {
         </Button>
       </div>
       <div
-        className={cn("grid w-full grid-cols-12 items-start gap-8", {
+        className={cn("grid w-full grid-cols-12 items-start gap-8 mb-8", {
           "col-start-3": true,
         })}
       >
         <div
           className={cn(
-            "relative col-span-12 mx-auto grid grid-cols-12 gap-6 transition-all delay-200 duration-500 ease-out md:col-span-9",
+            "relative col-span-12 mx-auto grid grid-cols-12 gap-6 transition-all delay-200 duration-500 ease-out md:col-span-8",
           )}
         >
           {addonsData.map((addon) => (
-            <AddonCard.Card key={addon.id}>
+            <AddonCard.Card key={addon.id} active={false}>
               <AddonCard.Header addon={addon} />
-              <AddonCard.Content addon={addon} />
-              <AddonCard.Footer addon={addon} />
+              <AddonCard.Description addon={addon} />
+              <AddonCard.Checkbox addon={addon} />
+
+              {addon.addonType === "DROPDOWN" ? (
+                <AddonCard.Dropdown addon={addon} />
+              ) : null}
+
               {addon.addonType === "PLUS_MINUS" ? (
                 <AddonCard.PlusMinus addon={addon} />
               ) : null}
             </AddonCard.Card>
           ))}
         </div>
-        <div className="sticky top-4 col-span-12 rounded-md border font-medium shadow md:col-span-3">
-          <div className="flex justify-between p-3">
-            <span>
-              {t("quote")}{" "}
-              {t(
-                quotesData.find((item) => item.id === quoteSelected)
-                  ?.name as any,
-              )}
-            </span>
-            <span className="flex gap-2">
-              <span>
-                {quotesData.find((item) => item.id === quoteSelected)?.price}
+        <div className="sticky top-4 col-span-12 rounded-md border font-medium shadow md:col-span-4">
+          <div className="flex flex-col p-3">
+            <div className="mb-4 flex items-center justify-between">
+              <span className="text-xl font-medium">
+                {t("quote")}{" "}
+                {t(
+                  quotesData.find((item) => item.id === quoteSelected)
+                    ?.name as any,
+                )}
               </span>
-              {t("s_r")}
-            </span>
+              <span className="flex gap-2">
+                <span>
+                  {quotesData.find((item) => item.id === quoteSelected)?.price}
+                </span>
+                {t("s_r")}
+              </span>
+            </div>
+
+            <FeatList
+              quote={quotesDataV2.find((item) => item.id === quoteSelected)}
+              isSpeared={false}
+            />
           </div>
-          <ul className="flex flex-col gap-4 p-3 pt-0 text-sm">
-            {quotesDataV2
-              .find((item) => item.id === quoteSelected)
-              ?.features.map((feat, index) => (
-                <li key={index} className="flex items-center gap-1">
-                  <Image
-                    src={checkedIcon}
-                    alt={"checked"}
-                    width={18}
-                    height={18}
-                  />
-                  <span>{feat}</span>
-                </li>
-              ))}
-          </ul>
+
           <HeightMotion>
-            {customQuotesSelected.length ? (
-              <h2 className="px-3 py-1">
-                {t("addons")} ({customQuotesSelected.length})
-              </h2>
-            ) : null}
-            <div className="flex w-full flex-col gap-4 p-3">
-              {customQuotesSelected.map((addon, index) => (
-                <AddonRow addon={addon} key={index} />
-              ))}
+            <div className="p-3">
+              {AddonSelected.length ||
+              AddonSelectedDropdown.length ||
+              AddonSelectedPlusMinus.length ? (
+                <h2>
+                  {t("addons")} (
+                  {AddonSelected.length +
+                    AddonSelectedDropdown.length +
+                    AddonSelectedPlusMinus.length}
+                  )
+                </h2>
+              ) : null}
+              <AddonsList />
             </div>
             <Button
               className="flex h-16 w-full items-center gap-1 rounded-b rounded-t-none text-base"
@@ -119,7 +148,7 @@ export default function CustomQuote() {
               onClick={() => onTakeAction()}
             >
               <span>{t("confirm_and_pay")}</span>
-              <span className="text-3xl">{invoiceTotalWithoutTax}</span>
+              <span className="text-3xl">{TOTAL}</span>
               <span>{t("s_r")}</span>
             </Button>
           </HeightMotion>

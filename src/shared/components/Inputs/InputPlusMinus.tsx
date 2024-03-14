@@ -10,7 +10,6 @@ interface InputPlusMinusProps extends InputProps {
   setDecrement: () => void;
   disabledPlus?: boolean;
   disabledMinus?: boolean;
-  
 }
 
 export default function InputPlusMinus({
@@ -27,14 +26,14 @@ export default function InputPlusMinus({
       <Button
         onClick={(e) => {
           e.preventDefault();
-          setDecrement();
+          setIncrement();
         }}
         className="flex h-full items-center justify-center rounded-none border-0 shadow-none"
-        disabled={props.disabledMinus}
+        disabled={props.disabledPlus}
       >
         <Image
-          src={minusIcon}
-          alt="minus"
+          src={plusIcon}
+          alt="plus"
           width={32}
           height={32}
           loading="lazy"
@@ -49,14 +48,14 @@ export default function InputPlusMinus({
       <Button
         onClick={(e) => {
           e.preventDefault();
-          setIncrement();
+          setDecrement();
         }}
         className="flex h-full items-center justify-center rounded-none border-0 shadow-none"
-        disabled={props.disabledPlus}
+        disabled={props.disabledMinus}
       >
         <Image
-          src={plusIcon}
-          alt="plus"
+          src={minusIcon}
+          alt="minus"
           width={32}
           height={32}
           loading="lazy"

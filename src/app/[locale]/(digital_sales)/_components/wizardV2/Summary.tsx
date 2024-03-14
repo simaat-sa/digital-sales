@@ -14,6 +14,8 @@ import { paymentWay } from "../../_services/paymentWay";
 import { quotesData } from "../../_services/quotesData";
 import FooterSales from "../FooterSales";
 import ActionButtonV2 from "./ActionButtonV2";
+import AddonsList from "./AddonsList";
+import FeatList from "./FeatList";
 
 const checkedIcon = "/assets/svg/icons/CheckBold.svg";
 const checkedDecagramIcon = "/assets/svg/icons/checked-decagram.svg";
@@ -28,7 +30,9 @@ export default function Summary() {
     onCheckPromoCode,
     onChange,
     onSelectPaymentWay,
-    customQuotesSelected,
+    AddonSelected,
+    AddonSelectedPlusMinus,
+    AddonSelectedDropdown,
   } = useQuotePricingServiceV2();
 
   const t = useTranslations("sales");
@@ -48,49 +52,8 @@ export default function Summary() {
             <h2 className="mt-3 text-lg font-medium">
               {t("quote")} {t(getQuoteSelected.name as any)}
             </h2>
-            <ul>
-              {getQuoteSelected.features.map((feat, i) => (
-                <li
-                  key={feat}
-                  className={cn("mb-4", {
-                    "mb-0": getQuoteSelected.features.length - 1 === i,
-                  })}
-                >
-                  <div className="flex flex-nowrap items-center gap-x-3">
-                    <Image
-                      src={checkedIcon}
-                      alt={"checked"}
-                      width={24}
-                      height={24}
-                    />
-                    <Label className="text-base font-medium">{feat}</Label>
-                  </div>
-                </li>
-              ))}
-            </ul>
-            <h2 className="mt-3 text-lg font-medium">{t("addons")}</h2>
-            <ul>
-              {getQuoteSelected.addons.map((addon, i) => (
-                <li
-                  key={addon.id}
-                  className={cn("mb-4", {
-                    "mb-0": getQuoteSelected.features.length - 1 === i,
-                  })}
-                >
-                  <div className="flex flex-nowrap items-center gap-x-3">
-                    <Image
-                      src={checkedIcon}
-                      alt={"checked"}
-                      width={24}
-                      height={24}
-                    />
-                    <Label className="text-base font-medium">
-                      {addon.name}
-                    </Label>
-                  </div>
-                </li>
-              ))}
-            </ul>
+            <FeatList quote={getQuoteSelected} isSpeared={false} />
+
             <div className="flex justify-between">
               <div className="flex flex-1 flex-col justify-center gap-4">
                 <h2 className="text-xl font-medium">{t("guarantee_title")}</h2>
@@ -203,22 +166,13 @@ export default function Summary() {
                 </li>
               </ul>
 
-              {customQuotesSelected.length ? (
+              {AddonSelected.length ||
+              AddonSelectedPlusMinus.length ||
+              AddonSelectedDropdown.length ? (
                 <>
                   <label className="text-lg font-medium">{t("addons")}</label>
+                  <AddonsList />
                   <ul>
-                    {customQuotesSelected.map((quote) => (
-                      <li
-                        className="mb-2 flex justify-between font-medium"
-                        key={quote.id}
-                      >
-                        <span>{quote.name}</span>
-                        <span className="flex gap-2">
-                          {quote.price} {t("s_r")}
-                        </span>
-                      </li>
-                    ))}
-
                     {promoCodeValid ? (
                       <li className="flex justify-between font-medium">
                         <span>{t("promo_value")}</span>

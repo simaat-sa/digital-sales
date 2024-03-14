@@ -1,15 +1,8 @@
 import InputBase from "@/shared/components/Inputs/InputBase";
 import HeightMotion from "@/shared/components/motions/HeighEffect";
 import { Label } from "@/shared/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/shared/components/ui/select";
-import { cn } from "@/shared/lib/utils";
-import { useLocale, useTranslations } from "next-intl";
+import { Tabs, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
+import { useTranslations } from "next-intl";
 import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2";
 import { quotesData } from "../../_services/quotesData";
 import MobileNumberWithCode from "../MobileNumberWithCode";
@@ -118,38 +111,33 @@ export default function RequirementForm() {
   } = useQuotePricingServiceV2();
   const t = useTranslations("sales");
   const validations = useTranslations("validations");
-  const locale = useLocale();
 
   return (
     <HeightMotion>
       <div className="flex flex-col gap-6">
-        <h3 className="text-3xl font-medium">{t("personal_info")}</h3>
-        <div className="flex flex-col gap-4">
+        <h3 className="text-3xl font-medium">{t("tell_us_about_yourSelf")}</h3>
+        <div className="flex w-full flex-col gap-4">
           <Label>{t("business_needed")}</Label>
-          <Select
-            onValueChange={(value) => onChange("quotePlan", value)}
+
+          <Tabs
+            className="w-full"
             value={quotePlan}
-            dir={locale === "ar" ? "rtl" : "ltr"}
+            onValueChange={(e) => {
+              onChange("quotePlan", String(e));
+            }}
           >
-            <SelectTrigger
-              className={cn("w-full", {
-                "border-red-600": errors.quotePlan.length ? true : false,
-              })}
-            >
-              <SelectValue placeholder={t("business_needed")} />
-            </SelectTrigger>
-            <SelectContent>
+            <TabsList className="h-16 w-full overflow-hidden rounded-full">
               {quotesData.map(({ id, business_need_label }) => (
-                <SelectItem
+                <TabsTrigger
                   value={String(id)}
-                  onChange={() => onChange("quotePlan", id)}
-                  key={String(id)}
+                  key={id}
+                  className="h-full flex-1 overflow-hidden rounded-full"
                 >
                   {t(business_need_label as any)}
-                </SelectItem>
+                </TabsTrigger>
               ))}
-            </SelectContent>
-          </Select>
+            </TabsList>
+          </Tabs>
           {errors.quotePlan.length ? (
             <p className="-mt-4 text-sm text-red-600">
               {validations("quote_type_is_required")}

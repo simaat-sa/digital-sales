@@ -68,7 +68,8 @@
     "simulate_payment_successfully": "محاكاة الدفع بنجاح",
     "try_by_yourself": "جربها بنفسك (تجربة مجانية)",
     "v1": "نسخة تجربية 1",
-    "v2": "نسخة تجربية 2"
+    "v2": "نسخة تجربية 2",
+    "tell_us_about_yourSelf": "مرحبًا بك، أخبرنا عن نفسك"
   },
   "validations": {
     "quote_type_is_required": "نوع العمل مطلوب",
@@ -95,7 +96,8 @@
       "from": "من",
       "to": "الي",
       "price": "السعر",
-      "how_the_add-one_is_calculated?": "كيف يتم حساب الإضافة؟"
+      "how_the_add-one_is_calculated?": "كيف يتم حساب السعر؟",
+      "from_to": "من {from} الي {to} = {total} ر.س"
     }
   }
 }

@@ -4,6 +4,7 @@
 
 @import "@/shared/assets/css/fonts.css";
 @import "@/shared/assets/css/cards.css";
+@import "@/shared/assets/css/input.css";
 
 @layer base {
   :root {

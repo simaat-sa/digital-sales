@@ -5,9 +5,9 @@ import { mountStoreDevtool } from "simple-zustand-devtools";
 import { ObjectSchema, ValidationError, object, string } from "yup";
 import { create } from "zustand";
 import { FieldName, QuotePlan, taxNumber } from "./QuotePricingService";
-import { AddonV2, quotesData } from "./quotesData";
+import { AddonV2, quotesData, quotesDataV2 } from "./quotesData";
 
-const STEPS = 50;
+export const ADDON_STEPS = 50;
 
 type registerWay = "MobileNumber" | "SocialMedia" | "";
 
@@ -22,13 +22,34 @@ export type Wizards =
 
 export type ActionButtonV2 = "get_code" | "check_code" | "next" | "confirm_pay";
 
+export type AddonV2Dropdown = AddonV2 & {
+  price_selected: number;
+};
+
+export type AddonV2PlusMinus = AddonV2 & {
+  count: number;
+};
+
 export type CustomQuotesSelected = AddonV2 & {
   count: number;
 };
 
+export type AddonSelectedDropdown = AddonV2 & {
+  price_selected: number;
+};
+
+export type AddonSelectedPlusMinus = AddonV2 & {
+  count: number;
+  total: number;
+};
+
+export type AddonSelected = AddonV2;
+
 interface QuotePricingStateType {
   registerWay: registerWay;
-  customQuotesSelected: CustomQuotesSelected[];
+  AddonSelected: CustomQuotesSelected[];
+  AddonSelectedPlusMinus: AddonSelectedPlusMinus[];
+  AddonSelectedDropdown: AddonSelectedDropdown[];
   actionButton: ActionButtonV2;
   currentWizard: Wizards;
   wizardHistory: Wizards[];
@@ -78,29 +99,31 @@ interface IRequestQuoteActions {
   _setCurrentWizard: (wizard: Wizards) => void;
   _getCode: (isRegister: boolean) => void;
   _onUpdateWizardHistory: (wizard?: Wizards, isBack?: boolean) => void;
-  onSelectCustomAddon: (addon: AddonV2) => void;
-  onTakeAction: (isBack?: boolean) => void;
-  resetV2: () => void;
   _checkCode: () => void;
   _isMobileNumberValid: () => boolean;
   _isRequirementsValid: () => Promise<boolean>;
   _onChangeCode: (name: FieldName, value: string) => void;
   _disableField: (name: FieldName, value: boolean) => void;
   _onVerifyPromoCode: () => void;
+  onTakeAction: (isBack?: boolean) => void;
+  resetV2: () => void;
   onChange: (name: FieldName, value: string | number | boolean) => void;
   onSelectQuote: (id: number) => void;
+  onSelectAddon: (addon: AddonV2) => void;
+  onSelectAddonDropDown: (addon: AddonV2) => void;
+  onSelectAddonPlusMinus: (addon: AddonV2) => void;
+  onChangePlusMinus: (value: number, addon: AddonV2) => void;
   onSelectPaymentWay: (months: number) => void;
   onClickResendCode: () => void;
   onCheckPromoCode: () => void;
   onVerifyDomain: () => void;
   onToggleDialogPaymentStatus: (status: boolean) => void;
   onLoginWithGoogle: (email?: string) => void;
-  reset: () => void;
   addAddon: (addon: AddonV2) => void;
   removeAddon: (addonId: number) => void;
-  setIncrement: (addonId: number) => void;
-  setDecrement: (addonId: number) => void;
-  onChangeAddonCounts: (addonId: number, value: number) => void;
+  setIncrement: (addonId: number, steps: number) => void;
+  setDecrement: (addonId: number, steps: number) => void;
+  onChangeAddonDropdown: (addonId: number, value: number) => void;
 }
 
 interface QuotePricingV2 extends QuotePricingStateType, IRequestQuoteActions {}
@@ -108,14 +131,16 @@ interface QuotePricingV2 extends QuotePricingStateType, IRequestQuoteActions {}
 const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
   registerWay: "",
   currentWizard: "register",
-  customQuotesSelected: [],
+  AddonSelected: [],
+  AddonSelectedDropdown: [],
+  AddonSelectedPlusMinus: [],
   actionButton: "get_code",
   wizardHistory: [],
   country_code: 966,
   mobileNumber: "",
   code: "",
   showCode: false,
-  quotePlan: "",
+  quotePlan: "1",
   email: "",
   verifiedDomain: false,
   organizeName: "",
@@ -159,28 +184,49 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
       actionButton: "get_code",
     }));
   },
-  onSelectCustomAddon(addon) {
+  onSelectAddon(addon) {
     set(() => ({
-      customQuotesSelected: !get().customQuotesSelected.find(
+      AddonSelected: !get().AddonSelected.find((item) => item.id === addon.id)
+        ? [...get().AddonSelected, { ...addon, count: 1 }]
+        : get().AddonSelected.filter((item) => item.id !== addon.id),
+    }));
+  },
+  onSelectAddonDropDown(addon) {
+    set(() => ({
+      AddonSelectedDropdown: !get().AddonSelectedDropdown.find(
         (item) => item.id === addon.id,
       )
-        ? [...get().customQuotesSelected, { ...addon, count: 1 }]
-        : get().customQuotesSelected.filter((item) => item.id !== addon.id),
+        ? [
+            ...get().AddonSelectedDropdown,
+            { ...addon, price_selected: addon.data[0].price },
+          ]
+        : get().AddonSelectedDropdown.filter((item) => item.id !== addon.id),
+    }));
+  },
+  onSelectAddonPlusMinus(addon) {
+    set(() => ({
+      AddonSelectedPlusMinus: !get().AddonSelectedPlusMinus.find(
+        (item) => item.id === addon.id,
+      )
+        ? [
+            ...get().AddonSelectedPlusMinus,
+            {
+              ...addon,
+              count: addon.data[0].from,
+              total: addon.data[0].price * addon.data[0].from,
+            },
+          ]
+        : get().AddonSelectedPlusMinus.filter((item) => item.id !== addon.id),
     }));
   },
   addAddon(addon) {
     set(() => ({
-      customQuotesSelected: [
-        ...get().customQuotesSelected,
-        { ...addon, count: 1 },
-      ],
+      AddonSelected: [...get().AddonSelected, { ...addon, count: 1 }],
     }));
   },
   removeAddon(addonId) {
     set(() => ({
-      customQuotesSelected: get().customQuotesSelected.filter(
-        (item) => item.id !== addonId,
-      ),
+      AddonSelected: get().AddonSelected.filter((item) => item.id !== addonId),
     }));
   },
   _setCurrentWizard(wizard) {
@@ -498,34 +544,68 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
       dialogPaymentStatus: status,
     }));
   },
-  reset() {
-    set(useQuotePricingServiceV2.getInitialState());
-  },
-  setDecrement(addonId) {
+  setDecrement(addonId, steps) {
     set(() => ({
-      customQuotesSelected: get().customQuotesSelected.map((item) => {
-        if (item.id === addonId && item.count! > 1) {
-          item.count = item.count! < STEPS ? 1 : item.count! - STEPS;
-        }
-        return item;
-      }),
-    }));
-  },
-  setIncrement(addonId) {
-    set(() => ({
-      customQuotesSelected: get().customQuotesSelected.map((item) => {
-        if (item.id === addonId && item.count) {
-          item.count = item.count + STEPS;
-        }
-        return item;
-      }),
-    }));
-  },
-  onChangeAddonCounts(addonId, value) {
-    set(() => ({
-      customQuotesSelected: get().customQuotesSelected.map((item) => {
+      AddonSelectedPlusMinus: get().AddonSelectedPlusMinus.map((item) => {
         if (item.id === addonId) {
-          item.count = +value;
+          const MIN_RANGE = item.data[0].from;
+          let count =
+            item.count - steps < MIN_RANGE ? MIN_RANGE : item.count - steps;
+          const range = item.data.find((r) => r.from <= count && r.to >= count);
+
+          item.count = count;
+          item.total = range ? count * range.price : count * item.price;
+        }
+        return item;
+      }),
+    }));
+  },
+  setIncrement(addonId, steps) {
+    set(() => ({
+      AddonSelectedPlusMinus: get().AddonSelectedPlusMinus.map((item) => {
+        if (item.id === addonId && item.count) {
+          const MAX_RANGE = item.data[item.data.length - 1].to;
+
+          let count =
+            item.count + steps > MAX_RANGE ? MAX_RANGE : item.count + steps;
+
+          const range = item.data.find((r) => r.from <= count && r.to >= count);
+
+          item.count = count;
+          item.total = range ? count * range.price : count * item.price;
+        }
+        return item;
+      }),
+    }));
+  },
+  onChangePlusMinus(value, addon) {
+    set(() => ({
+      AddonSelectedPlusMinus: get().AddonSelectedPlusMinus.map((item) => {
+        if (item.id === addon.id) {
+          const MIN_RANGE = item.data[0].from;
+          const MAX_RANGE = item.data[item.data.length - 1].to;
+
+          if (MIN_RANGE <= value && value <= MAX_RANGE) {
+            item.count = value;
+          }
+
+          const range = item.data.find(
+            (r) => r.from <= item.count && r.to >= item.count,
+          );
+
+          item.total = range
+            ? item.count * range.price
+            : item.count * item.price;
+        }
+        return item;
+      }),
+    }));
+  },
+  onChangeAddonDropdown(addonId, value) {
+    set(() => ({
+      AddonSelectedDropdown: get().AddonSelectedDropdown.map((item) => {
+        if (item.id === addonId) {
+          item.price_selected = value;
         }
         return item;
       }),
@@ -535,25 +615,41 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
 
 function useCalcAmountsV2() {
   const {
-    customQuotesSelected,
+    AddonSelected,
+    AddonSelectedPlusMinus,
+    AddonSelectedDropdown,
     paymentMonths,
     promoCodeValue,
     promoCodeValid,
     quoteSelected,
   } = useQuotePricingServiceV2();
 
-  const totalInvoice = useMemo(() => {
-    const quotePrice = quotesData.find((quote) => quote.id === quoteSelected)!;
-
-    let addonsSelected = customQuotesSelected.map((Item) => Item.price);
+  const totalAddons = useMemo(() => {
+    let addonsSelected = AddonSelected.map((Item) => Item.price);
+    let PlusMinus = AddonSelectedPlusMinus.map((Item) => Item.total);
+    let Dropdown = AddonSelectedDropdown.map((Item) => Item.price_selected);
 
     let totalAddons = 0;
-
-    let totalByMonths = quotePrice?.price * paymentMonths;
 
     if (addonsSelected.length) {
       totalAddons = addonsSelected.reduce((a, b) => a + b);
     }
+
+    if (PlusMinus.length) {
+      totalAddons = PlusMinus.reduce((a, b) => a + b);
+    }
+
+    if (Dropdown.length) {
+      totalAddons = Dropdown.reduce((a, b) => a + b);
+    }
+
+    return totalAddons;
+  }, [AddonSelected, AddonSelectedDropdown, AddonSelectedPlusMinus]);
+
+  const totalInvoice = useMemo(() => {
+    const quotePrice = quotesData.find((quote) => quote.id === quoteSelected)!;
+
+    let totalByMonths = quotePrice?.price * paymentMonths;
 
     return promoCodeValid
       ? Math.ceil(
@@ -563,61 +659,36 @@ function useCalcAmountsV2() {
           calculateTotalWithTax(totalByMonths + totalAddons, taxNumber),
         );
   }, [
-    customQuotesSelected,
     paymentMonths,
     promoCodeValid,
     promoCodeValue,
     quoteSelected,
+    totalAddons,
   ]);
 
   const totalTax = useMemo(() => {
     const quotePrice = quotesData.find((quote) => quote.id === quoteSelected)!;
 
-    return calculateTax(quotePrice?.price * paymentMonths, taxNumber);
-  }, [paymentMonths, quoteSelected]);
+    return calculateTax(
+      quotePrice?.price * paymentMonths + totalAddons,
+      taxNumber,
+    );
+  }, [paymentMonths, quoteSelected, totalAddons]);
 
-  const invoiceTotalWithoutTax = useMemo(() => {
-    const quotePrice = quotesData.find((quote) => quote.id === quoteSelected)!;
-
-    let addonPlusAndMinus = customQuotesSelected
-      .filter((item) => item.addonType === "PLUS_MINUS")
-      .map((item) => {
-        let range = item.data.find(
-          (r) => r.from <= item.count || r.to >= item.count,
-        );
-        if (range) {
-          return range.price * item.count;
-        } else {
-          return item.count * item.data[0].price;
-        }
-      });
-    console.log("🚀 ~ invoiceTotalWithoutTax ~ addonPlusAndMinus:", addonPlusAndMinus)
-
-    let totalAddons = 0;
-
-    let totalByMonths = quotePrice?.price * paymentMonths;
-
-    if (addonPlusAndMinus.length) {
-      totalAddons = addonPlusAndMinus.reduce((a, b) => a + b);
-    }
-
-    return totalByMonths + totalAddons;
-  }, [customQuotesSelected, paymentMonths, quoteSelected]);
-
-  return { totalInvoice, totalTax, invoiceTotalWithoutTax };
+  return { totalInvoice, totalTax };
 }
 
 function useGetQuoteSelectedV2(id: number) {
-  return useMemo(() => quotesData.find((q) => q.id === id), [id]);
+  return useMemo(() => quotesDataV2.find((q) => q.id === id), [id]);
 }
 
 function useCalcTotalAddon(addon: AddonV2) {
-  const { customQuotesSelected } = useQuotePricingServiceV2();
+  const { AddonSelected } = useQuotePricingServiceV2();
 
   return useMemo(() => {
     switch (addon.addonType) {
       case "PLUS_MINUS":
-        const addonSelected = customQuotesSelected.find(
+        const addonSelected = AddonSelected.find(
           (item) => item.id === addon.id,
         );
 
@@ -640,13 +711,49 @@ function useCalcTotalAddon(addon: AddonV2) {
       default:
         return 0;
     }
-  }, [addon.addonType, addon.id, customQuotesSelected]);
+  }, [addon.addonType, addon.id, AddonSelected]);
+}
+
+function useInvoiceCustomAddons() {
+  const {
+    quoteSelected,
+    AddonSelected,
+    AddonSelectedPlusMinus,
+    AddonSelectedDropdown,
+  } = useQuotePricingServiceV2();
+  let quote = quotesDataV2.find((item) => item.id === quoteSelected);
+
+  return useMemo(() => {
+    if (quote) {
+      let addonsSelectedTotal = AddonSelected.length
+        ? AddonSelected.map((a) => a.price).reduce((a, b) => a + b)
+        : 0;
+
+      let addonPlusMinusTotal = AddonSelectedPlusMinus.length
+        ? AddonSelectedPlusMinus.map((a) => a.total).reduce((a, b) => a + b)
+        : 0;
+
+      let addDropdownTotal = AddonSelectedDropdown.length
+        ? AddonSelectedDropdown.map((a) => a.price_selected).reduce(
+            (a, b) => a + b,
+          )
+        : 0;
+
+      return (
+        quote.price +
+        addonsSelectedTotal +
+        addonPlusMinusTotal +
+        addDropdownTotal
+      );
+    }
+  }, [AddonSelected, AddonSelectedDropdown, AddonSelectedPlusMinus, quote]);
 }
 
 export {
   useCalcAmountsV2,
   useCalcTotalAddon,
   useGetQuoteSelectedV2,
+  useInvoiceCustomAddons,
   useQuotePricingServiceV2,
 };
 

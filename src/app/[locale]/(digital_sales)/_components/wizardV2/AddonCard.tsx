@@ -3,6 +3,13 @@ import InputPlusMinus from "@/shared/components/Inputs/InputPlusMinus";
 import PopoverInfo from "@/shared/components/PopoverInfo";
 import { Checkbox } from "@/shared/components/ui/checkbox";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/components/ui/select";
+import {
   Table,
   TableBody,
   TableCell,
@@ -14,20 +21,29 @@ import { cn } from "@/shared/lib/utils";
 import { useTranslations } from "next-intl";
 import { ReactNode, useMemo } from "react";
 import {
-  useCalcTotalAddon,
+  ADDON_STEPS,
   useQuotePricingServiceV2,
 } from "../../_services/QuotePricingServiceV2";
-import { AddonV2, addonsData } from "../../_services/quotesData";
+import { AddonV2 } from "../../_services/quotesData";
 
 type AddonCardWrapperProps = {
   addon: AddonV2;
 };
 
-function AddonCardWrapper({ children }: { children: ReactNode }) {
+function AddonCardWrapper({
+  children,
+  active,
+}: {
+  children: ReactNode;
+  active: boolean;
+}) {
   return (
     <div
       className={cn(
-        "col-span-12 flex flex-wrap gap-3 rounded bg-slate-50 p-3 shadow md:col-span-4",
+        "col-span-12 flex flex-wrap gap-3 rounded  bg-slate-50 p-3 text-foreground/70 shadow md:col-span-4",
+        {
+          "border border-primary-200 text-foreground/100": active,
+        },
       )}
     >
       {children}
@@ -55,37 +71,108 @@ function AddonCardHeader({ addon }: AddonCardWrapperProps) {
   );
 }
 
-function AddonCardContent({ addon }: AddonCardWrapperProps) {
-  const v2t = useTranslations("v2.sales");
-
+function AddonCardDescription({ addon }: AddonCardWrapperProps) {
   return <p className="text-sm">{addon.description}</p>;
 }
 
-function AddonCardFooter({ addon }: AddonCardWrapperProps) {
-  const t = useTranslations("sales");
-  const { addAddon, removeAddon, customQuotesSelected } =
+function PRICE(addon: AddonV2) {
+  const { AddonSelected, AddonSelectedPlusMinus, AddonSelectedDropdown } =
     useQuotePricingServiceV2();
-  const TOTAL = useCalcTotalAddon(addon);
+
+  return useMemo(() => {
+    switch (addon.addonType) {
+      case "PLUS_MINUS":
+        const result1 = AddonSelectedPlusMinus.find(
+          (item) => item.id === addon.id,
+        );
+        return result1 ? result1.total : addon.data[0].price;
+
+      case "DROPDOWN":
+        const result2 = AddonSelectedDropdown.find(
+          (item) => item.id === addon.id,
+        );
+
+        return result2 ? result2.price_selected : addon.data[0].price;
+
+      default:
+        const result3 = AddonSelected.find((item) => item.id === addon.id);
+        return result3 ? result3.price : addon.price;
+    }
+  }, [
+    AddonSelected,
+    AddonSelectedDropdown,
+    AddonSelectedPlusMinus,
+    addon.addonType,
+    addon.data,
+    addon.id,
+    addon.price,
+  ]);
+}
+
+function AddonCardCheckbox({ addon }: AddonCardWrapperProps) {
+  const t = useTranslations("sales");
+  const {
+    AddonSelected,
+    AddonSelectedPlusMinus,
+    AddonSelectedDropdown,
+    addAddon,
+    removeAddon,
+    onSelectAddonPlusMinus,
+    onSelectAddonDropDown,
+  } = useQuotePricingServiceV2();
+  const displayPrice = PRICE(addon);
+
+  const checked = useMemo(() => {
+    switch (addon.addonType) {
+      case "PLUS_MINUS":
+        return AddonSelectedPlusMinus.find((item) => item.id === addon.id)
+          ? true
+          : false;
+
+      case "DROPDOWN":
+        return AddonSelectedDropdown.find((item) => item.id === addon.id)
+          ? true
+          : false;
+
+      default:
+        return AddonSelected.find((item) => item.id === addon.id)
+          ? true
+          : false;
+    }
+  }, [
+    AddonSelected,
+    AddonSelectedDropdown,
+    AddonSelectedPlusMinus,
+    addon.addonType,
+    addon.id,
+  ]);
+
+  const handleChange = (addon: AddonV2, checked: boolean) => {
+    switch (addon.addonType) {
+      case "PLUS_MINUS":
+        onSelectAddonPlusMinus(addon);
+        break;
+      case "DROPDOWN":
+        onSelectAddonDropDown(addon);
+        break;
+
+      default:
+        checked ? addAddon(addon) : removeAddon(addon.id);
+        break;
+    }
+  };
 
   return (
     <div className="mt-4 flex w-full items-center justify-between">
       <span className="text-2xl font-medium">
-        {customQuotesSelected.find((item) => item.id === addon.id)
-          ? TOTAL
-          : addonsData.find((item) => item.id === addon.id)?.data[0]
-              ?.price}{" "}
-        {t("s_r")}
+        {displayPrice} {t("s_r")}
       </span>
       <Checkbox
         className="h-6 w-6 rounded-sm"
         onCheckedChange={(checked) => {
-          checked ? addAddon(addon) : removeAddon(addon.id);
+          handleChange(addon, checked as boolean);
         }}
-        checked={
-          customQuotesSelected.find((item) => item.id === addon.id)
-            ? true
-            : false
-        }
+        checked={checked}
       />
     </div>
   );
@@ -95,44 +182,44 @@ function PlusMinus({ addon }: AddonCardWrapperProps) {
   const v2t = useTranslations("v2.sales");
   const t = useTranslations("sales");
   const {
-    customQuotesSelected,
+    AddonSelectedPlusMinus,
     setDecrement,
     setIncrement,
-    onChangeAddonCounts,
+    onChangePlusMinus,
   } = useQuotePricingServiceV2();
 
   const inputValue = useMemo(() => {
     return (
-      customQuotesSelected.find((item) => item.id === addon.id)?.count || 1
+      AddonSelectedPlusMinus.find((item) => item.id === addon.id)?.count || 1
     );
-  }, [addon.id, customQuotesSelected]);
+  }, [addon.id, AddonSelectedPlusMinus]);
 
   const disabledMinus = useMemo(() => {
-    return !customQuotesSelected.find((item) => item.id === addon.id) ||
-      customQuotesSelected.find((item) => item.id === addon.id)?.count === 1
+    return !AddonSelectedPlusMinus.find((item) => item.id === addon.id) ||
+      inputValue <= addon.data[0].from
       ? true
       : false;
-  }, [addon.id, customQuotesSelected]);
+  }, [AddonSelectedPlusMinus, addon.data, addon.id, inputValue]);
 
   const disabledPlus = useMemo(() => {
-    return !customQuotesSelected.find((item) => item.id === addon.id) ||
+    return !AddonSelectedPlusMinus.find((item) => item.id === addon.id) ||
       inputValue >= addon.data[addon.data.length - 1].to
       ? true
       : false;
-  }, [addon.data, addon.id, customQuotesSelected, inputValue]);
+  }, [addon.data, addon.id, AddonSelectedPlusMinus, inputValue]);
 
   return (
     <div className="flex w-full flex-col gap-3">
       <InputPlusMinus
-        setDecrement={() => setDecrement(addon.id)}
+        setDecrement={() => setDecrement(addon.id, addon?.steps || ADDON_STEPS)}
         setIncrement={() => {
-          setIncrement(addon.id);
+          setIncrement(addon.id, addon?.steps || ADDON_STEPS);
         }}
         value={inputValue}
-        onChange={(e) => onChangeAddonCounts(addon.id, +e.target.value)}
+        onChange={(e) => onChangePlusMinus(+e.target.value, addon)}
         type="number"
         disabled={
-          !customQuotesSelected.find((item) => item.id === addon.id)
+          !AddonSelectedPlusMinus.find((item) => item.id === addon.id)
             ? true
             : false
         }
@@ -172,17 +259,74 @@ function PlusMinus({ addon }: AddonCardWrapperProps) {
   );
 }
 
+function AddonDropdown({ addon }: { addon: AddonV2 }) {
+  const tv2 = useTranslations("v2.sales");
+  const { AddonSelectedDropdown, onChangeAddonDropdown } =
+    useQuotePricingServiceV2();
 
-function AddonDropdown(){
+  const inputValue = useMemo(() => {
+    return (
+      AddonSelectedDropdown.find((item) => item.id === addon.id)
+        ?.price_selected || 0
+    );
+  }, [AddonSelectedDropdown, addon.id]);
 
+  return (
+    <div className="w-full">
+      <Select
+        value={String(inputValue)}
+        onValueChange={(value) => {
+          onChangeAddonDropdown(addon.id, +value);
+        }}
+        disabled={!inputValue ? true : false}
+      >
+        <SelectTrigger>
+          <SelectValue placeholder="select" />
+        </SelectTrigger>
+        <SelectContent>
+          {addon.data.map((item, index) => (
+            <SelectItem key={index} value={String(item.price)}>
+              {tv2("from_to", {
+                from: item.from,
+                to: item.to,
+                total: item.price,
+              })}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  );
+}
 
-  return 
+function AddonDefault({ addon }: { addon: AddonV2 }) {
+  const t = useTranslations("sales");
+  const { addAddon, removeAddon, AddonSelected } = useQuotePricingServiceV2();
+
+  return (
+    <div className="mt-4 flex w-full items-center justify-between">
+      <span className="text-2xl font-medium">
+        {addon.price} {t("s_r")}
+      </span>
+      <Checkbox
+        className="h-6 w-6 rounded-sm"
+        onCheckedChange={(checked) => {
+          !checked ? addAddon(addon) : removeAddon(addon.id);
+        }}
+        checked={
+          AddonSelected.find((item) => item.id === addon.id) ? true : false
+        }
+      />
+    </div>
+  );
 }
 
 export const AddonCard = {
   Card: AddonCardWrapper,
   Header: AddonCardHeader,
-  Content: AddonCardContent,
-  Footer: AddonCardFooter,
+  Description: AddonCardDescription,
+  Checkbox: AddonCardCheckbox,
+  Default: AddonDefault,
   PlusMinus: PlusMinus,
+  Dropdown: AddonDropdown,
 };
