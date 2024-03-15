@@ -116,7 +116,8 @@ export default function Quotes() {
                       </DialogHeader>
                       <DialogDescription className="my-0 py-0">
                         <div className="w-full overflow-hidden">
-                          <VideoComponent src="https://www.w3schools.com/html/mov_bbb.mp4" />
+                          {/* <VideoComponent src="https://youtu.be/9LnBHZBCQAk?si=IzVRkmxP5xIe7yx_" /> */}
+                          {<iframe id="ytplayer" type="text/html" width="100%" height="562.5" src="https://www.youtube.com/embed/9LnBHZBCQAk?si=IzVRkmxP5xIe7yx_" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>}
                         </div>
                       </DialogDescription>
                     </DialogContent>
