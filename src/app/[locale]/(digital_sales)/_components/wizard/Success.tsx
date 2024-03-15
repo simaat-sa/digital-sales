@@ -29,7 +29,6 @@ export default function Success() {
           </div>
         </HeightMotion>
       </div>
-      <FooterSales />
     </div>
   );
 }

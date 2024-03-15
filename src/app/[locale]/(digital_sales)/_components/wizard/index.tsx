@@ -59,7 +59,6 @@ export default function Wizard() {
                   <ActionButton />
                 ) : null}
               </div>
-              <FooterSales />
             </div>
           </div>
         ) : null}

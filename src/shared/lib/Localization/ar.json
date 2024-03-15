@@ -84,7 +84,8 @@
   "common": {
     "resend_code": "اعادة أرسال الرمز",
     "countdown": " {time} ثانية",
-    "continue_with_google": "تسجيل الدخول عن طريق جوجل"
+    "continue_with_google": "تسجيل الدخول عن طريق جوجل",
+    "simaat": "سمات - عقارية تفاعلية متكاملة"
   },
   "v2": {
     "sales": {

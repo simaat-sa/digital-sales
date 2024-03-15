@@ -223,7 +223,6 @@ export default function Summary() {
 
               <ActionButton />
             </div>
-            <FooterSales />
           </div>
         </div>
       </div>

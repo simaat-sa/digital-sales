@@ -254,9 +254,7 @@ export default function Quotes() {
           )
         )}
       </div>
-      <div className="my-4">
-        <FooterSales />
-      </div>
+      
     </>
   );
 }

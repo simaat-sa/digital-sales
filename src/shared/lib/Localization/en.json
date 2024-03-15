@@ -84,7 +84,8 @@
   "common": {
     "resend_code": "Resend code",
     "countdown": "{time} seconds",
-    "continue_with_google": "Continue with google"
+    "continue_with_google": "Continue with google",
+    "simaat": "سمات - عقارية تفاعلية متكاملة"
   },
   "v2": {
     "sales": {
