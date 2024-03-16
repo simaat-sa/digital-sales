@@ -37,7 +37,7 @@ export default function InputBase({
         {...props}
       />
       {error?.length ? (
-        <p className="text-sm text-red-600 -mt-3">{error}</p>
+        <p className="text-lg text-red-600 -mt-3">{error}</p>
       ) : null}
     </div>
   );

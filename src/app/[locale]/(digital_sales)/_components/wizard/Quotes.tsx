@@ -89,7 +89,7 @@ export default function Quotes() {
                           width={24}
                           height={24}
                         />
-                        <Label className="text-base font-medium">{feat}</Label>
+                        <Label className="text-lg font-medium">{feat}</Label>
                       </div>
                     </li>
                   ))}
@@ -183,7 +183,7 @@ export default function Quotes() {
                         checked={addons.get(id)?.includes(addon.id)}
                       />
                       <div className="flex flex-nowrap justify-between items-center flex-1 px-4">
-                        <span className="text-base font-medium flex-1 cursor-pointer">
+                        <span className="text-lg font-medium flex-1 cursor-pointer">
                           {addon.name}
                         </span>
                         <div className="flex flex-nowrap items-center gap-2">

@@ -30,7 +30,7 @@ export default function InputCode({
           {...props}
         />
         {error?.length ? (
-          <p className="text-sm text-red-600 -mt-3">{error}</p>
+          <p className="text-lg text-red-600 -mt-3">{error}</p>
         ) : null}
       </div>
       {!props.disabled ? (
@@ -40,7 +40,7 @@ export default function InputCode({
             if (completed || resendCode) {
               return (
                 <span
-                  className="underline text-sm cursor-pointer"
+                  className="underline text-lg cursor-pointer"
                   onClick={() => {
                     onResendCode().then(() => {
                       api.start();

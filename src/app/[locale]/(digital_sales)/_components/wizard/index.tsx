@@ -15,7 +15,7 @@ import { quotesData } from "@/app/[locale]/(digital_sales)/_services/quotesData"
 import Image from "next/image";
 import { useEffect } from "react";
 
-const planningPrice = "/assets/brand/simaat_logo.svg";
+const planningPrice = "/assets/images/simaat-summary.png";
 
 export default function Wizard() {
   const { currentWizard, showCode, setAllAddons } = useQuotePricingService();
@@ -44,9 +44,9 @@ export default function Wizard() {
               <Image
                 src={planningPrice}
                 alt="planning price"
-                width={500}
+                width={1000}
                 height={800}
-                className="bg-slate-100"
+                className="bg-slate-100 w-full mx-4 shadow-md rounded-3xl"
               />
             </div>
             <div className="col-span-2 flex flex-col px-4 md:px-2 lg:col-span-1 lg:px-0">
@@ -59,7 +59,11 @@ export default function Wizard() {
                   <ActionButton />
                 ) : null}
               </div>
+<<<<<<< Updated upstream
               <FooterSales />
+=======
+              {/* <FooterSales /> */}
+>>>>>>> Stashed changes
             </div>
           </div>
         ) : null}

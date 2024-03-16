@@ -62,7 +62,7 @@ export default function Summary() {
                       width={24}
                       height={24}
                     />
-                    <Label className="text-base font-medium">{feat}</Label>
+                    <Label className="text-lg font-medium">{feat}</Label>
                   </div>
                 </li>
               ))}
@@ -75,7 +75,7 @@ export default function Summary() {
                 </p>
               </div>
               <Image
-                src="https://simaat.app/wp-content/uploads/elementor/thumbs/Money_back_guarantee-pze0w29nbaesrsrmlyr5tg8eetudlbtnrueu8eeq4w.png"
+                src="/assets/images/21-days-guarantee.svg"
                 alt={t("guarantee_title")}
                 width={170}
                 height={170}
@@ -101,7 +101,7 @@ export default function Summary() {
                       onSelectPaymentWay(payment.months);
                     }}
                   >
-                    <span className="text-sm font-medium">
+                    <span className="text-lg font-medium">
                       {payment.label[locale as "ar" | "en"]}
                     </span>
                     <div className="flex flex-nowrap items-center justify-center gap-2 align-baseline">

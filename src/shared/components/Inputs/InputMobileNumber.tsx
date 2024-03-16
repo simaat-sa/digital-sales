@@ -79,7 +79,7 @@ export default function InputMobileNumber({
         )}
       </div>
       {error?.length ? (
-        <p className="-mt-3 text-sm text-red-600">{error}</p>
+        <p className="-mt-3 text-lg text-red-600">{error}</p>
       ) : null}
     </div>
   );

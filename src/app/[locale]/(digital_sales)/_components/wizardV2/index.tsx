@@ -1,5 +1,5 @@
 "use client";
-import FooterSales from "@/app/[locale]/(digital_sales)/_components/FooterSales";
+// import FooterSales from "@/app/[locale]/(digital_sales)/_components/FooterSales";
 import Image from "next/image";
 import {
   Wizards,
@@ -14,7 +14,7 @@ import RequirementForm from "./Requirement";
 import Success from "./Success";
 import Summary from "./Summary";
 
-const planningPrice = "/assets/brand/simaat_logo.svg";
+const planningPrice = "/assets/images/simaat-summary.png";
 
 export default function Wizard() {
   const { showCode } = useQuotePricingServiceV2();

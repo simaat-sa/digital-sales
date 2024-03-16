@@ -38,7 +38,7 @@ export default function SocialAuth() {
           variant="outline"
           className="flex h-14 w-full flex-nowrap content-baseline items-center gap-2 align-baseline"
         >
-          <span className="text-base">{tc("continue_with_google")}</span>
+          <span className="text-lg">{tc("continue_with_google")}</span>
           <Image
             src={googleIcon}
             alt={tc("continue_with_google")}
