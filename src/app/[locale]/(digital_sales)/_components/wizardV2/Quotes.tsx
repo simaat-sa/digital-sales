@@ -1,3 +1,4 @@
+import Iframe from "@/shared/components/IFrame";
 import { VideoComponent } from "@/shared/components/VideoComponent";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -8,15 +9,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/components/ui/dialog";
-import { Label } from "@/shared/components/ui/label";
 import { Separator } from "@/shared/components/ui/separator";
 import { cn } from "@/shared/lib/utils";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { Fragment } from "react";
 import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2";
 import { quotesDataV2 } from "../../_services/quotesData";
-import FooterSales from "../FooterSales";
 import FeatList from "./FeatList";
 
 const VideoStream = "/assets/svg/icons/media-player.svg";
@@ -105,8 +103,16 @@ export default function Quotes() {
                     </DialogHeader>
                     <DialogDescription className="my-0 py-0">
                       <div className="w-full overflow-hidden">
-                        {/* <VideoComponent src="https://youtu.be/9LnBHZBCQAk?si=IzVRkmxP5xIe7yx_" /> */}
-                        {<iframe id="ytplayer" type="text/html" width="100%" height="562.5" src="https://www.youtube.com/embed/9LnBHZBCQAk?si=IzVRkmxP5xIe7yx_" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>}
+                        <Iframe
+                          id="ytplayer"
+                          type="text/html"
+                          width="100%"
+                          height="562.5"
+                          src="https://www.youtube.com/embed/9LnBHZBCQAk?si=IzVRkmxP5xIe7yx_"
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          allowFullScreen={true}
+                        />
                       </div>
                     </DialogDescription>
                   </DialogContent>
@@ -216,9 +222,6 @@ export default function Quotes() {
             </div>
           ),
         )}
-      </div>
-      <div className="my-4">
-        <FooterSales />
       </div>
     </>
   );

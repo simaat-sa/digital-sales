@@ -59,11 +59,6 @@ export default function Wizard() {
                   <ActionButton />
                 ) : null}
               </div>
-<<<<<<< Updated upstream
-              <FooterSales />
-=======
-              {/* <FooterSales /> */}
->>>>>>> Stashed changes
             </div>
           </div>
         ) : null}
