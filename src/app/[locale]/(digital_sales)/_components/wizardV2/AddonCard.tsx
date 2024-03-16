@@ -62,8 +62,8 @@ function AddonCardHeader({ addon }: AddonCardWrapperProps) {
             <BaseImage
               src={addon.logo}
               alt={addon.name}
-              width={48}
-              height={48}
+              width={60}
+              height={60}
             />
           </div>
         ) : null}

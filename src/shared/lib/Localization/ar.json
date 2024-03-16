@@ -57,7 +57,7 @@
     "personal_name": "اسم مالك فرد",
     "register_main_title": "ابدأ رحلتك الآن",
     "register_main_desc": " مع الجيل القادم من الخدمات العقارية",
-    "resend_code_notice": "ادخل رمز التحقق المرسل الي ( {mobileNumber}+ ) في رساله نصية",
+    "resend_code_notice": "ادخل رمز التحقق المرسل إلى ( {mobileNumber}+ ) في رساله نصية",
     "order_call": "تسجيل طلب اتصال",
     "personal_info": "أخبرنا عنك المزيد",
     "confirm_domain_title": "تأكيد اسم النطاق",

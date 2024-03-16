@@ -116,7 +116,7 @@ export default function CustomQuote() {
         <div className="sticky top-4 col-span-12 rounded-md border font-medium shadow md:col-span-4">
           <div className="flex flex-col p-3">
             <div className="mb-4 flex items-center justify-between">
-              <span className="text-xl font-medium">
+              <span className="text-xl font-medium pt-3">
                 {t("quote")}{" "}
                 {t(
                   quotesData.find((item) => item.id === quoteSelected)
@@ -145,7 +145,7 @@ export default function CustomQuote() {
               {AddonSelected.length ||
               AddonSelectedDropdown.length ||
               AddonSelectedPlusMinus.length ? (
-                <h2>
+                <h2 className="text-lg mb-2">
                   {t("addons")} (
                   {AddonSelected.length +
                     AddonSelectedDropdown.length +
