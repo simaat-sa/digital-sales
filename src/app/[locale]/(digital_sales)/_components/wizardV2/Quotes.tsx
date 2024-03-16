@@ -17,6 +17,7 @@ import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2"
 import { quotesDataV2 } from "../../_services/quotesData";
 import FeatList from "./FeatList";
 import FooterSales from "../FooterSales";
+import { displayPrice } from "@/shared/lib/format-pricing";
 
 const VideoStream = "/assets/svg/icons/media-player.svg";
 const CalenderIcon = "/assets/svg/icons/Calender.svg";
@@ -36,7 +37,7 @@ export default function Quotes() {
           {t("back")}
         </Button>
       </div>
-      <div className=" card_pricing_plan grid grid-cols-12 items-start gap-6 px-4 md:px-2 lg:px-0">
+      <div className="card_pricing_plan grid grid-cols-12 items-start gap-6 px-4 md:px-2 lg:px-0">
         {quotesDataV2.map(
           ({ id, name, features, price, description, business_need_label }) => (
             <div
@@ -61,7 +62,9 @@ export default function Quotes() {
                   ) : null}
                 </div>
                 <div className="flex flex-nowrap items-center gap-x-4">
-                  <h4 className="text-5xl font-medium">{price}</h4>
+                  <h4 className="text-5xl font-medium">
+                    {displayPrice(price, true)}
+                  </h4>
                   <span>{t("s_r_monthly")}</span>
                 </div>
               </div>
@@ -224,7 +227,7 @@ export default function Quotes() {
           ),
         )}
       </div>
-      <FooterSales />
+      {/* <FooterSales /> */}
     </>
   );
 }

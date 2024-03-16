@@ -33,7 +33,7 @@ export default function InputMobileNumber({
       </div>
       <div
         className={cn(
-          "flex flex-nowrap overflow-hidden rounded border bg-white shadow ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          "flex flex-nowrap overflow-hidden rounded-lg border bg-white ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
           {
             "border-red-600": error?.length ? true : false,
           },
@@ -41,8 +41,8 @@ export default function InputMobileNumber({
         dir="ltr"
       >
         <Select value="966" disabled={props.disabled}>
-          <SelectTrigger className="mr-0 max-w-[5rem] rounded-none border-0 pr-0 focus-visible:ring-0">
-            <SelectValue className="max-w-[5rem] border-0 outline-none focus:border-0 focus:outline-none focus-visible:border-0 focus-visible:outline-none" />
+          <SelectTrigger className="my-auto mr-0 h-full max-w-[5rem] rounded-none border-0 pr-0 focus-visible:ring-0">
+            <SelectValue className="max-w-[5rem] border-0 py-3 outline-none focus:border-0 focus:outline-none focus-visible:border-0 focus-visible:outline-none" />
           </SelectTrigger>
           <SelectContent className="w-auto">
             {countryCodes.map((code) => (

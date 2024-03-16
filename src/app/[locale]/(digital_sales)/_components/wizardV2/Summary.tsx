@@ -1,6 +1,7 @@
 import InputBase from "@/shared/components/Inputs/InputBase";
 import { Button } from "@/shared/components/ui/button";
 import { Separator } from "@/shared/components/ui/separator";
+import { displayPrice } from "@/shared/lib/format-pricing";
 import { cn } from "@/shared/lib/utils";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
@@ -40,19 +41,15 @@ export default function Summary() {
 
   return (
     <>
-      <div className="absolute bottom-0 left-0 right-0 top-0 z-0 hidden grid-cols-1 lg:grid lg:grid-cols-2">
-        <div className="col-span-1 bg-gray-100"></div>
-        <div className="col-span-1"></div>
-      </div>
-      <div className="container relative z-10">
+      <div className="min-h-layout container relative z-10">
         <div className="grid h-full w-full grid-cols-2 gap-y-6 lg:gap-2">
           <div className="col-span-2 flex flex-col justify-center gap-4 md:px-2 lg:col-span-1 lg:h-full lg:px-0">
-            <h2 className="mt-3 text-lg font-medium">
+            <h2 className="mt-6 text-2xl font-medium">
               {t("quote")} {t(getQuoteSelected.name as any)}
             </h2>
             <FeatList quote={getQuoteSelected} isSpeared={false} />
 
-            <div className="flex justify-between">
+            <div className="flex justify-between rtl:mb-4 rtl:px-4">
               <div className="flex flex-1 flex-col justify-center gap-4">
                 <h2 className="text-xl font-medium">{t("guarantee_title")}</h2>
                 <p className="text-lg font-medium text-neutral-600">
@@ -69,10 +66,10 @@ export default function Summary() {
             </div>
           </div>
           <div className="col-span-2 flex flex-col md:px-2 lg:col-span-1 lg:px-0">
-            <div className="mx-auto flex w-full flex-1 flex-col justify-center gap-4 px-2 md:px-3 lg:px-6">
-              <label className="text-lg font-medium">
+            <div className="mx-auto flex w-full flex-1 flex-col gap-4 px-2 md:px-3 lg:px-6">
+              <h2 className="mt-6 text-2xl font-medium">
                 {t("summary_order")}
-              </label>
+              </h2>
               <h4 className="text-lg font-medium">{t("payment")}</h4>
               <div className="grid w-full grid-cols-4 gap-4 lg:gap-6">
                 {paymentWay.map((payment) => {
@@ -83,7 +80,7 @@ export default function Summary() {
                     <div
                       key={payment.type}
                       className={cn(
-                        "col-span-2 flex cursor-pointer flex-col items-center justify-center gap-6 rounded-xl border border-slate-50 bg-white p-3 shadow transition-colors duration-75 ease-in lg:col-span-1",
+                        "col-span-2 flex cursor-pointer flex-col items-center justify-center gap-6 rounded-xl border border-slate-50 bg-white p-3 shadow transition-colors duration-75 ease-in lg:flex-1",
                         {
                           "border-primary-600":
                             payment.months === paymentMonths,
@@ -98,7 +95,7 @@ export default function Summary() {
                       </span>
                       <div className="flex flex-nowrap items-center justify-center gap-2 align-baseline">
                         <span className="text-3xl">
-                          {+quote.price * +payment.months || 0}
+                          {displayPrice(+quote.price * +payment.months, true)}
                         </span>
                         {t("s_r")}
                       </div>
@@ -146,9 +143,12 @@ export default function Summary() {
                       )?.label[locale as "ar" | "en"]
                     }
                   </span>
-                  <span className="flex gap-2">
-                    <span>{getQuoteSelected.price * paymentMonths}</span>
-                    {t("s_r")}
+                  <span>
+                    {displayPrice(
+                      getQuoteSelected.price * paymentMonths,
+                      true,
+                      locale,
+                    )}
                   </span>
                 </li>
 
@@ -159,7 +159,7 @@ export default function Summary() {
                     })}
                   </span>
                   <span className="flex gap-2">
-                    {totalTax} {t("s_r")}
+                    {displayPrice(totalTax, true, locale)}
                   </span>
                 </li>
               </ul>
@@ -175,7 +175,7 @@ export default function Summary() {
                       <li className="flex justify-between font-medium">
                         <span>{t("promo_value")}</span>
                         <span className="flex gap-2 text-red-600">
-                          {promoCodeValue} - {t("s_r")}
+                          {displayPrice(promoCodeValue, true)} - {t("s_r")}
                         </span>
                       </li>
                     ) : null}
@@ -185,14 +185,15 @@ export default function Summary() {
 
               <Separator />
               <div className="mb-8 flex flex-nowrap justify-between">
-                <span>{t("total")}</span>
+                <span className="text-2xl">{t("total")}</span>
 
                 <div className="flex flex-nowrap items-center justify-center gap-2 align-baseline">
-                  <span className="text-4xl font-medium">{totalInvoice}</span>
+                  <span className="text-4xl font-medium">
+                    {displayPrice(totalInvoice, true)}
+                  </span>
                   {t("s_r")}
                 </div>
               </div>
-
               <ActionButtonV2 />
             </div>
           </div>

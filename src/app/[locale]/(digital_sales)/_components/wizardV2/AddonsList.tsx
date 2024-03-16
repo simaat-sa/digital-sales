@@ -1,8 +1,11 @@
+import { displayPrice } from "@/shared/lib/format-pricing";
 import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2";
+import { useLocale } from "next-intl";
 
 export default function AddonsList() {
   const { AddonSelected, AddonSelectedPlusMinus, AddonSelectedDropdown } =
     useQuotePricingServiceV2();
+  const locale = useLocale();
 
   return (
     <ul className="w-full">
@@ -12,7 +15,7 @@ export default function AddonsList() {
           className="mb-1 flex w-full items-center justify-between"
         >
           <span>{item.name}</span>
-          <span>{item.price}</span>
+          <span>{displayPrice(item.price, true, locale)}</span>
         </li>
       ))}
       {AddonSelectedPlusMinus.map((item, index) => (
@@ -21,7 +24,7 @@ export default function AddonsList() {
           className="mb-1 flex w-full items-center justify-between"
         >
           <span>{item.name}</span>
-          <span>{item.total}</span>
+          <span>{displayPrice(item.total, true, locale)}</span>
         </li>
       ))}
 
@@ -31,7 +34,7 @@ export default function AddonsList() {
           className="mb-1 flex w-full items-center justify-between"
         >
           <span>{item.name}</span>
-          <span>{item.price_selected}</span>
+          <span>{displayPrice(item.price_selected, true, locale)}</span>
         </li>
       ))}
     </ul>

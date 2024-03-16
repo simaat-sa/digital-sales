@@ -17,8 +17,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/components/ui/table";
+import { displayPrice } from "@/shared/lib/format-pricing";
 import { cn } from "@/shared/lib/utils";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { ReactNode, useMemo } from "react";
 import {
   ADDON_STEPS,
@@ -120,7 +121,8 @@ function AddonCardCheckbox({ addon }: AddonCardWrapperProps) {
     onSelectAddonPlusMinus,
     onSelectAddonDropDown,
   } = useQuotePricingServiceV2();
-  const displayPrice = PRICE(addon);
+  const price = PRICE(addon);
+  const locale = useLocale();
 
   const checked = useMemo(() => {
     switch (addon.addonType) {
@@ -165,7 +167,7 @@ function AddonCardCheckbox({ addon }: AddonCardWrapperProps) {
   return (
     <div className="mt-4 flex w-full items-center justify-between">
       <span className="text-2xl font-medium">
-        {displayPrice} {t("s_r")}
+        {displayPrice(price,true,locale)}
       </span>
       <Checkbox
         className="h-6 w-6 rounded-sm"
@@ -245,9 +247,9 @@ function PlusMinus({ addon }: AddonCardWrapperProps) {
                 <TableRow key={index}>
                   <TableCell>{item.from}</TableCell>
                   <TableCell>{item.to}</TableCell>
-                  <TableCell>{Number(item.price).toFixed(2)}</TableCell>
+                  <TableCell>{displayPrice(item.price, true)}</TableCell>
                   <TableCell>
-                    {Number(item.price * item.to).toFixed(2)}
+                    {displayPrice(item.price * item.to, true)}
                   </TableCell>
                 </TableRow>
               ))}

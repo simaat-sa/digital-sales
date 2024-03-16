@@ -1,5 +1,6 @@
 import HeightMotion from "@/shared/components/motions/HeighEffect";
 import { Button } from "@/shared/components/ui/button";
+import { displayPrice } from "@/shared/lib/format-pricing";
 import { cn } from "@/shared/lib/utils";
 import { useTranslations } from "next-intl";
 import {
@@ -13,7 +14,6 @@ import {
   quotesData,
   quotesDataV2,
 } from "../../_services/quotesData";
-import FooterSales from "../FooterSales";
 import { AddonCard } from "./AddonCard";
 import AddonsList from "./AddonsList";
 import FeatList from "./FeatList";
@@ -35,7 +35,7 @@ function AddonRow({ addon }: { addon: AddonV2 }) {
             {AddonSelected.find((item) => item.id === addon.id)?.count})
           </span>
           <div className="flex items-center gap-1">
-            <span>{PRICE}</span>
+            <span>{displayPrice(PRICE, true)}</span>
             <span>{t("s_r")}</span>
           </div>
         </div>
@@ -125,7 +125,10 @@ export default function CustomQuote() {
               </span>
               <span className="flex gap-2">
                 <span>
-                  {quotesData.find((item) => item.id === quoteSelected)?.price}
+                  {displayPrice(
+                    quotesData.find((item) => item.id === quoteSelected)?.price!,
+                    true,
+                  )}
                 </span>
                 {t("s_r")}
               </span>
@@ -158,13 +161,13 @@ export default function CustomQuote() {
               onClick={() => onTakeAction()}
             >
               <span>{t("confirm_and_pay")}</span>
-              <span className="text-3xl">{TOTAL}</span>
+              <span className="text-3xl">{displayPrice(TOTAL || 0, true)}</span>
               <span>{t("s_r")}</span>
             </Button>
           </HeightMotion>
         </div>
       </div>
-      <FooterSales />
+      {/* <FooterSales /> */}
     </>
   );
 }

@@ -10,8 +10,8 @@ export default function FooterSales() {
   const { reset } = useQuotePricingService();
 
   return (
-    <footer className="h-footer container relative z-20 bg-transparent">
-      <div className="grid h-16 w-full grid-cols-2 items-center">
+    <footer className="h-footer relative z-20 border-t bg-transparent">
+      <div className="container grid h-16 w-full grid-cols-2 items-center">
         <div className="col-span-2 flex items-center lg:col-span-1">{`منصة سمات Simaat © ${new Date(Date.now()).getFullYear()}. جميع الحقوق محفوظة.`}</div>
         <div className="ccol-span-2 flex items-center justify-end lg:col-span-1">
           {/* <Link
