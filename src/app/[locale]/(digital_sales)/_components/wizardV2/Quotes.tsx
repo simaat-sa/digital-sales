@@ -16,6 +16,7 @@ import Image from "next/image";
 import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2";
 import { quotesDataV2 } from "../../_services/quotesData";
 import FeatList from "./FeatList";
+import FooterSales from "../FooterSales";
 
 const VideoStream = "/assets/svg/icons/media-player.svg";
 const CalenderIcon = "/assets/svg/icons/Calender.svg";
@@ -223,6 +224,7 @@ export default function Quotes() {
           ),
         )}
       </div>
+      <FooterSales />
     </>
   );
 }

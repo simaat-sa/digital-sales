@@ -2,12 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "@/shared/assets/css/layout.css";
 @import "@/shared/assets/css/fonts.css";
 @import "@/shared/assets/css/cards.css";
 @import "@/shared/assets/css/input.css";
 
 @layer base {
   :root {
+    --h-bar: 5rem;
+    --h-footer: 3.5rem;
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
@@ -73,9 +76,12 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
   }
+
   body {
     @apply bg-background text-foreground;
     font-family: "URWGeometricArabic";

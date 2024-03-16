@@ -42,7 +42,7 @@ export default function Summary() {
         <div className="col-span-1"></div>
       </div>
       <div className="container relative z-10">
-        <div className="grid min-h-screen w-full grid-cols-2 gap-y-6 lg:gap-2">
+        <div className="grid h-full w-full grid-cols-2 gap-y-6 lg:gap-2">
           <div className="col-span-2 flex flex-col justify-center gap-4 px-4 md:px-2 lg:col-span-1 lg:h-full lg:px-0">
             <h2 className="mt-3 text-lg font-medium">
               {t("quote")} {t(getQuoteSelected.name as any)}

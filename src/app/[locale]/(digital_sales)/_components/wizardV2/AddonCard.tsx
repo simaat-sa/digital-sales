@@ -40,9 +40,9 @@ function AddonCardWrapper({
   return (
     <div
       className={cn(
-        "col-span-12 flex flex-wrap gap-3 rounded  bg-slate-50 p-3 text-foreground/70 shadow md:col-span-4",
+        "col-span-12 flex flex-wrap gap-3 rounded bg-slate-50 p-3 text-foreground/70 shadow md:col-span-4",
         {
-          "border border-primary-200 text-foreground/100": active,
+          "border text-foreground/100": active,
         },
       )}
     >

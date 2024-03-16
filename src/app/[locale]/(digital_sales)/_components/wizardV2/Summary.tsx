@@ -1,6 +1,5 @@
 import InputBase from "@/shared/components/Inputs/InputBase";
 import { Button } from "@/shared/components/ui/button";
-import { Label } from "@/shared/components/ui/label";
 import { Separator } from "@/shared/components/ui/separator";
 import { cn } from "@/shared/lib/utils";
 import { useLocale, useTranslations } from "next-intl";
@@ -12,7 +11,6 @@ import {
 } from "../../_services/QuotePricingServiceV2";
 import { paymentWay } from "../../_services/paymentWay";
 import { quotesData } from "../../_services/quotesData";
-import FooterSales from "../FooterSales";
 import ActionButtonV2 from "./ActionButtonV2";
 import AddonsList from "./AddonsList";
 import FeatList from "./FeatList";
@@ -47,7 +45,7 @@ export default function Summary() {
         <div className="col-span-1"></div>
       </div>
       <div className="container relative z-10">
-        <div className="grid min-h-screen w-full grid-cols-2 gap-y-6 lg:gap-2">
+        <div className="grid h-full w-full grid-cols-2 gap-y-6 lg:gap-2">
           <div className="col-span-2 flex flex-col justify-center gap-4 md:px-2 lg:col-span-1 lg:h-full lg:px-0">
             <h2 className="mt-3 text-lg font-medium">
               {t("quote")} {t(getQuoteSelected.name as any)}

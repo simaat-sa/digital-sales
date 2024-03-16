@@ -11,9 +11,5 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function Page() {
-  return (
-    <div className="relative flex w-full flex-col items-center">
-      <WizardV2 />
-    </div>
-  );
+  return <WizardV2 />;
 }

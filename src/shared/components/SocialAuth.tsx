@@ -51,7 +51,10 @@ export default function SocialAuth() {
         <div className="flex flex-col gap-4">
           <span>Hi, {user?.user?.name}</span>
           <Button
-            onClick={() => signOut()}
+            onClick={() => {
+              signOut();
+              console.log("signout....");
+            }}
             variant="outline"
             className="w-full"
           >

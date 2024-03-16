@@ -10,22 +10,22 @@ export default function FooterSales() {
   const { reset } = useQuotePricingService();
 
   return (
-    <footer className="container h-14 w-full">
+    <footer className="h-footer container relative z-20 bg-transparent">
       <div className="grid h-16 w-full grid-cols-2 items-center">
-        <div className="col-span-1 flex items-center">{`منصة سمات Simaat © ${new Date(Date.now()).getFullYear()}. جميع الحقوق محفوظة.`}</div>
-        <div className="col-span-1 flex items-center justify-between">
-          <Link
+        <div className="col-span-2 flex items-center lg:col-span-1">{`منصة سمات Simaat © ${new Date(Date.now()).getFullYear()}. جميع الحقوق محفوظة.`}</div>
+        <div className="ccol-span-2 flex items-center justify-end lg:col-span-1">
+          {/* <Link
             href={
               !pathname.includes("/v2")
                 ? "/v2/digital-sales"
                 : "/v1/digital-sales"
             }
-            className="text-secondary-900 underline"
+            className="text-secondary-900 underline lg:px-2"
             onClick={() => reset()}
             prefetch={true}
           >
             {!pathname.includes("/v2") ? t("v2") : t("v1")}
-          </Link>
+          </Link> */}
 
           <Link
             href={pathname}

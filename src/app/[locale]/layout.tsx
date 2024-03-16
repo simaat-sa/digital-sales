@@ -7,7 +7,6 @@ import { getServerSession } from "next-auth";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, unstable_setRequestLocale } from "next-intl/server";
 import Bar from "./(digital_sales)/_components/Bar";
-import FooterSales from "./(digital_sales)/_components/FooterSales";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -38,8 +37,8 @@ export default async function RootLayout({
           <ReactQueryProvider>
             <SessionProviderAuth session={session}>
               <Bar />
-              <main>{children}</main>
-              <FooterSales/>
+              {children}
+              {/* <FooterSales /> */}
             </SessionProviderAuth>
           </ReactQueryProvider>
         </NextIntlClientProvider>

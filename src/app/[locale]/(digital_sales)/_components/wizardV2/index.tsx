@@ -1,10 +1,11 @@
 "use client";
-// import FooterSales from "@/app/[locale]/(digital_sales)/_components/FooterSales";
+import { cn } from "@/shared/lib/utils";
 import Image from "next/image";
 import {
   Wizards,
   useQuotePricingServiceV2,
 } from "../../_services/QuotePricingServiceV2";
+import FooterSales from "../FooterSales";
 import ActionButtonV2 from "./ActionButtonV2";
 import CustomQuote from "./CustomQuote";
 import CheckDomain from "./Domain";
@@ -21,21 +22,21 @@ export default function Wizard() {
   const { currentWizard, actionButton } = useQuotePricingServiceV2();
 
   return (
-    <>
-      {(
-        ["register", "requirements", "summary", "domain"] as Wizards[]
-      ).includes(currentWizard) ? (
-        <div className="absolute bottom-0 left-0 right-0 top-0 z-0 hidden grid-cols-1 lg:grid lg:grid-cols-2">
-          <div className="col-span-1 bg-gray-100"></div>
-          <div className="col-span-1"></div>
-        </div>
-      ) : null}
-
-      <div className="container relative z-10">
+    <main
+      className={cn("relative", {
+        "after:bottom-0 after:left-0 after:top-0 after:z-10 after:w-1/2 after:bg-gray-100 lg:after:absolute lg:after:content-[''] rtl:after:right-0":
+          (["register", "requirements", "domain"] as Wizards[]).find(
+            (item) => item === currentWizard,
+          )
+            ? true
+            : false,
+      })}
+    >
+      <section className="min-h-layout container relative z-20">
         {(["register", "requirements", "domain"] as Wizards[]).includes(
           currentWizard,
         ) ? (
-          <div className="grid h-screen min-h-screen w-full grid-cols-2">
+          <div className="grid h-full w-full grid-cols-2">
             <div className="hidden h-full items-center justify-center lg:flex">
               <Image
                 src={planningPrice}
@@ -72,8 +73,9 @@ export default function Wizard() {
         {currentWizard === "custom_quote" ? <CustomQuote /> : null}
         {currentWizard === "quotes" ? <Quotes /> : null}
         {currentWizard === "summary" ? <Summary /> : null}
-      </div>
+      </section>
       {currentWizard === "success" ? <Success /> : null}
-    </>
+      <FooterSales />
+    </main>
   );
 }

@@ -1,5 +1,4 @@
 "use client";
-import FooterSales from "@/app/[locale]/(digital_sales)/_components/FooterSales";
 import ActionButton from "@/app/[locale]/(digital_sales)/_components/wizard/ActionButton";
 import CheckDomain from "@/app/[locale]/(digital_sales)/_components/wizard/Domain";
 import Quotes from "@/app/[locale]/(digital_sales)/_components/wizard/Quotes";
@@ -14,6 +13,7 @@ import {
 import { quotesData } from "@/app/[locale]/(digital_sales)/_services/quotesData";
 import Image from "next/image";
 import { useEffect } from "react";
+import FooterSales from "../FooterSales";
 
 const planningPrice = "/assets/images/simaat-summary.png";
 
@@ -25,21 +25,12 @@ export default function Wizard() {
   }, [setAllAddons]);
 
   return (
-    <>
-      {(
-        ["register", "requirements", "summary", "domain"] as Wizards[]
-      ).includes(currentWizard) ? (
-        <div className="absolute bottom-0 left-0 right-0 top-0 z-0 hidden grid-cols-1 lg:grid lg:grid-cols-2">
-          <div className="col-span-1 bg-gray-100"></div>
-          <div className="col-span-1"></div>
-        </div>
-      ) : null}
-
-      <div className="relative z-10 container">
+    <main className="relative after:bottom-0 after:left-0 after:top-0 after:z-10 after:w-1/2 after:bg-gray-100 lg:after:absolute lg:after:content-[''] rtl:after:right-0">
+      <section className="min-h-layout container relative z-20">
         {(["register", "requirements", "domain"] as Wizards[]).includes(
           currentWizard,
         ) ? (
-          <div className="grid h-screen min-h-screen w-full grid-cols-2">
+          <div className="grid h-full w-full grid-cols-2">
             <div className="hidden h-full items-center justify-center lg:flex">
               <Image
                 src={planningPrice}
@@ -65,8 +56,9 @@ export default function Wizard() {
 
         {currentWizard === "quotes" ? <Quotes /> : null}
         {currentWizard === "summary" ? <Summary /> : null}
-      </div>
+      </section>
+      <FooterSales />
       {currentWizard === "success" ? <Success /> : null}
-    </>
+    </main>
   );
 }

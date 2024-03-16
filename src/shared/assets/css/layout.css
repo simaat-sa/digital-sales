@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+
+@layer components {
+  .h-bar {
+    height: var(--h-bar);
+  }
+
+  .h-footer {
+    height: var(--h-footer);
+  }
+
+  .min-h-layout {
+    height: calc(100dvh - var(--h-bar) - var(--h-footer));
+  }
+}

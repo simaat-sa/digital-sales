@@ -13,6 +13,7 @@ import {
   quotesData,
   quotesDataV2,
 } from "../../_services/quotesData";
+import FooterSales from "../FooterSales";
 import { AddonCard } from "./AddonCard";
 import AddonsList from "./AddonsList";
 import FeatList from "./FeatList";
@@ -60,11 +61,11 @@ export default function CustomQuote() {
   const v2t = useTranslations("v2.sales");
   const t = useTranslations("sales");
   const {
-    AddonSelected,
-    onTakeAction,
     quoteSelected,
+    AddonSelected,
     AddonSelectedDropdown,
     AddonSelectedPlusMinus,
+    onTakeAction,
   } = useQuotePricingServiceV2();
 
   const TOTAL = useInvoiceCustomAddons();
@@ -78,7 +79,7 @@ export default function CustomQuote() {
         </Button>
       </div>
       <div
-        className={cn("grid w-full grid-cols-12 items-start gap-8 mb-8", {
+        className={cn("mb-8 grid w-full grid-cols-12 items-start gap-8", {
           "col-start-3": true,
         })}
       >
@@ -88,7 +89,16 @@ export default function CustomQuote() {
           )}
         >
           {addonsData.map((addon) => (
-            <AddonCard.Card key={addon.id} active={false}>
+            <AddonCard.Card
+              key={addon.id}
+              active={
+                AddonSelected.find((item) => item.id === addon.id) ||
+                AddonSelectedDropdown.find((item) => item.id === addon.id) ||
+                AddonSelectedPlusMinus.find((item) => item.id === addon.id)
+                  ? true
+                  : false
+              }
+            >
               <AddonCard.Header addon={addon} />
               <AddonCard.Description addon={addon} />
               <AddonCard.Checkbox addon={addon} />
@@ -154,6 +164,7 @@ export default function CustomQuote() {
           </HeightMotion>
         </div>
       </div>
+      <FooterSales />
     </>
   );
 }
