@@ -11,6 +11,14 @@ export const authOptions: AuthOptions = {
     GoogleProvider({
       clientId: GOOGLE_CLIENT_ID ?? "",
       clientSecret: GOOGLE_CLIENT_SECRET ?? "",
+      authorization: {
+        params: {
+          redirect_uri:
+            process.env.NODE_ENV === "production"
+              ? "https://digital-sales.simaat.dev/api/auth/callback/google"
+              : "http://localhost:3000/api/auth/callback/google",
+        },
+      },
     }),
   ],
   session: {
