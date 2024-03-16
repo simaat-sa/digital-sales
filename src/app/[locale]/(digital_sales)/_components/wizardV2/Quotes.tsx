@@ -50,7 +50,7 @@ export default function Quotes() {
             >
               <div className="flex min-h-40 w-full flex-col justify-center gap-4">
                 <div className="flex w-full flex-nowrap items-center justify-between gap-x-4">
-                  <h4 className="text-2xl font-medium">
+                  <h4 className="text-3xl font-medium">
                     {t("quote")} {t(name as any)}
                   </h4>
                   {String(id) === quotePlan ? (

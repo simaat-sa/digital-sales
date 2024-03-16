@@ -139,7 +139,7 @@ export default function RequirementForm() {
             </SelectContent>
           </Select>
           {errors.quotePlan.length ? (
-            <p className="text-sm text-red-600 -mt-4">
+            <p className="text-lg text-red-600 -mt-4">
               {validations("quote_type_is_required")}
             </p>
           ) : null}

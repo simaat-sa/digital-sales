@@ -143,7 +143,7 @@ export default function CustomQuote() {
               <AddonsList />
             </div>
             <Button
-              className="flex h-16 w-full items-center gap-1 rounded-b rounded-t-none text-base"
+              className="flex h-16 w-full items-center gap-1 rounded-b rounded-t-none text-lg"
               size="lg"
               onClick={() => onTakeAction()}
             >

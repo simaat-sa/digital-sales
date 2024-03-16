@@ -33,7 +33,7 @@ export default function FeatList({
                     width={24}
                     height={24}
                   />
-                  <Label className="text-base font-medium">{item}</Label>
+                  <Label className="text-lg font-medium">{item}</Label>
                 </div>
               </li>
               {isSpeared &&

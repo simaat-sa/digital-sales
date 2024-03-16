@@ -15,7 +15,7 @@ export default function Bar() {
               "https://simaat.app/wp-content/uploads/2022/11/simaat_logo-1.svg"
             }
             alt={t("simaat")}
-            width={140}
+            width={170}
             height={80}
             loading="lazy"
           />

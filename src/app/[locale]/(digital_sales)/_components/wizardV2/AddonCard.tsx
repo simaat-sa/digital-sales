@@ -72,7 +72,7 @@ function AddonCardHeader({ addon }: AddonCardWrapperProps) {
 }
 
 function AddonCardDescription({ addon }: AddonCardWrapperProps) {
-  return <p className="text-sm">{addon.description}</p>;
+  return <p className="text-lg">{addon.description}</p>;
 }
 
 function PRICE(addon: AddonV2) {
@@ -227,7 +227,7 @@ function PlusMinus({ addon }: AddonCardWrapperProps) {
         disabledPlus={disabledPlus}
       />
       <div className="flex w-full gap-2 align-baseline">
-        <span className="mt-1 text-sm">
+        <span className="mt-1 text-base">
           {v2t("how_the_add-one_is_calculated?")}
         </span>
         <PopoverInfo>
