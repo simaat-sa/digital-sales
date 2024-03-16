@@ -226,7 +226,7 @@ export const addonsData: AddonV2[] = [
     id: 7,
     name: "الربط مع إيجار",
     price: 4999,
-    logo: "https://simaat.app/wp-content/uploads/2022/11/gov.2.svg",
+    logo: "/assets/images/ejar-logo-ar.svg",
     addonType: "DEFAULT",
     data: [],
     description: "",
