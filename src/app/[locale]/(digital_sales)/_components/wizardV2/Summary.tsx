@@ -8,6 +8,7 @@ import Image from "next/image";
 import {
   useCalcAmountsV2,
   useGetQuoteSelectedV2,
+  useInvoiceSummary,
   useQuotePricingServiceV2,
 } from "../../_services/QuotePricingServiceV2";
 import { paymentWay } from "../../_services/paymentWay";
@@ -37,6 +38,7 @@ export default function Summary() {
   const t = useTranslations("sales");
   const locale = useLocale();
   const { totalInvoice, totalTax } = useCalcAmountsV2();
+  const totalSummary = useInvoiceSummary();
   const getQuoteSelected = useGetQuoteSelectedV2(quoteSelected!)!;
 
   return (
@@ -189,7 +191,9 @@ export default function Summary() {
 
                 <div className="flex flex-nowrap items-center justify-center gap-2 align-baseline">
                   <span className="text-4xl font-medium">
-                    {displayPrice(totalInvoice, true)}
+                    {totalSummary
+                      ? displayPrice(totalSummary, true)
+                      : totalSummary}
                   </span>
                   {t("s_r")}
                 </div>

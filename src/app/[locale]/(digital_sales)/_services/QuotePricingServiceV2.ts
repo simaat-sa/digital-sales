@@ -749,11 +749,65 @@ function useInvoiceCustomAddons() {
   }, [AddonSelected, AddonSelectedDropdown, AddonSelectedPlusMinus, quote]);
 }
 
+function useInvoiceSummary() {
+  const {
+    paymentMonths,
+    quoteSelected,
+    AddonSelected,
+    AddonSelectedPlusMinus,
+    AddonSelectedDropdown,
+    promoCodeValid,
+    promoCodeValue,
+  } = useQuotePricingServiceV2();
+  let quote = quotesDataV2.find((item) => item.id === quoteSelected);
+
+  return useMemo(() => {
+    if (quote) {
+      let addonsSelectedTotal = AddonSelected.length
+        ? AddonSelected.map((a) => a.price).reduce((a, b) => a + b)
+        : 0;
+
+      let addonPlusMinusTotal = AddonSelectedPlusMinus.length
+        ? AddonSelectedPlusMinus.map((a) => a.total).reduce((a, b) => a + b)
+        : 0;
+
+      let addDropdownTotal = AddonSelectedDropdown.length
+        ? AddonSelectedDropdown.map((a) => a.price_selected).reduce(
+            (a, b) => a + b,
+          )
+        : 0;
+
+      let totalByMonths = quote?.price * paymentMonths || 0;
+
+      let total =
+        totalByMonths +
+        addonsSelectedTotal +
+        addonPlusMinusTotal +
+        addDropdownTotal;
+
+      return promoCodeValid
+        ? calculateTotalWithTax(total, taxNumber) - promoCodeValue
+        : calculateTotalWithTax(total, taxNumber);
+    } else {
+      return 0;
+    }
+  }, [
+    AddonSelected,
+    AddonSelectedDropdown,
+    AddonSelectedPlusMinus,
+    paymentMonths,
+    promoCodeValid,
+    promoCodeValue,
+    quote,
+  ]);
+}
+
 export {
   useCalcAmountsV2,
   useCalcTotalAddon,
   useGetQuoteSelectedV2,
   useInvoiceCustomAddons,
+  useInvoiceSummary,
   useQuotePricingServiceV2,
 };
 
