@@ -1,7 +1,7 @@
 import { SAUDI_ARABIA_MOBILE_NUMBER_REGEX } from "@/shared/lib/constants";
 import { calculateTax, calculateTotalWithTax } from "@/shared/lib/utils";
+import { signOut } from "next-auth/react";
 import { useMemo } from "react";
-import { mountStoreDevtool } from "simple-zustand-devtools";
 import { ObjectSchema, ValidationError, object, string } from "yup";
 import { create } from "zustand";
 import { FieldName, QuotePlan, taxNumber } from "./QuotePricingService";
@@ -124,6 +124,7 @@ interface IRequestQuoteActions {
   setIncrement: (addonId: number, steps: number) => void;
   setDecrement: (addonId: number, steps: number) => void;
   onChangeAddonDropdown: (addonId: number, value: number) => void;
+  signOut: () => void;
 }
 
 interface QuotePricingV2 extends QuotePricingStateType, IRequestQuoteActions {}
@@ -304,7 +305,11 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
   },
   _isMobileNumberValid() {
     let mobileNumber = get().mobileNumber;
-    const isValid = SAUDI_ARABIA_MOBILE_NUMBER_REGEX.test(mobileNumber);
+    let country_code = get().country_code;
+
+    const isValid = SAUDI_ARABIA_MOBILE_NUMBER_REGEX.test(
+      `${country_code}${mobileNumber}`,
+    );
 
     if (!isValid) {
       set(() => ({
@@ -461,7 +466,9 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
       quoteSelected: id,
     }));
   },
-  resetV2() {},
+  resetV2() {
+    set(useQuotePricingServiceV2.getInitialState());
+  },
   onTakeAction(isBack) {
     let _setCurrentWizard = get()._setCurrentWizard;
     let _onUpdateWizardHistory = get()._onUpdateWizardHistory;
@@ -526,18 +533,27 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
     get()._onVerifyPromoCode();
   },
   onVerifyDomain() {
-    set(() => ({
-      disable: {
-        ...get().disable,
-        domain: true,
-      },
-    }));
-    setTimeout(() => {
+    if (get().domain.length) {
       set(() => ({
-        verifiedDomain: true,
-        disableBtnNext: false,
+        disable: {
+          ...get().disable,
+          domain: true,
+        },
       }));
-    }, 2000);
+      setTimeout(() => {
+        set(() => ({
+          verifiedDomain: true,
+          disableBtnNext: false,
+        }));
+      }, 2000);
+    } else {
+      set(() => ({
+        errors: {
+          ...get().errors,
+          domain: "domain_is_required",
+        },
+      }));
+    }
   },
   onToggleDialogPaymentStatus(status) {
     set(() => ({
@@ -610,6 +626,11 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
         return item;
       }),
     }));
+  },
+  signOut() {
+    signOut().then(() => {
+      get().resetV2();
+    });
   },
 }));
 
@@ -810,7 +831,3 @@ export {
   useInvoiceSummary,
   useQuotePricingServiceV2,
 };
-
-if (process.env.NODE_ENV === "development") {
-  mountStoreDevtool("QuotePricingServiceV2", useQuotePricingServiceV2);
-}

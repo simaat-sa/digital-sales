@@ -79,13 +79,16 @@
     "last_name_required": "Last name is required",
     "code_required": "code required",
     "office_name_required": "Office name is required",
-    "company_name_required": "Company name is required"
+    "company_name_required": "Company name is required",
+    "domain_is_required" : "Domain is required"
   },
   "common": {
     "resend_code": "Resend code",
     "countdown": "{time} seconds",
     "continue_with_google": "Continue with google",
-    "simaat": "سمات - عقارية تفاعلية متكاملة"
+    "simaat": "سمات - عقارية تفاعلية متكاملة",
+    "Confirm": "Confirm",
+    "close": "Close"
   },
   "v2": {
     "sales": {
@@ -98,7 +101,10 @@
       "to": "To",
       "price": "Price",
       "how_the_add-one_is_calculated?": "how the add-one is calculated?",
-      "from_to": "From {from} to {to} = {total} R.S"
+      "from_to": "From {from} to {to} = {total} R.S",
+      "logged_with": "Logged with",
+      "dialog_title": "log out",
+      "dialog_desc": "Are you sure you want to log out?"
     }
   }
 }
