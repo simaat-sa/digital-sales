@@ -1,5 +1,14 @@
-import { redirect } from "next/navigation";
+import WizardV2 from "@/app/[locale]/(public)/_components/wizardV2";
+import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
+export async function generateMetadata(): Promise<Metadata> {
+  const translateSales = await getTranslations("sales");
 
-export default function Home() {
-  return redirect("/ar/v2/digital-sales");
+  return {
+    title: translateSales("simaat_digital_sales"),
+  };
+}
+
+export default function Page() {
+  return <WizardV2 />;
 }
