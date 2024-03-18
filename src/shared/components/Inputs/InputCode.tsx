@@ -40,7 +40,7 @@ export default function InputCode({
             if (completed || resendCode) {
               return (
                 <span
-                  className="underline text-lg cursor-pointer"
+                  className="text-primary text-lg cursor-pointer mt-2"
                   onClick={() => {
                     onResendCode().then(() => {
                       api.start();

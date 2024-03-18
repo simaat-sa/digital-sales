@@ -22,7 +22,7 @@ export default function FeatList({
             <Fragment key={i}>
               <li
                 key={index}
-                className={cn("mb-4", {
+                className={cn("mb-3", {
                   "mb-0": feat.data.length - 1 === i && isSpeared,
                 })}
               >

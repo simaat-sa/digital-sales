@@ -8,11 +8,11 @@ export default function AddonsList() {
   const locale = useLocale();
 
   return (
-    <ul className="w-full">
+    <ul className="w-full text-lg">
       {AddonSelected.map((item, index) => (
         <li
           key={index}
-          className="mb-1 flex w-full items-center justify-between"
+          className="mb-2 flex w-full items-center justify-between"
         >
           <span>{item.name}</span>
           <span>{displayPrice(item.price, true, locale)}</span>
@@ -21,7 +21,7 @@ export default function AddonsList() {
       {AddonSelectedPlusMinus.map((item, index) => (
         <li
           key={index}
-          className="mb-1 flex w-full items-center justify-between"
+          className="mb-2 flex w-full items-center justify-between"
         >
           <span>{item.name}</span>
           <span>{displayPrice(item.total, true, locale)}</span>
@@ -31,7 +31,7 @@ export default function AddonsList() {
       {AddonSelectedDropdown.map((item, index) => (
         <li
           key={index}
-          className="mb-1 flex w-full items-center justify-between"
+          className="mb-2 flex w-full items-center justify-between"
         >
           <span>{item.name}</span>
           <span>{displayPrice(item.price_selected, true, locale)}</span>

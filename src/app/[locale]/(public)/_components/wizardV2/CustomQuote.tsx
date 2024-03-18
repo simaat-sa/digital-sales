@@ -123,7 +123,7 @@ export default function CustomQuote() {
                     ?.name as any,
                 )}
               </span>
-              <span className="flex gap-2">
+              <span className="text-xl font-medium pt-3 flex gap-2">
                 <span>
                   {displayPrice(
                     quotesData.find((item) => item.id === quoteSelected)?.price!,
@@ -141,11 +141,11 @@ export default function CustomQuote() {
           </div>
 
           <HeightMotion>
-            <div className="p-3">
+            <div className="px-3 mb-3">
               {AddonSelected.length ||
               AddonSelectedDropdown.length ||
               AddonSelectedPlusMinus.length ? (
-                <h2 className="text-lg mb-2">
+                <h2 className="text-xl mb-4">
                   {t("addons")} (
                   {AddonSelected.length +
                     AddonSelectedDropdown.length +
@@ -160,8 +160,8 @@ export default function CustomQuote() {
               size="lg"
               onClick={() => onTakeAction()}
             >
-              <span>{t("confirm_and_pay")}</span>
-              <span className="text-3xl">{displayPrice(TOTAL || 0, true)}</span>
+              <span className="text-xl">{t("confirm_and_pay")}</span>
+              <span className="text-3xl pr-3">{displayPrice(TOTAL || 0, true)}</span>
               <span>{t("s_r")}</span>
             </Button>
           </HeightMotion>

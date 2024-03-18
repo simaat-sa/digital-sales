@@ -72,8 +72,8 @@ export default function Summary() {
               <h2 className="mt-6 text-2xl font-medium">
                 {t("summary_order")}
               </h2>
-              <h4 className="text-lg font-medium">{t("payment")}</h4>
-              <div className="grid w-full grid-cols-4 gap-4 lg:gap-6">
+              <h4 className="text-xl font-medium">{t("payment")}</h4>
+              <div className="grid w-full grid-cols-4 gap-3 lg:gap-6">
                 {paymentWay.map((payment) => {
                   const quote = quotesData.find(
                     (quote) => quote.id === getQuoteSelected.id,
@@ -84,7 +84,7 @@ export default function Summary() {
                       className={cn(
                         "col-span-2 flex cursor-pointer flex-col items-center justify-center gap-6 rounded-xl border border-slate-50 bg-white p-3 shadow transition-colors duration-75 ease-in lg:flex-1",
                         {
-                          "border-primary-600":
+                          "border-primary-600 bg-slate-50":
                             payment.months === paymentMonths,
                         },
                       )}
@@ -92,7 +92,7 @@ export default function Summary() {
                         onSelectPaymentWay(payment.months);
                       }}
                     >
-                      <span className="text-lg font-medium">
+                      <span className="text-xl font-medium">
                         {payment.label[locale as "ar" | "en"]}
                       </span>
                       <div className="flex flex-nowrap items-center justify-center gap-2 align-baseline">
@@ -106,7 +106,7 @@ export default function Summary() {
                 })}
               </div>
 
-              <div className="flex w-full items-end gap-3 md:w-4/5 lg:w-full">
+              <div className="flex w-full items-end gap-3 md:w-4/5 lg:w-full mt-4">
                 <InputBase
                   label={t("promo_code")}
                   placeholder={t("promo_code")}
@@ -132,11 +132,11 @@ export default function Summary() {
                 )}
               </div>
 
-              <label className="text-lg font-medium">
+              <label className="text-xl font-medium mt-3">
                 {t("quote")} {t(getQuoteSelected.name as any)}
               </label>
 
-              <ul className="flex w-full list-none flex-col gap-4 font-medium">
+              <ul className="flex w-full list-none flex-col gap-3 font-medium">
                 <li className="flex justify-between">
                   <span>
                     {
@@ -170,7 +170,7 @@ export default function Summary() {
               AddonSelectedPlusMinus.length ||
               AddonSelectedDropdown.length ? (
                 <>
-                  <label className="text-lg font-medium">{t("addons")}</label>
+                  <label className="text-xl font-medium mt-3">{t("addons")}</label>
                   <AddonsList />
                   <ul>
                     {promoCodeValid ? (
