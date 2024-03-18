@@ -17,6 +17,7 @@ interface MobileNumberWithCodeProps {
   };
   showCode: boolean;
   verified?: boolean;
+  countryCode: number;
   onChange: (name: FieldName, value: string) => void;
 }
 
@@ -27,8 +28,10 @@ export default function MobileNumberWithCode({
   disable,
   showCode,
   verified,
+  countryCode,
   onChange,
 }: MobileNumberWithCodeProps) {
+  console.log("🚀 ~ countryCode:", countryCode);
   const t = useTranslations("sales");
   const validations = useTranslations("validations");
 
@@ -52,7 +55,7 @@ export default function MobileNumberWithCode({
         <HeightMotion>
           <p className="mb-4 text-lg text-gray-600">
             {t("resend_code_notice", {
-              mobileNumber: value,
+              mobileNumber: `${countryCode}${value}`,
             })}
           </p>
           <InputCode

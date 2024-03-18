@@ -1,11 +1,26 @@
 import InputBase from "@/shared/components/Inputs/InputBase";
 import HeightMotion from "@/shared/components/motions/HeighEffect";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/shared/components/ui/alert-dialog";
 import { Label } from "@/shared/components/ui/label";
 import { Tabs, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
+import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2";
 import { quotesData } from "../../_services/quotesData";
 import MobileNumberWithCode from "../MobileNumberWithCode";
+
+const exitIcon = "/assets/svg/icons/ExitLine.svg";
 
 function InputName() {
   const {
@@ -108,17 +123,58 @@ export default function RequirementForm() {
     showCode,
     disable,
     registerWay,
+    signOut,
+    country_code,
   } = useQuotePricingServiceV2();
   const t = useTranslations("sales");
+  const tv2 = useTranslations("v2.sales");
+  const tc = useTranslations("common");
   const validations = useTranslations("validations");
+  const { status, data: user } = useSession();
 
   return (
     <HeightMotion>
       <div className="flex flex-col gap-6">
         <h3 className="text-3xl font-medium">{t("tell_us_about_yourSelf")}</h3>
+        {status === "authenticated" ? (
+          <div className="flex w-full justify-between rounded-full border bg-white px-6 py-2">
+            <div>
+              <span className="block">{tv2("logged_with")}</span>
+              <span>{user?.user?.email || ""}</span>
+            </div>
+            <AlertDialog>
+              <AlertDialogTrigger>
+                <Image
+                  src={exitIcon}
+                  alt={"exit"}
+                  width={24}
+                  height={24}
+                  loading="lazy"
+                />
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>{tv2("dialog_title")}</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    {tv2("dialog_desc")}
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter className="gap-4">
+                  <AlertDialogCancel>{tc("close")}</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => {
+                      signOut();
+                    }}
+                  >
+                    {tc("Confirm")}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
+        ) : null}
         <div className="flex w-full flex-col gap-4">
           <Label>{t("business_needed")}</Label>
-
           <Tabs
             className="w-full"
             value={quotePlan}
@@ -167,6 +223,7 @@ export default function RequirementForm() {
         {registerWay === "SocialMedia" ? (
           <MobileNumberWithCode
             value={mobileNumber}
+            countryCode={country_code}
             onChange={onChange}
             errors={{
               mobileNumber: errors.mobileNumber,

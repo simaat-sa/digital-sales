@@ -79,13 +79,16 @@
     "last_name_required": "الأسم الأخير مطلوب",
     "code_required": "الرمز مطلوب",
     "office_name_required": "أسم المكتب مطلوب",
-    "company_name_required": "أسم الشركة مطلوب"
+    "company_name_required": "أسم الشركة مطلوب",
+    "domain_is_required": "أسم النطاق مطلوب"
   },
   "common": {
     "resend_code": "اعادة أرسال الرمز",
     "countdown": " {time} ثانية",
     "continue_with_google": "تسجيل الدخول عن طريق جوجل",
-    "simaat": "سمات - عقارية تفاعلية متكاملة"
+    "simaat": "سمات - عقارية تفاعلية متكاملة",
+    "Confirm": "تأكيد",
+    "close": "الالغاء"
   },
   "v2": {
     "sales": {
@@ -98,7 +101,10 @@
       "to": "الي",
       "price": "السعر",
       "how_the_add-one_is_calculated?": "كيف يتم حساب السعر؟",
-      "from_to": "من {from} الي {to} = {total} ر.س"
+      "from_to": "من {from} الي {to} = {total} ر.س",
+      "logged_with": "سجلت دخول",
+      "dialog_title": "تسجيل الخروج",
+      "dialog_desc": "هل أنت متأكد أنك تريد تسجيل الخروج؟"
     }
   }
 }
