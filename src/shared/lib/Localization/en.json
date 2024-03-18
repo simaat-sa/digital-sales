@@ -77,7 +77,7 @@
     "mobile_number_not_valid": "Mobile number is not valid",
     "first_name_required": "First name is required",
     "last_name_required": "Last name is required",
-    "code_required": "code required",
+    "code_required": "Code required",
     "office_name_required": "Office name is required",
     "company_name_required": "Company name is required",
     "domain_is_required" : "Domain is required"
@@ -94,17 +94,17 @@
     "sales": {
       "custom_your_quote": "Custom your quote",
       "ejar": "Ejar",
-      "whatsapp": "what's App",
+      "whatsapp": "WhatsApp",
       "mada": "Mada",
       "users_count": "Users count",
       "from": "From",
       "to": "To",
       "price": "Price",
-      "how_the_add-one_is_calculated?": "how the add-one is calculated?",
+      "how_the_add-one_is_calculated?": "How the add-one is calculated?",
       "from_to": "From {from} to {to} = {total} R.S",
       "logged_with": "Logged in with Google",
       "dialog_title": "log out",
-      "dialog_desc": "Are you sure you want to logout?"
+      "dialog_desc": "Are you sure you want to logout ?"
     }
   }
 }
