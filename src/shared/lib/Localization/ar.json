@@ -102,7 +102,7 @@
       "price": "السعر",
       "how_the_add-one_is_calculated?": "كيف يتم حساب السعر؟",
       "from_to": "من {from} الي {to} = {total} ر.س",
-      "logged_with": "تم تسجيل الدخول",
+      "logged_with": "تم تسجيل دخولك بحساب جوجل",
       "dialog_title": "تسجيل الخروج",
       "dialog_desc": "هل أنت متأكد من تسجيل الخروج؟"
     }

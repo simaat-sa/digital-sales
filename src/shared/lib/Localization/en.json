@@ -102,9 +102,9 @@
       "price": "Price",
       "how_the_add-one_is_calculated?": "how the add-one is calculated?",
       "from_to": "From {from} to {to} = {total} R.S",
-      "logged_with": "Logged with",
+      "logged_with": "Logged in with Google",
       "dialog_title": "log out",
-      "dialog_desc": "Are you sure you want to log out?"
+      "dialog_desc": "Are you sure you want to logout?"
     }
   }
 }
