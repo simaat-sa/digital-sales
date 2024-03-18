@@ -6,8 +6,8 @@ import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, unstable_setRequestLocale } from "next-intl/server";
-import Bar from "./(digital_sales)/_components/Bar";
-import FooterSales from "./(digital_sales)/_components/FooterSales";
+import Bar from "./(public)/_components/Bar";
+import FooterSales from "./(public)/_components/FooterSales";
 
 export const metadata: Metadata = {
   title: "Create Next App",

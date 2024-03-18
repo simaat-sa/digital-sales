@@ -17,7 +17,6 @@ export default function RegisterForm() {
     country_code,
   } = useQuotePricingServiceV2();
 
-  console.log("🚀 ~ RegisterForm ~ country_code:", country_code);
   const t = useTranslations("sales");
   const { _setCurrentWizard, _onUpdateWizardHistory, onLoginWithGoogle } =
     useQuotePricingServiceV2();

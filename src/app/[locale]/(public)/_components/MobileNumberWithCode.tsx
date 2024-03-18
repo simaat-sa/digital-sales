@@ -2,7 +2,7 @@ import InputCode from "@/shared/components/Inputs/InputCode";
 import InputMobileNumber from "@/shared/components/Inputs/InputMobileNumber";
 import HeightMotion from "@/shared/components/motions/HeighEffect";
 import { useTranslations } from "next-intl";
-import { FieldName } from "../_services/QuotePricingService";
+import { FieldName } from "../_services/QuotePricingServiceV2";
 
 interface MobileNumberWithCodeProps {
   value: string;
@@ -31,7 +31,6 @@ export default function MobileNumberWithCode({
   countryCode,
   onChange,
 }: MobileNumberWithCodeProps) {
-  // console.log("🚀 ~ countryCode:", countryCode);
   const t = useTranslations("sales");
   const validations = useTranslations("validations");
 

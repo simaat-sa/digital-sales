@@ -4,12 +4,26 @@ import { signOut } from "next-auth/react";
 import { useMemo } from "react";
 import { ObjectSchema, ValidationError, object, string } from "yup";
 import { create } from "zustand";
-import { FieldName, QuotePlan, taxNumber } from "./QuotePricingService";
 import { AddonV2, quotesData, quotesDataV2 } from "./quotesData";
 
 export const ADDON_STEPS = 50;
+const taxNumber = 15;
 
 type registerWay = "MobileNumber" | "SocialMedia" | "";
+
+export type QuotePlan = "personal" | "office" | "company" | string;
+
+export type FieldName =
+  | "mobileNumber"
+  | "code"
+  | "showCode"
+  | "quotePlan"
+  | "organizeName"
+  | "email"
+  | "firstName"
+  | "lastName"
+  | "domain"
+  | "promoCode";
 
 export type Wizards =
   | "register"
