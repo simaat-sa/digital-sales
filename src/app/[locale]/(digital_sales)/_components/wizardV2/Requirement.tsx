@@ -137,10 +137,10 @@ export default function RequirementForm() {
       <div className="flex flex-col gap-6">
         <h3 className="text-3xl font-medium">{t("tell_us_about_yourSelf")}</h3>
         {status === "authenticated" ? (
-          <div className="flex w-full justify-between rounded-full border bg-white px-6 py-2">
+          <div className="flex w-full justify-between rounded-md bg-slate-200 px-2 py-2">
             <div>
               <span className="block">{tv2("logged_with")}</span>
-              <span>{user?.user?.email || ""}</span>
+              <span>{user?.user?.name || ""}</span>
             </div>
             <AlertDialog>
               <AlertDialogTrigger>

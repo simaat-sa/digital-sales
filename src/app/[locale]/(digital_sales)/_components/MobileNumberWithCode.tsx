@@ -31,7 +31,7 @@ export default function MobileNumberWithCode({
   countryCode,
   onChange,
 }: MobileNumberWithCodeProps) {
-  console.log("🚀 ~ countryCode:", countryCode);
+  // console.log("🚀 ~ countryCode:", countryCode);
   const t = useTranslations("sales");
   const validations = useTranslations("validations");
 

@@ -57,7 +57,7 @@
     "personal_name": "اسم مالك فرد",
     "register_main_title": "ابدأ رحلتك الآن",
     "register_main_desc": " مع الجيل القادم من الخدمات العقارية",
-    "resend_code_notice": "ادخل رمز التحقق المرسل إلى ( {mobileNumber}+ ) في رساله نصية",
+    "resend_code_notice": "ادخل رمز التحقق المرسل إلى ({mobileNumber}+) في رساله نصية",
     "order_call": "تسجيل طلب اتصال",
     "personal_info": "أخبرنا عنك المزيد",
     "confirm_domain_title": "تأكيد اسم النطاق",
@@ -102,9 +102,9 @@
       "price": "السعر",
       "how_the_add-one_is_calculated?": "كيف يتم حساب السعر؟",
       "from_to": "من {from} الي {to} = {total} ر.س",
-      "logged_with": "سجلت دخول",
+      "logged_with": "تم تسجيل الدخول",
       "dialog_title": "تسجيل الخروج",
-      "dialog_desc": "هل أنت متأكد أنك تريد تسجيل الخروج؟"
+      "dialog_desc": "هل أنت متأكد من تسجيل الخروج؟"
     }
   }
 }
