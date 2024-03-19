@@ -15,7 +15,7 @@ export default function FeatList({
   isSpeared: boolean;
 }) {
   return (
-    <ul className="list-none">
+    <ul className="list-none mb-4">
       {quote?.features.map((feat, index) => (
         <Fragment key={index}>
           {feat.data.map((item, i) => (
@@ -39,7 +39,7 @@ export default function FeatList({
               {isSpeared &&
               feat.data.length - 1 === i &&
               quote.features.length - 1 !== index ? (
-                <Separator className="my-3 h-8 bg-slate-50" />
+                <Separator className="my-3 h-6 bg-slate-50" />
               ) : null}
             </Fragment>
           ))}

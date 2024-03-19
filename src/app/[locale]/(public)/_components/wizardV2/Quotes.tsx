@@ -48,7 +48,7 @@ export default function Quotes() {
                   "bg-gradient-to-r from-slate-200 to-gray-100 shadow-lg":
                     String(id) === quotePlan,
                 },
-                "card_pricing_plan_sibling col-span-12 flex flex-col gap-y-3 overflow-hidden rounded-3xl border bg-white p-4 shadow-md transition-colors duration-150 md:col-span-6 lg:col-span-4",
+                "card_pricing_plan_sibling col-span-12 flex flex-col gap-y-3 overflow-hidden rounded-3xl border bg-white p-4 shadow-md transition-colors duration-150 md:col-span-6 lg:col-span-4 mb-4",
               )}
               key={String(id)}
             >
@@ -75,7 +75,7 @@ export default function Quotes() {
                   "bg-slate-300": String(id) === quotePlan,
                 })}
               />
-              <div className=" flex flex-col gap-6">
+              <div className="flex flex-col gap-4">
                 {/* <p>{description}</p> */}
                 <FeatList
                   quote={{
@@ -89,7 +89,7 @@ export default function Quotes() {
                   isSpeared
                 />
                 <Dialog>
-                  <DialogTrigger className="w-full lg:w-9/12">
+                  <DialogTrigger className="w-full lg:w-9/12 text-secondaryblue">
                     <Button
                       variant="outline"
                       className="flex w-full justify-start gap-x-6 border-2 p-6"
@@ -124,7 +124,7 @@ export default function Quotes() {
                   </DialogContent>
                 </Dialog>
                 <Dialog>
-                  <DialogTrigger className="w-full lg:w-9/12">
+                  <DialogTrigger className="w-full lg:w-9/12 text-secondaryblue">
                     <Button
                       variant="outline"
                       className="flex w-full justify-start gap-x-6 border-2 p-6"
@@ -152,7 +152,7 @@ export default function Quotes() {
                 <a
                   href="https://demo.simaat.sa/"
                   target="_blank"
-                  className="w-full lg:w-9/12"
+                  className="w-full lg:w-9/12 text-secondaryblue"
                 >
                   <Button
                     variant="outline"

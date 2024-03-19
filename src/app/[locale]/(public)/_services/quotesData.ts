@@ -155,7 +155,7 @@ export const quotesDataV2: QuoteModelV2[] = [
           "مصاريف الوحدات العقارية",
           "متابعة التحصيل/إشعارات المستأجرين",
           "اخلاء الوحدة/التأمين",
-          "فاتورة إلكترونية متوافقة مع متطلبات هيئة الزكاة",
+          "فاتورة إلكترونية متوافقة مع متطلبات الهيئة",
         ],
       },
       {
@@ -237,7 +237,7 @@ export const addonsData: AddonV2[] = [
     price: 0,
     logo: "",
     addonType: "PLUS_MINUS",
-    description: "وسع قنواتك التسويقية ومصادر العملاء",
+    description: "يمكنك زيادة عدد مستخدمين إضافيين حسب احتياجك",
     data: [
       {
         from: 1,
@@ -253,7 +253,7 @@ export const addonsData: AddonV2[] = [
     price: 499,
     logo: "",
     addonType: "DROPDOWN",
-    description: "",
+    description: "تذكيرات برسائل نصية بإسم مخصص ومعرف لك",
     data: [
       {
         from: 101,
@@ -276,7 +276,7 @@ export const addonsData: AddonV2[] = [
     price: 500,
     logo: "",
     addonType: "DEFAULT",
-    description: "",
+    description: "عملياتك بين يديك أينما كنت ووسع قاعدة عملائك من المستأجرين والملاك",
     data: [],
   },
   {
@@ -285,7 +285,7 @@ export const addonsData: AddonV2[] = [
     price: 0,
     logo: "",
     addonType: "PLUS_MINUS",
-    description: "وسع قنواتك التسويقية ومصادر العملاء",
+    description: "لا تشيل هم ادخال عقودك، ودع الأمر لنا مهما كان حجمها",
     data: [
       {
         from: 1,
@@ -315,7 +315,7 @@ export const addonsData: AddonV2[] = [
     price: 0,
     logo: "",
     addonType: "PLUS_MINUS",
-    description: "وسع قنواتك التسويقية ومصادر العملاء",
+    description: "ادخال القيود بأي عدد حسب احتياجك",
     data: [
       {
         from: 1,
@@ -378,7 +378,7 @@ export const addonsData: AddonV2[] = [
     logo: "https://simaat.sa/images/product/WhatsApp-Business.png",
     addonType: "DEFAULT",
     data: [],
-    description: "وسع قنواتك التسويقية ومصادر العملاء",
+    description: "تسجيل حساب جديد لواتساب أعمال مخصص لك للتنبيهات والتذكيرات ",
   },
   {
     id: 6,
@@ -387,6 +387,6 @@ export const addonsData: AddonV2[] = [
     logo: "https://simaat.sa/images/product/WhatsApp-Business.png",
     addonType: "DEFAULT",
     data: [],
-    description: "وسع قنواتك التسويقية ومصادر العملاء",
+    description: "إذا كان لديك حساب واتساب أعمال خاص بك، يمكننا تفعيله على منصتك",
   },
 ];

@@ -34,7 +34,7 @@ export default function CustomQuote() {
     <>
       <div className="flex h-[6rem] w-full items-center justify-between lg:h-[8rem]">
         <h2 className="text-2xl font-medium lg:text-3xl">
-          {v2t("custom_your_quote")}
+          {v2t("custom_your_quote_title")}
         </h2>
         <Button variant="outline" onClick={() => onTakeAction(true)}>
           {t("back")}

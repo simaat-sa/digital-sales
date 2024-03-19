@@ -40,7 +40,7 @@ export default function InputCode({
             if (completed || resendCode) {
               return (
                 <span
-                  className="text-primary text-lg cursor-pointer mt-2"
+                  className="text-secondaryblue text-lg cursor-pointer mt-2 hover:text-primary"
                   onClick={() => {
                     onResendCode().then(() => {
                       api.start();

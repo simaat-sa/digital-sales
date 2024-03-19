@@ -10,11 +10,11 @@
     "resend_code": "إعلدة إرسال رمز التحقق",
     "quote_type": "نوع الباقة",
     "email": "البريد إلاكتروني",
-    "best_matching": "المرشحه لك",
+    "best_matching": "المرشحة لك",
     "addons": "الإضافات",
     "contact_support": "اتصل بالدعم",
     "schedule_meeting": "تحديد موعد للإجتماع",
-    "select": "أختر",
+    "select": "اختر",
     "check": "تاكيد",
     "confirm_and_pay": "تأكيد ودفع ",
     "ar": "Arabic",
@@ -93,6 +93,7 @@
   "v2": {
     "sales": {
       "custom_your_quote": "خصص باقتك",
+      "custom_your_quote_title": "خصص باقتك لتناسب احتياجك",
       "ejar": "ايجار",
       "whatsapp": "واتساب",
       "mada": "مدي",

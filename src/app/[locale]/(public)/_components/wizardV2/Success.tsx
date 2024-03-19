@@ -32,7 +32,7 @@ export default function Success() {
             <p className="pt-3 text-lg font-medium">
               {t("success_desc", { email })}
             </p>
-            <p className="pb-2 text-xl font-medium">{email}</p>
+            <p className="pb-2 text-xl font-medium text-secondaryblue">{email}</p>
             <div>{t("auto_redirect")}</div>
           </div>
         </HeightMotion>

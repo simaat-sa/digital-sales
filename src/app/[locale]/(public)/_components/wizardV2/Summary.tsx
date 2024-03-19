@@ -152,17 +152,6 @@ export default function Summary() {
                     )}
                   </span>
                 </li>
-
-                <li className="flex justify-between">
-                  <span>
-                    {t("tax", {
-                      amount: 15,
-                    })}
-                  </span>
-                  <span className="flex gap-2">
-                    {displayPrice(totalTax, true, locale)}
-                  </span>
-                </li>
               </ul>
 
               {AddonSelected.length ||
@@ -175,13 +164,24 @@ export default function Summary() {
                   <AddonsList />
                   <ul>
                     {promoCodeValid ? (
-                      <li className="flex justify-between font-medium">
+                      <li className="flex justify-between font-medium text-xl text-secondaryblue">
                         <span>{t("promo_value")}</span>
-                        <span className="flex gap-2 text-red-600">
+                        <span className="flex gap-2 text-secondaryblue">
                           {displayPrice(promoCodeValue, true)} - {t("s_r")}
                         </span>
                       </li>
                     ) : null}
+
+                    <li className="flex justify-between">
+                      <span className="text-lg pt-3">
+                        {t("tax", {
+                          amount: 15,
+                        })}
+                      </span>
+                      <span className="flex gap-2 text-lg pt-3">
+                        {displayPrice(totalTax, true, locale)}
+                      </span>
+                    </li>
                   </ul>
                 </>
               ) : null}

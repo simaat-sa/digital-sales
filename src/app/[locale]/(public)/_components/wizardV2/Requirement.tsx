@@ -152,6 +152,7 @@ export default function RequirementForm() {
                   width={24}
                   height={24}
                   loading="lazy"
+                  class="rotate-180"
                 />
               </AlertDialogTrigger>
               <AlertDialogContent>
@@ -184,7 +185,7 @@ export default function RequirementForm() {
               onChange("quotePlan", String(e));
             }}
           >
-            <TabsList className="h-16 w-full overflow-hidden rounded-full">
+            <TabsList className="h-16 w-full overflow-hidden rounded-full border">
               {quotesData.map(({ id, business_need_label }) => (
                 <TabsTrigger
                   value={String(id)}
