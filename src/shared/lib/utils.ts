@@ -27,7 +27,7 @@ export function calculateTax(amount: number, taxRate: number) {
   }
 
   // Calculate tax amount
-  const taxAmount = (amount / 100) * taxRate;
+  const taxAmount = amount * (taxRate / 100);
 
   return Number(taxAmount).toFixed(2); // Return formatted total string
 }

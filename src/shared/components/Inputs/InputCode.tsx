@@ -16,7 +16,7 @@ export default function InputCode({
   error,
   ...props
 }: InputCodeProps) {
-  const [resendCode, setResendCode] = useState<boolean>(true);
+  const [resendCode, setResendCode] = useState<boolean>(false);
 
   const c = useTranslations("common");
 
@@ -30,22 +30,20 @@ export default function InputCode({
           {...props}
         />
         {error?.length ? (
-          <p className="text-lg text-red-600 -mt-3">{error}</p>
+          <p className="-mt-3 text-lg text-red-600">{error}</p>
         ) : null}
       </div>
       {!props.disabled ? (
         <Countdown
           date={Date.now() + timeLeft}
-          renderer={({ seconds, completed, api }) => {
-            if (completed || resendCode) {
+          renderer={({ seconds, api }) => {
+            if (resendCode) {
               return (
                 <span
-                  className="text-secondaryblue text-lg cursor-pointer mt-2 hover:text-primary"
+                  className="mt-2 cursor-pointer text-lg text-secondaryblue hover:text-primary"
                   onClick={() => {
-                    onResendCode().then(() => {
-                      api.start();
-                      setResendCode(false);
-                    });
+                    api.start();
+                    setResendCode(false);
                   }}
                 >
                   {c("resend_code")}
@@ -67,7 +65,7 @@ export default function InputCode({
               );
             }
           }}
-          autoStart={false}
+          autoStart={true}
         />
       ) : null}
     </div>

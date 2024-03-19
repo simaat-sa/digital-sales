@@ -254,6 +254,7 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
     let isValid = get()._isMobileNumberValid();
 
     if (isValid) {
+      get().onClickResendCode();
       return set(() => ({
         actionButton: isRegister ? "check_code" : "next",
         showCode: true,
