@@ -134,8 +134,10 @@ export default function RequirementForm() {
 
   return (
     <HeightMotion>
-      <div className="flex flex-col gap-6">
-        <h3 className="text-3xl font-medium">{t("tell_us_about_yourSelf")}</h3>
+      <div className="flex flex-col gap-4 lg:gap-6">
+        <h3 className="text-xl font-medium lg:text-3xl mt-4 lg:mt-2">
+          {t("tell_us_about_yourSelf")}
+        </h3>
         {status === "authenticated" ? (
           <div className="flex w-full justify-between rounded-md bg-slate-200 px-2 py-2">
             <div>
@@ -187,7 +189,7 @@ export default function RequirementForm() {
                 <TabsTrigger
                   value={String(id)}
                   key={id}
-                  className="h-full flex-1 overflow-hidden rounded-full"
+                  className="h-full flex-auto overflow-hidden rounded-full text-lg lg:flex-1 ltr:text-base"
                 >
                   {t(business_need_label as any)}
                 </TabsTrigger>

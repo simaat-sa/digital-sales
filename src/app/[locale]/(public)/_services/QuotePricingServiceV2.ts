@@ -1,5 +1,5 @@
 import { SAUDI_ARABIA_MOBILE_NUMBER_REGEX } from "@/shared/lib/constants";
-import { calculateTax, calculateTotalWithTax } from "@/shared/lib/utils";
+import { calculateTax } from "@/shared/lib/utils";
 import { signOut } from "next-auth/react";
 import { useMemo } from "react";
 import { ObjectSchema, ValidationError, object, string } from "yup";
@@ -648,14 +648,16 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
   },
 }));
 
-function useCalcAmountsV2() {
+function useGetQuoteSelectedV2(id: number) {
+  return useMemo(() => quotesDataV2.find((q) => q.id === id), [id]);
+}
+
+function useSummaryCalcTax() {
   const {
     AddonSelected,
     AddonSelectedPlusMinus,
     AddonSelectedDropdown,
     paymentMonths,
-    promoCodeValue,
-    promoCodeValid,
     quoteSelected,
   } = useQuotePricingServiceV2();
 
@@ -681,72 +683,20 @@ function useCalcAmountsV2() {
     return totalAddons;
   }, [AddonSelected, AddonSelectedDropdown, AddonSelectedPlusMinus]);
 
-  const totalInvoice = useMemo(() => {
-    const quotePrice = quotesData.find((quote) => quote.id === quoteSelected)!;
-
-    let totalByMonths = quotePrice?.price * paymentMonths;
-
-    return promoCodeValid
-      ? Math.ceil(
-          calculateTotalWithTax(totalByMonths + totalAddons, taxNumber),
-        ) - promoCodeValue
-      : Math.ceil(
-          calculateTotalWithTax(totalByMonths + totalAddons, taxNumber),
-        );
-  }, [
-    paymentMonths,
-    promoCodeValid,
-    promoCodeValue,
-    quoteSelected,
-    totalAddons,
-  ]);
-
   const totalTax = useMemo(() => {
     const quotePrice = quotesData.find((quote) => quote.id === quoteSelected)!;
 
-    return calculateTax(
-      quotePrice?.price * paymentMonths + totalAddons,
-      taxNumber,
-    );
+    if (quotePrice) {
+      return +calculateTax(
+        quotePrice.price * paymentMonths + totalAddons,
+        taxNumber,
+      );
+    } else {
+      return 0;
+    }
   }, [paymentMonths, quoteSelected, totalAddons]);
 
-  return { totalInvoice, totalTax };
-}
-
-function useGetQuoteSelectedV2(id: number) {
-  return useMemo(() => quotesDataV2.find((q) => q.id === id), [id]);
-}
-
-function useCalcTotalAddon(addon: AddonV2) {
-  const { AddonSelected } = useQuotePricingServiceV2();
-
-  return useMemo(() => {
-    switch (addon.addonType) {
-      case "PLUS_MINUS":
-        const addonSelected = AddonSelected.find(
-          (item) => item.id === addon.id,
-        );
-
-        if (addonSelected) {
-          const filter = addonSelected.data.find(
-            (item) =>
-              item.from <= addonSelected.count &&
-              item.to >= addonSelected.count,
-          );
-
-          if (filter) {
-            return filter.price * addonSelected.count;
-          } else {
-            return addonSelected.price;
-          }
-        } else {
-          return 0;
-        }
-
-      default:
-        return 0;
-    }
-  }, [addon.addonType, addon.id, AddonSelected]);
+  return { totalTax: Math.ceil(totalTax) };
 }
 
 function useInvoiceCustomAddons() {
@@ -795,6 +745,7 @@ function useInvoiceSummary() {
     promoCodeValue,
   } = useQuotePricingServiceV2();
   let quote = quotesDataV2.find((item) => item.id === quoteSelected);
+  const { totalTax } = useSummaryCalcTax();
 
   return useMemo(() => {
     if (quote) {
@@ -812,36 +763,35 @@ function useInvoiceSummary() {
           )
         : 0;
 
-      let totalByMonths = quote?.price * paymentMonths || 0;
+      let totalByMonths = quote.price * paymentMonths;
 
       let total =
         totalByMonths +
         addonsSelectedTotal +
         addonPlusMinusTotal +
-        addDropdownTotal;
+        addDropdownTotal +
+        totalTax;
 
-      return promoCodeValid
-        ? calculateTotalWithTax(total, taxNumber) - promoCodeValue
-        : calculateTotalWithTax(total, taxNumber);
+      return Math.ceil(promoCodeValid ? total - promoCodeValue : total);
     } else {
       return 0;
     }
   }, [
+    quote,
     AddonSelected,
     AddonSelectedDropdown,
     AddonSelectedPlusMinus,
     paymentMonths,
     promoCodeValid,
     promoCodeValue,
-    quote,
+    totalTax,
   ]);
 }
 
 export {
-  useCalcAmountsV2,
-  useCalcTotalAddon,
   useGetQuoteSelectedV2,
   useInvoiceCustomAddons,
   useInvoiceSummary,
   useQuotePricingServiceV2,
+  useSummaryCalcTax,
 };

@@ -7,7 +7,7 @@ const callIcon = "/assets/svg/icons/MaterialCall.svg";
 export default function Bar() {
   const t = useTranslations("common");
   return (
-    <div className="h-bar relative z-20 flex  w-full bg-white shadow-sm">
+    <div className="h-bar flex w-full bg-white shadow-sm">
       <div className="container flex items-center justify-between">
         <Link href={"#"}>
           <Image

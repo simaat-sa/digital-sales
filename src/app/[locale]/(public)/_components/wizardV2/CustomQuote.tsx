@@ -4,7 +4,6 @@ import { displayPrice } from "@/shared/lib/format-pricing";
 import { cn } from "@/shared/lib/utils";
 import { useTranslations } from "next-intl";
 import {
-  useCalcTotalAddon,
   useInvoiceCustomAddons,
   useQuotePricingServiceV2,
 } from "../../_services/QuotePricingServiceV2";
@@ -17,45 +16,6 @@ import {
 import { AddonCard } from "./AddonCard";
 import AddonsList from "./AddonsList";
 import FeatList from "./FeatList";
-
-const checkedIcon = "/assets/svg/icons/CheckBold.svg";
-
-function AddonRow({ addon }: { addon: AddonV2 }) {
-  const PRICE = useCalcTotalAddon(addon);
-  const t = useTranslations("sales");
-  const { AddonSelected, AddonSelectedDropdown, AddonSelectedPlusMinus } =
-    useQuotePricingServiceV2();
-
-  switch (addon.addonType) {
-    case "PLUS_MINUS":
-      return (
-        <div className="flex w-full items-center justify-between">
-          <span>
-            {addon.name} (
-            {AddonSelected.find((item) => item.id === addon.id)?.count})
-          </span>
-          <div className="flex items-center gap-1">
-            <span>{displayPrice(PRICE, true)}</span>
-            <span>{t("s_r")}</span>
-          </div>
-        </div>
-      );
-
-    case "DEFAULT":
-      return (
-        <div className="flex w-full items-center justify-between">
-          <span>{addon.name}</span>
-          <div className="flex items-center gap-1">
-            <span>{addon.price}</span>
-            <span>{t("s_r")}</span>
-          </div>
-        </div>
-      );
-
-    default:
-      break;
-  }
-}
 
 export default function CustomQuote() {
   const v2t = useTranslations("v2.sales");
@@ -72,8 +32,10 @@ export default function CustomQuote() {
 
   return (
     <>
-      <div className="flex h-[8rem] w-full items-center justify-between px-4 lg:px-0">
-        <h2 className="text-3xl font-medium">{v2t("custom_your_quote")}</h2>
+      <div className="flex h-[6rem] w-full items-center justify-between lg:h-[8rem]">
+        <h2 className="text-2xl font-medium lg:text-3xl">
+          {v2t("custom_your_quote")}
+        </h2>
         <Button variant="outline" onClick={() => onTakeAction(true)}>
           {t("back")}
         </Button>
@@ -113,20 +75,21 @@ export default function CustomQuote() {
             </AddonCard.Card>
           ))}
         </div>
-        <div className="sticky top-4 col-span-12 rounded-md border font-medium shadow md:col-span-4">
+        <div className="sticky top-4 col-span-12 overflow-hidden rounded-md border font-medium shadow md:col-span-4">
           <div className="flex flex-col p-3">
             <div className="mb-4 flex items-center justify-between">
-              <span className="text-xl font-medium pt-3">
+              <span className="pt-3 text-xl font-medium">
                 {t("quote")}{" "}
                 {t(
                   quotesData.find((item) => item.id === quoteSelected)
                     ?.name as any,
                 )}
               </span>
-              <span className="text-xl font-medium pt-3 flex gap-2">
+              <span className="flex gap-2 pt-3 text-xl font-medium">
                 <span>
                   {displayPrice(
-                    quotesData.find((item) => item.id === quoteSelected)?.price!,
+                    quotesData.find((item) => item.id === quoteSelected)
+                      ?.price!,
                     true,
                   )}
                 </span>
@@ -141,11 +104,11 @@ export default function CustomQuote() {
           </div>
 
           <HeightMotion>
-            <div className="px-3 mb-3">
+            <div className="mb-3 px-3">
               {AddonSelected.length ||
               AddonSelectedDropdown.length ||
               AddonSelectedPlusMinus.length ? (
-                <h2 className="text-xl mb-4">
+                <h2 className="mb-4 text-xl">
                   {t("addons")} (
                   {AddonSelected.length +
                     AddonSelectedDropdown.length +
@@ -161,7 +124,9 @@ export default function CustomQuote() {
               onClick={() => onTakeAction()}
             >
               <span className="text-xl">{t("confirm_and_pay")}</span>
-              <span className="text-3xl pr-3">{displayPrice(TOTAL || 0, true)}</span>
+              <span className="pr-3 text-3xl">
+                {displayPrice(TOTAL || 0, true)}
+              </span>
               <span>{t("s_r")}</span>
             </Button>
           </HeightMotion>

@@ -1,4 +1,4 @@
-import { type ClassValue, clsx } from "clsx";
+import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -17,7 +17,7 @@ export function calculateTotalWithTax(amount: number, taxRate: number) {
   // Calculate total amount, rounding to two decimal places
   const total = amount + taxAmount;
 
-  return Number(total.toFixed(2)); // Return formatted total string
+  return Number(total).toFixed(2); // Return formatted total string
 }
 
 export function calculateTax(amount: number, taxRate: number) {
@@ -29,5 +29,5 @@ export function calculateTax(amount: number, taxRate: number) {
   // Calculate tax amount
   const taxAmount = (amount / 100) * taxRate;
 
-  return Number(taxAmount.toFixed(2)); // Return formatted total string
+  return Number(taxAmount).toFixed(2); // Return formatted total string
 }
