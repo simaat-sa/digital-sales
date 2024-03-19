@@ -80,7 +80,7 @@
     "code_required": "Code required",
     "office_name_required": "Office name is required",
     "company_name_required": "Company name is required",
-    "domain_is_required" : "Domain is required"
+    "domain_is_required": "Domain is required"
   },
   "common": {
     "resend_code": "Resend code",
@@ -93,6 +93,7 @@
   "v2": {
     "sales": {
       "custom_your_quote": "Custom your quote",
+      "custom_your_quote_title": "Customize your package to suit your needs",
       "ejar": "Ejar",
       "whatsapp": "WhatsApp",
       "mada": "Mada",

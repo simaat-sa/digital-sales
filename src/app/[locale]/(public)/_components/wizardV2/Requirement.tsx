@@ -152,7 +152,7 @@ export default function RequirementForm() {
                   width={24}
                   height={24}
                   loading="lazy"
-                  class="rotate-180"
+                  className="rotate-180"
                 />
               </AlertDialogTrigger>
               <AlertDialogContent>
