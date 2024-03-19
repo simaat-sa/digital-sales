@@ -26,7 +26,7 @@ export default function ActionButtonV2() {
   const t = useTranslations("sales");
 
   return (
-    <div className="flex w-full items-center justify-between gap-4">
+    <div className="flex w-full items-center justify-between gap-4 pb-4 lg:pb-2">
       {currentWizard !== "summary" ? (
         <Button
           onClick={(e) => {
@@ -76,7 +76,8 @@ export default function ActionButtonV2() {
           </DialogContent>
         </Dialog>
       )}
-      {currentWizard !== "quotes" ? (
+
+      {currentWizard !== "register" ? (
         <Button
           onClick={(e) => {
             e.preventDefault();

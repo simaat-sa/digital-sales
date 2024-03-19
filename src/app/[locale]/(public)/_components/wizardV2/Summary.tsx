@@ -6,7 +6,7 @@ import { cn } from "@/shared/lib/utils";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import {
-  useCalcAmountsV2,
+  useSummaryCalcTax,
   useGetQuoteSelectedV2,
   useInvoiceSummary,
   useQuotePricingServiceV2,
@@ -17,7 +17,6 @@ import ActionButtonV2 from "./ActionButtonV2";
 import AddonsList from "./AddonsList";
 import FeatList from "./FeatList";
 
-const checkedIcon = "/assets/svg/icons/CheckBold.svg";
 const checkedDecagramIcon = "/assets/svg/icons/checked-decagram.svg";
 
 export default function Summary() {
@@ -37,7 +36,7 @@ export default function Summary() {
 
   const t = useTranslations("sales");
   const locale = useLocale();
-  const { totalInvoice, totalTax } = useCalcAmountsV2();
+  const { totalTax } = useSummaryCalcTax();
   const totalSummary = useInvoiceSummary();
   const getQuoteSelected = useGetQuoteSelectedV2(quoteSelected!)!;
 
@@ -45,7 +44,7 @@ export default function Summary() {
     <>
       <div className="min-h-layout container relative z-10">
         <div className="grid h-full w-full grid-cols-2 gap-y-6 lg:gap-2">
-          <div className="col-span-2 flex flex-col justify-center gap-4 md:px-2 lg:col-span-1 lg:h-full lg:px-0">
+          <div className="col-span-2 flex flex-col gap-4 md:px-2 lg:col-span-1 lg:h-full lg:px-0">
             <h2 className="mt-6 text-2xl font-medium">
               {t("quote")} {t(getQuoteSelected.name as any)}
             </h2>
@@ -106,7 +105,7 @@ export default function Summary() {
                 })}
               </div>
 
-              <div className="flex w-full items-end gap-3 md:w-4/5 lg:w-full mt-4">
+              <div className="mt-4 flex w-full items-end gap-3 md:w-4/5 lg:w-full">
                 <InputBase
                   label={t("promo_code")}
                   placeholder={t("promo_code")}
@@ -132,7 +131,7 @@ export default function Summary() {
                 )}
               </div>
 
-              <label className="text-xl font-medium mt-3">
+              <label className="mt-3 text-xl font-medium">
                 {t("quote")} {t(getQuoteSelected.name as any)}
               </label>
 
@@ -170,7 +169,9 @@ export default function Summary() {
               AddonSelectedPlusMinus.length ||
               AddonSelectedDropdown.length ? (
                 <>
-                  <label className="text-xl font-medium mt-3">{t("addons")}</label>
+                  <label className="mt-3 text-xl font-medium">
+                    {t("addons")}
+                  </label>
                   <AddonsList />
                   <ul>
                     {promoCodeValid ? (

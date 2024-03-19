@@ -38,8 +38,8 @@ export default function RegisterForm() {
 
   return (
     <div className="flex w-full flex-col gap-12 transition-all delay-75 duration-300">
-      <div className="text-center">
-        <h2 className="mb-4 text-4xl font-medium">
+      <div className="flex flex-col gap-4 pt-2 text-center lg:pt-3">
+        <h2 className="text-lg font-medium lg:text-4xl">
           {t("register_main_title")}
         </h2>
         <p className="text-xl">{t("register_main_desc")}</p>

@@ -32,7 +32,9 @@ export default function Quotes() {
   return (
     <>
       <div className="flex h-[8rem] w-full items-center justify-between px-4 lg:px-0">
-        <h2 className="text-3xl font-medium">{t("quotes_title")}</h2>
+        <h2 className="text-2xl font-medium lg:text-3xl">
+          {t("quotes_title")}
+        </h2>
         <Button variant="outline" onClick={() => onTakeAction(true)}>
           {t("back")}
         </Button>

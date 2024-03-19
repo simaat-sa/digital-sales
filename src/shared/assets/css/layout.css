@@ -11,6 +11,6 @@
   }
 
   .min-h-layout {
-    min-height: calc(100dvh - var(--h-bar) - var(--h-footer) - 2em );
+    min-height: calc(100vh - var(--h-bar) - var(--h-footer));
   }
 }

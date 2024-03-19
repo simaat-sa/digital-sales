@@ -17,7 +17,7 @@ export default function FeatList({
   return (
     <ul className="list-none">
       {quote?.features.map((feat, index) => (
-        <>
+        <Fragment key={index}>
           {feat.data.map((item, i) => (
             <Fragment key={i}>
               <li
@@ -43,7 +43,7 @@ export default function FeatList({
               ) : null}
             </Fragment>
           ))}
-        </>
+        </Fragment>
       ))}
     </ul>
   );
