@@ -6,10 +6,10 @@ import { cn } from "@/shared/lib/utils";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import {
-  useSummaryCalcTax,
   useGetQuoteSelectedV2,
   useInvoiceSummary,
   useQuotePricingServiceV2,
+  useSummaryCalcTax,
 } from "../../_services/QuotePricingServiceV2";
 import { paymentWay } from "../../_services/paymentWay";
 import { quotesData } from "../../_services/quotesData";
@@ -164,27 +164,26 @@ export default function Summary() {
                   <AddonsList />
                   <ul>
                     {promoCodeValid ? (
-                      <li className="flex justify-between font-medium text-xl text-secondaryblue">
+                      <li className="flex justify-between text-xl font-medium text-secondaryblue">
                         <span>{t("promo_value")}</span>
                         <span className="flex gap-2 text-secondaryblue">
                           {displayPrice(promoCodeValue, true)} - {t("s_r")}
                         </span>
                       </li>
                     ) : null}
-
-                    <li className="flex justify-between">
-                      <span className="text-lg pt-3">
-                        {t("tax", {
-                          amount: 15,
-                        })}
-                      </span>
-                      <span className="flex gap-2 text-lg pt-3">
-                        {displayPrice(totalTax, true, locale)}
-                      </span>
-                    </li>
                   </ul>
                 </>
               ) : null}
+              <div className="flex justify-between">
+                <span className="pt-3 text-lg">
+                  {t("tax", {
+                    amount: 15,
+                  })}
+                </span>
+                <span className="flex gap-2 pt-3 text-lg">
+                  {displayPrice(totalTax, true, locale)}
+                </span>
+              </div>
 
               <Separator />
               <div className="mb-8 flex flex-nowrap justify-between">
