@@ -1,3 +1,4 @@
+import GoogleCalendarSchedulingButton from "@/shared/components/GoogleCalender";
 import Iframe from "@/shared/components/IFrame";
 import { VideoComponent } from "@/shared/components/VideoComponent";
 import { Button } from "@/shared/components/ui/button";
@@ -10,19 +11,20 @@ import {
   DialogTrigger,
 } from "@/shared/components/ui/dialog";
 import { Separator } from "@/shared/components/ui/separator";
+import { displayPrice } from "@/shared/lib/format-pricing";
 import { cn } from "@/shared/lib/utils";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2";
 import { quotesDataV2 } from "../../_services/quotesData";
 import FeatList from "./FeatList";
-import FooterSales from "../FooterSales";
-import { displayPrice } from "@/shared/lib/format-pricing";
 
 const VideoStream = "/assets/svg/icons/media-player.svg";
 const CalenderIcon = "/assets/svg/icons/Calender.svg";
 const CallIcon = "/assets/svg/icons/Call.svg";
 const externalLink = "/assets/svg/icons/Linkexternal.svg";
+const calendarUrl =
+  "https://calendar.google.com/calendar/appointments/schedules/AcZssZ0B3HrdIkhYVbzyufSC9EU5gfYwWY1C6U8g3rQLaeoxIhDKzTkm9zOOHlFuQ6763c_6JrQQjtBO?gv=true";
 
 export default function Quotes() {
   const { quotePlan, onTakeAction, onSelectQuote } = useQuotePricingServiceV2();
@@ -48,7 +50,7 @@ export default function Quotes() {
                   "bg-gradient-to-r from-slate-200 to-gray-100 shadow-lg":
                     String(id) === quotePlan,
                 },
-                "card_pricing_plan_sibling col-span-12 flex flex-col gap-y-3 overflow-hidden rounded-3xl border bg-white p-4 shadow-md transition-colors duration-150 md:col-span-6 lg:col-span-4 mb-4",
+                "card_pricing_plan_sibling col-span-12 mb-4 flex flex-col gap-y-3 overflow-hidden rounded-3xl border bg-white p-4 shadow-md transition-colors duration-150 md:col-span-6 lg:col-span-4",
               )}
               key={String(id)}
             >
@@ -89,7 +91,7 @@ export default function Quotes() {
                   isSpeared
                 />
                 <Dialog>
-                  <DialogTrigger className="w-full lg:w-9/12 text-secondaryblue">
+                  <DialogTrigger className="w-full text-secondaryblue lg:w-9/12">
                     <Button
                       variant="outline"
                       className="flex w-full justify-start gap-x-6 border-2 p-6"
@@ -124,7 +126,7 @@ export default function Quotes() {
                   </DialogContent>
                 </Dialog>
                 <Dialog>
-                  <DialogTrigger className="w-full lg:w-9/12 text-secondaryblue">
+                  <DialogTrigger className="w-full text-secondaryblue lg:w-9/12">
                     <Button
                       variant="outline"
                       className="flex w-full justify-start gap-x-6 border-2 p-6"
@@ -152,7 +154,7 @@ export default function Quotes() {
                 <a
                   href="https://demo.simaat.sa/"
                   target="_blank"
-                  className="w-full lg:w-9/12 text-secondaryblue"
+                  className="w-full text-secondaryblue lg:w-9/12"
                 >
                   <Button
                     variant="outline"
@@ -191,7 +193,7 @@ export default function Quotes() {
                       </DialogContent>
                     </Dialog>
 
-                    <Dialog>
+                    {/* <Dialog>
                       <DialogTrigger className="flex w-9/12 flex-nowrap gap-4">
                         <Image
                           src={CalenderIcon}
@@ -210,7 +212,17 @@ export default function Quotes() {
                           <div className="w-full overflow-hidden"></div>
                         </DialogDescription>
                       </DialogContent>
-                    </Dialog>
+                    </Dialog> */}
+                    <div className="flex items-center gap-2">
+                      <Image
+                        src={CalenderIcon}
+                        alt={t("schedule_meeting")}
+                        width={20}
+                        height={20}
+                        loading="lazy"
+                      />
+                      <GoogleCalendarSchedulingButton />
+                    </div>
                   </div>
                 ) : null}
               </div>
