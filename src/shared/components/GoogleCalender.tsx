@@ -11,7 +11,6 @@ function GoogleCalendarSchedulingButton() {
     <>
       <Script
         src="https://calendar.google.com/calendar/scheduling-button-script.js"
-        async
         onLoad={() => {
           (window as any).calendar.schedulingButton.load({
             url: "https://calendar.google.com/calendar/appointments/schedules/AcZssZ0B3HrdIkhYVbzyufSC9EU5gfYwWY1C6U8g3rQLaeoxIhDKzTkm9zOOHlFuQ6763c_6JrQQjtBO?gv=true",
@@ -21,7 +20,7 @@ function GoogleCalendarSchedulingButton() {
           });
         }}
       ></Script>
-      <button ref={refElement} ></button>
+      <button ref={refElement}></button>
     </>
   );
 }
