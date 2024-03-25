@@ -1,4 +1,4 @@
-import WizardV2 from "@/app/[locale]/(public)/_components/wizardV2";
+import { redirect } from "@/shared/lib/navigation";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 export async function generateMetadata(): Promise<Metadata> {
@@ -10,5 +10,5 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function Page() {
-  return <WizardV2 />;
+  return redirect("/get-started");
 }

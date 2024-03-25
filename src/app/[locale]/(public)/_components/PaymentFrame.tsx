@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useEffect } from "react";
-import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2";
+import { useQuotePricingServiceV2 } from "../_services/QuotePricingServiceV2";
 
 const paymentFormImg = "/assets/online_payments_forms.png";
 

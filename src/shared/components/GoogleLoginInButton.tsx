@@ -16,6 +16,7 @@ export default function GoogleLoginInButton() {
       }}
       variant="outline"
       className="flex h-14 w-full flex-nowrap content-baseline items-center gap-2 align-baseline"
+      type="button"
     >
       <span className="text-lg">{tc("continue_with_google")}</span>
       <Image

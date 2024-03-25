@@ -2,19 +2,23 @@
 import HeightMotion from "@/shared/components/motions/HeighEffect";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2";
 
 const checkedUrl = "/assets/images/check.png";
-export default function Success() {
-  const { email, resetV2 } = useQuotePricingServiceV2();
+
+export default function Page() {
+  const { email, handleDeleteDataStored } = useQuotePricingServiceV2();
   const t = useTranslations("sales");
+  const router = useRouter();
 
   useEffect(() => {
-    setTimeout(() => {
-      resetV2();
-    }, 3000);
-  }, [resetV2]);
+    setTimeout(async () => {
+      await handleDeleteDataStored();
+      router.push("/get-started");
+    }, 5000);
+  }, [handleDeleteDataStored, router]);
 
   return (
     <div className="min-h-layout container flex items-center justify-center">
@@ -32,7 +36,9 @@ export default function Success() {
             <p className="pt-3 text-lg font-medium">
               {t("success_desc", { email })}
             </p>
-            <p className="pb-2 text-xl font-medium text-secondaryblue">{email}</p>
+            <p className="pb-2 text-xl font-medium text-secondaryblue">
+              {email}
+            </p>
             <div>{t("auto_redirect")}</div>
           </div>
         </HeightMotion>

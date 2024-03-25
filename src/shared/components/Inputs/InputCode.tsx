@@ -1,3 +1,4 @@
+"use client";
 import { cn } from "@/shared/lib/utils";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
