@@ -3,7 +3,7 @@ import { Separator } from "@/shared/components/ui/separator";
 import { cn } from "@/shared/lib/utils";
 import Image from "next/image";
 import { Fragment } from "react";
-import { QuoteModelV2 } from "../../_services/quotesData";
+import { QuoteModelV2 } from "../_services/quotesData";
 
 const checkedIcon = "/assets/svg/icons/CheckBold.svg";
 
@@ -15,7 +15,7 @@ export default function FeatList({
   isSpeared: boolean;
 }) {
   return (
-    <ul className="list-none mb-4">
+    <ul className="mb-4 list-none">
       {quote?.features.map((feat, index) => (
         <Fragment key={index}>
           {feat.data.map((item, i) => (

@@ -24,8 +24,8 @@ import { ReactNode, useMemo } from "react";
 import {
   ADDON_STEPS,
   useQuotePricingServiceV2,
-} from "../../_services/QuotePricingServiceV2";
-import { AddonV2 } from "../../_services/quotesData";
+} from "../_services/QuotePricingServiceV2";
+import { AddonV2 } from "../_services/quotesData";
 
 type AddonCardWrapperProps = {
   addon: AddonV2;
@@ -167,7 +167,7 @@ function AddonCardCheckbox({ addon }: AddonCardWrapperProps) {
   return (
     <div className="mt-4 flex w-full items-center justify-between">
       <span className="text-2xl font-medium">
-        {displayPrice(price,true,locale)}
+        {displayPrice(price, true, locale)}
       </span>
       <Checkbox
         className="h-6 w-6 rounded-sm"

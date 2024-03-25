@@ -105,7 +105,8 @@
       "from_to": "From {from} to {to} = {total} R.S",
       "logged_with": "Logged in with Google",
       "dialog_title": "log out",
-      "dialog_desc": "Are you sure you want to logout ?"
+      "dialog_desc": "Are you sure you want to logout ?",
+      "steps_number": "Step {pageNumber}/5"
     }
   }
 }

@@ -50,7 +50,7 @@ export default function MobileNumberWithCode({
         verified={verified}
       />
 
-      {showCode ? (
+      {showCode && !verified ? (
         <HeightMotion>
           <p className="mb-4 text-lg text-gray-600">
             {t("resend_code_notice", {

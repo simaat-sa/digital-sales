@@ -1,3 +1,5 @@
+"use client";
+import { QuoteRequestModel } from "@/shared/@types/model/QuoteRequest";
 import InputBase from "@/shared/components/Inputs/InputBase";
 import HeightMotion from "@/shared/components/motions/HeighEffect";
 import {
@@ -12,13 +14,16 @@ import {
   AlertDialogTrigger,
 } from "@/shared/components/ui/alert-dialog";
 import { Label } from "@/shared/components/ui/label";
-import { Tabs, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
+import { useRouter } from "@/shared/lib/navigation";
+import { cn } from "@/shared/lib/utils";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2";
-import { quotesData } from "../../_services/quotesData";
-import MobileNumberWithCode from "../MobileNumberWithCode";
+import { useEffect } from "react";
+import { useQuotePricingServiceV2 } from "../_services/QuotePricingServiceV2";
+import { quotesDataV2 } from "../_services/quotesData";
+import { ActionButton } from "./ActionButton";
+import MobileNumberWithCode from "./MobileNumberWithCode";
 
 const exitIcon = "/assets/svg/icons/ExitLine.svg";
 
@@ -110,7 +115,11 @@ function InputName() {
   }
 }
 
-export default function RequirementForm() {
+export default function BasicInfoForm({
+  state,
+}: {
+  state: QuoteRequestModel | null;
+}) {
   const {
     quotePlan,
     email,
@@ -125,17 +134,34 @@ export default function RequirementForm() {
     registerWay,
     signOut,
     country_code,
+    setState,
+    handleSubmitBasicInfo,
   } = useQuotePricingServiceV2();
+
   const t = useTranslations("sales");
   const tv2 = useTranslations("v2.sales");
   const tc = useTranslations("common");
   const validations = useTranslations("validations");
   const { status, data: user } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (state) {
+      setState(state);
+    }
+  }, [setState, state]);
 
   return (
     <HeightMotion>
-      <div className="flex flex-col gap-4 lg:gap-6">
-        <h3 className="text-xl font-medium lg:text-3xl mt-4 lg:mt-2">
+      <form
+        className="flex flex-col gap-4 lg:gap-6"
+        action={() =>
+          handleSubmitBasicInfo().then(() =>
+            router.push("/get-started/pricing-plan"),
+          )
+        }
+      >
+        <h3 className="mt-4 text-xl font-medium lg:mt-2 lg:text-3xl">
           {t("tell_us_about_yourSelf")}
         </h3>
         {status === "authenticated" ? (
@@ -166,7 +192,9 @@ export default function RequirementForm() {
                   <AlertDialogCancel>{tc("close")}</AlertDialogCancel>
                   <AlertDialogAction
                     onClick={() => {
-                      signOut();
+                      signOut().then(async () => {
+                        router.push("/get-started");
+                      });
                     }}
                   >
                     {tc("Confirm")}
@@ -178,25 +206,23 @@ export default function RequirementForm() {
         ) : null}
         <div className="flex w-full flex-col gap-4">
           <Label>{t("business_needed")}</Label>
-          <Tabs
-            className="w-full"
-            value={quotePlan}
-            onValueChange={(e) => {
-              onChange("quotePlan", String(e));
-            }}
-          >
-            <TabsList className="h-16 w-full overflow-hidden rounded-full border">
-              {quotesData.map(({ id, business_need_label }) => (
-                <TabsTrigger
-                  value={String(id)}
-                  key={id}
-                  className="h-full flex-auto overflow-hidden rounded-full text-lg lg:flex-1 ltr:text-base"
-                >
-                  {t(business_need_label as any)}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
+
+          <div className="inline-flex h-16 w-full items-center justify-center overflow-hidden rounded-full border bg-muted p-1 text-muted-foreground">
+            {quotesDataV2.map(({ id, business_need_label }) => (
+              <div
+                className={cn(
+                  "inline-flex h-full flex-auto cursor-pointer items-center justify-center overflow-hidden whitespace-nowrap rounded-full px-3 py-1.5 text-lg font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm lg:flex-1 ltr:text-base",
+                )}
+                data-state={quotePlan === String(id) ? "active" : ""}
+                key={id}
+                onClick={() => {
+                  onChange("quotePlan", String(id));
+                }}
+              >
+                {t(business_need_label as any)}
+              </div>
+            ))}
+          </div>
           {errors.quotePlan.length ? (
             <p className="-mt-4 text-lg text-red-600">
               {validations("quote_type_is_required")}
@@ -223,7 +249,7 @@ export default function RequirementForm() {
           />
         ) : null}
 
-        {registerWay === "SocialMedia" ? (
+        {status === "authenticated" ? (
           <MobileNumberWithCode
             value={mobileNumber}
             countryCode={country_code}
@@ -241,7 +267,20 @@ export default function RequirementForm() {
             verified={verifiedMobile}
           />
         ) : null}
-      </div>
+
+        <ActionButton.Root>
+          <ActionButton.Submit type="submit">
+            {!showCode && status === "authenticated"
+              ? t("get_code")
+              : !verifiedMobile
+                ? t("check_code")
+                : t("next")}
+          </ActionButton.Submit>
+          <div className="font-medium">
+            {tv2("steps_number", { pageNumber: 2 })}
+          </div>
+        </ActionButton.Root>
+      </form>
     </HeightMotion>
   );
 }

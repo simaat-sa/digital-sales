@@ -1,6 +1,6 @@
 import { displayPrice } from "@/shared/lib/format-pricing";
-import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2";
 import { useLocale } from "next-intl";
+import { useQuotePricingServiceV2 } from "../_services/QuotePricingServiceV2";
 
 export default function AddonsList() {
   const { AddonSelected, AddonSelectedPlusMinus, AddonSelectedDropdown } =

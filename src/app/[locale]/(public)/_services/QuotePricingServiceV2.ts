@@ -1,15 +1,26 @@
+import { QuoteRequestModel } from "@/shared/@types/model/QuoteRequest";
 import { SAUDI_ARABIA_MOBILE_NUMBER_REGEX } from "@/shared/lib/constants";
 import { calculateTax } from "@/shared/lib/utils";
+import Cookies from "js-cookie";
 import { signOut } from "next-auth/react";
 import { useMemo } from "react";
-import { ObjectSchema, ValidationError, object, string } from "yup";
+import { object, ObjectSchema, string, ValidationError } from "yup";
 import { create } from "zustand";
-import { AddonV2, quotesData, quotesDataV2 } from "./quotesData";
+import { addonsData, AddonV2, quotesDataV2 } from "./quotesData";
 
 export const ADDON_STEPS = 50;
 const taxNumber = 15;
 
-type registerWay = "MobileNumber" | "SocialMedia" | "";
+export type registerWay = "MobileNumber" | "SocialMedia" | "";
+
+export type SalesPages =
+  | "get-started"
+  | "basic-info"
+  | "pricing-plan"
+  | "custom-plan"
+  | "domain"
+  | "summary-invoice"
+  | "success";
 
 export type QuotePlan = "personal" | "office" | "company" | string;
 
@@ -138,7 +149,15 @@ interface IRequestQuoteActions {
   setIncrement: (addonId: number, steps: number) => void;
   setDecrement: (addonId: number, steps: number) => void;
   onChangeAddonDropdown: (addonId: number, value: number) => void;
-  signOut: () => void;
+  signOut: () => Promise<boolean>;
+  setState: (state: QuoteRequestModel) => void;
+  storeRequestData: () => void;
+  handleSubmitBasicInfo: () => Promise<boolean>;
+  handleSubmitSelectPlan: (id: number) => Promise<boolean>;
+  handleSubmitCustomPlan: () => Promise<boolean>;
+  handleSubmitDomain: () => Promise<boolean>;
+  handleSubmitSummaryInvoice: () => Promise<boolean>;
+  handleDeleteDataStored: () => void;
 }
 
 interface QuotePricingV2 extends QuotePricingStateType, IRequestQuoteActions {}
@@ -190,6 +209,64 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
     firstName: "",
     lastName: "",
     organizeName: "",
+  },
+  setState(state) {
+    let basicAddon: any[] = addonsData.filter((a) => {
+      if (state.addons.find((b) => b === a.id) && a.addonType === "DEFAULT") {
+        return {
+          ...a,
+          count: 1,
+        } as CustomQuotesSelected;
+      }
+    });
+
+    let plusAndMinusAddon: AddonSelectedPlusMinus[] = addonsData
+      .filter(
+        (a) =>
+          state.addons.find((b) => b === a.id) && a.addonType === "PLUS_MINUS",
+      )
+      .map((a) => {
+        let result: AddonSelectedPlusMinus = {
+          ...a,
+          count: 1,
+          total: a.data[0].price,
+        };
+
+        return result;
+      });
+
+    let dropdownAddon: any[] = addonsData
+      .filter(
+        (a) =>
+          state.addons.find((b) => b === a.id) && a.addonType === "DROPDOWN",
+      )
+      .map((a) => {
+        return {
+          ...a,
+          price_selected: a.data[0].price,
+        } as AddonSelectedDropdown;
+      });
+
+    set(() => ({
+      mobileNumber: state.mobileNumber,
+      verifiedMobile: state.mobileNumberVerified,
+      email: state.email,
+      verifiedEmail: state.emailVerified,
+      registerWay: state.registerType,
+      firstName: state.firstName,
+      lastName: state.lastName,
+      organizeName: state.organize,
+      quotePlan: String(state.business_needed),
+      quoteSelected: state.planId,
+      domain: state.domain,
+      verifiedDomain: state.domainVerified,
+      paymentMonths: state.monthsDuration || 1,
+      promoCode: state.promoCode,
+      promoCodeValid: state.promoCodeVerified,
+      AddonSelected: basicAddon,
+      AddonSelectedDropdown: dropdownAddon,
+      AddonSelectedPlusMinus: plusAndMinusAddon,
+    }));
   },
   onLoginWithGoogle(email) {
     set(() => ({
@@ -254,7 +331,7 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
     let isValid = get()._isMobileNumberValid();
 
     if (isValid) {
-      return set(() => ({
+      set(() => ({
         actionButton: isRegister ? "check_code" : "next",
         showCode: true,
         disableBtnNext: true,
@@ -266,32 +343,11 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
     if (code.length === 4) {
       get()._disableField("code", true);
 
-      if (get().currentWizard === "register") {
-        setTimeout(() => {
-          set(() => ({
-            currentWizard: "requirements",
-            actionButton: "next",
-            wizardHistory: ["register"],
-            verifiedMobile: true,
-            registerWay: "MobileNumber",
-          }));
-          get()._disableField("code", false);
-        }, 1200);
-      }
-
-      if (get().currentWizard === "requirements") {
-        setTimeout(() => {
-          set(() => ({
-            actionButton: "next",
-            verifiedMobile: true,
-            disableBtnNext: false,
-            disable: {
-              ...get().disable,
-              mobileNumber: true,
-            },
-          }));
-        }, 1200);
-      }
+      set(() => ({
+        actionButton: "next",
+        verifiedMobile: true,
+        registerWay: "MobileNumber",
+      }));
     }
   },
   _onUpdateWizardHistory(wizard, isBack) {
@@ -481,7 +537,7 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
     }));
   },
   resetV2() {
-    set(useQuotePricingServiceV2.getInitialState());
+    set(() => useQuotePricingServiceV2.getInitialState());
   },
   onTakeAction(isBack) {
     let _setCurrentWizard = get()._setCurrentWizard;
@@ -642,9 +698,97 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
     }));
   },
   signOut() {
-    signOut().then(() => {
-      get().resetV2();
+    return new Promise((resolve, reject) => {
+      signOut().then(async () => {
+        try {
+          await get().resetV2();
+          resolve(true);
+        } catch (error) {
+          reject(true);
+        }
+      });
     });
+  },
+
+  async storeRequestData() {
+    const data = get();
+
+    const payload: QuoteRequestModel = {
+      email: data.email,
+      emailVerified: data.verifiedEmail,
+      mobileNumber: data.mobileNumber,
+      mobileNumberVerified: data.verifiedMobile,
+      registerType: data.registerWay,
+      planId: Number(data.quoteSelected || 0),
+      business_needed: +data.quotePlan,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      organize: data.organizeName,
+      domain: data.domain,
+      domainVerified: data.verifiedDomain,
+      monthsDuration: data.paymentMonths,
+      addons: [
+        ...data.AddonSelected.map((a) => a.id),
+        ...data.AddonSelectedDropdown.map((a) => a.id),
+        ...data.AddonSelectedPlusMinus.map((a) => a.id),
+      ],
+      promoCodeVerified: data.promoCodeValid,
+      promoCode: data.promoCode,
+    };
+    await Cookies.remove("data");
+    Cookies.set("data", JSON.stringify(payload));
+  },
+  handleSubmitBasicInfo() {
+    return new Promise((resolve) => {
+      if (get().verifiedMobile) {
+        get()
+          ._isRequirementsValid()
+          .then(async () => {
+            await get().storeRequestData();
+            resolve(true);
+          });
+      } else {
+        get()._getCode(false);
+      }
+    });
+  },
+  async handleSubmitSelectPlan(id) {
+    await get().onSelectQuote(id);
+
+    return new Promise(async (resolve) => {
+      await get().storeRequestData();
+      resolve(true);
+    });
+  },
+  handleSubmitCustomPlan() {
+    return new Promise(async (resolve) => {
+      await set(() => ({
+        domain:
+          get().firstName.trim() + get().lastName.trim() ||
+          get().organizeName.trim() ||
+          "",
+      }));
+
+      await get().storeRequestData();
+      resolve(true);
+    });
+  },
+  handleSubmitDomain() {
+    return new Promise(async (resolve) => {
+      await get().storeRequestData();
+      resolve(true);
+    });
+  },
+  handleSubmitSummaryInvoice() {
+    return new Promise(async (resolve) => {
+      await get().onToggleDialogPaymentStatus(true);
+      await get().storeRequestData();
+      resolve(true);
+    });
+  },
+  async handleDeleteDataStored() {
+    await Cookies.remove("data");
+    get().resetV2();
   },
 }));
 
@@ -684,7 +828,9 @@ function useSummaryCalcTax() {
   }, [AddonSelected, AddonSelectedDropdown, AddonSelectedPlusMinus]);
 
   const totalTax = useMemo(() => {
-    const quotePrice = quotesData.find((quote) => quote.id === quoteSelected)!;
+    const quotePrice = quotesDataV2.find(
+      (quote) => quote.id === quoteSelected,
+    )!;
 
     if (quotePrice) {
       return +calculateTax(

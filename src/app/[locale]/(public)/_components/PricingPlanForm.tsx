@@ -1,3 +1,6 @@
+"use client";
+
+import { QuoteRequestModel } from "@/shared/@types/model/QuoteRequest";
 import GoogleCalendarSchedulingButton from "@/shared/components/GoogleCalender";
 import Iframe from "@/shared/components/IFrame";
 import { VideoComponent } from "@/shared/components/VideoComponent";
@@ -12,11 +15,13 @@ import {
 } from "@/shared/components/ui/dialog";
 import { Separator } from "@/shared/components/ui/separator";
 import { displayPrice } from "@/shared/lib/format-pricing";
+import { useRouter } from "@/shared/lib/navigation";
 import { cn } from "@/shared/lib/utils";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2";
-import { quotesDataV2 } from "../../_services/quotesData";
+import { useEffect } from "react";
+import { useQuotePricingServiceV2 } from "../_services/QuotePricingServiceV2";
+import { quotesDataV2 } from "../_services/quotesData";
 import FeatList from "./FeatList";
 
 const VideoStream = "/assets/svg/icons/media-player.svg";
@@ -26,18 +31,34 @@ const externalLink = "/assets/svg/icons/Linkexternal.svg";
 const calendarUrl =
   "https://calendar.google.com/calendar/appointments/schedules/AcZssZ0B3HrdIkhYVbzyufSC9EU5gfYwWY1C6U8g3rQLaeoxIhDKzTkm9zOOHlFuQ6763c_6JrQQjtBO?gv=true";
 
-export default function Quotes() {
-  const { quotePlan, onTakeAction, onSelectQuote } = useQuotePricingServiceV2();
+export default function PricingPlanForm({
+  state,
+}: {
+  state: QuoteRequestModel;
+}) {
+  console.log("🚀 ~ state:", state);
+  const { quotePlan, onTakeAction, setState, handleSubmitSelectPlan } =
+    useQuotePricingServiceV2();
   const t = useTranslations("sales");
   const tv2 = useTranslations("v2.sales");
+  const router = useRouter();
+
+  useEffect(() => {
+    if (state) {
+      setState(state);
+    }
+  }, [setState, state]);
 
   return (
-    <>
+    <div className="container">
       <div className="flex h-[8rem] w-full items-center justify-between px-4 lg:px-0">
-        <h2 className="text-2xl font-medium lg:text-3xl">
-          {t("quotes_title")}
-        </h2>
-        <Button variant="outline" onClick={() => onTakeAction(true)}>
+        <div>
+          <h2 className="inline-flex items-end  text-2xl font-medium lg:text-3xl">
+            {t("quotes_title")}
+          </h2>
+          <span className="mx-3">{tv2("steps_number", { pageNumber: 3 })}</span>
+        </div>
+        <Button variant="outline" type="button" onClick={() => router.back()}>
           {t("back")}
         </Button>
       </div>
@@ -231,8 +252,11 @@ export default function Quotes() {
                 type="button"
                 onClick={(e) => {
                   e.preventDefault();
-                  onSelectQuote(id);
-                  onTakeAction();
+                  handleSubmitSelectPlan(id).then(() => {
+                    router.push("/get-started/custom-plan", {
+                      scroll: true,
+                    });
+                  });
                 }}
               >
                 {tv2("custom_your_quote")}
@@ -241,7 +265,6 @@ export default function Quotes() {
           ),
         )}
       </div>
-      {/* <FooterSales /> */}
-    </>
+    </div>
   );
 }

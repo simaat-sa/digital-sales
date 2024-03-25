@@ -1,23 +1,27 @@
+"use client";
+
+import { QuoteRequestModel } from "@/shared/@types/model/QuoteRequest";
 import HeightMotion from "@/shared/components/motions/HeighEffect";
 import { Button } from "@/shared/components/ui/button";
 import { displayPrice } from "@/shared/lib/format-pricing";
+import { useRouter } from "@/shared/lib/navigation";
 import { cn } from "@/shared/lib/utils";
 import { useTranslations } from "next-intl";
+import { useEffect } from "react";
 import {
   useInvoiceCustomAddons,
   useQuotePricingServiceV2,
-} from "../../_services/QuotePricingServiceV2";
-import {
-  AddonV2,
-  addonsData,
-  quotesData,
-  quotesDataV2,
-} from "../../_services/quotesData";
+} from "../_services/QuotePricingServiceV2";
+import { addonsData, quotesDataV2 } from "../_services/quotesData";
 import { AddonCard } from "./AddonCard";
 import AddonsList from "./AddonsList";
 import FeatList from "./FeatList";
 
-export default function CustomQuote() {
+export default function CustomPlanForm({
+  state,
+}: {
+  state: QuoteRequestModel;
+}) {
   const v2t = useTranslations("v2.sales");
   const t = useTranslations("sales");
   const {
@@ -25,18 +29,29 @@ export default function CustomQuote() {
     AddonSelected,
     AddonSelectedDropdown,
     AddonSelectedPlusMinus,
-    onTakeAction,
+    setState,
+    handleSubmitCustomPlan,
   } = useQuotePricingServiceV2();
+  const router = useRouter();
 
   const TOTAL = useInvoiceCustomAddons();
 
+  useEffect(() => {
+    if (state) {
+      setState(state);
+    }
+  }, [setState, state]);
+
   return (
-    <>
+    <div className="container">
       <div className="flex h-[6rem] w-full items-center justify-between lg:h-[8rem]">
-        <h2 className="text-2xl font-medium lg:text-3xl">
-          {v2t("custom_your_quote_title")}
-        </h2>
-        <Button variant="outline" onClick={() => onTakeAction(true)}>
+        <div>
+          <h2 className="inline-flex text-2xl font-medium lg:text-3xl">
+            {v2t("custom_your_quote_title")}
+          </h2>
+          <span className="mx-3">{v2t("steps_number", { pageNumber: 4 })}</span>
+        </div>
+        <Button variant="outline" type="button" onClick={() => router.back()}>
           {t("back")}
         </Button>
       </div>
@@ -81,14 +96,14 @@ export default function CustomQuote() {
               <span className="pt-3 text-xl font-medium">
                 {t("quote")}{" "}
                 {t(
-                  quotesData.find((item) => item.id === quoteSelected)
+                  quotesDataV2.find((item) => item.id === quoteSelected)
                     ?.name as any,
                 )}
               </span>
               <span className="flex gap-2 pt-3 text-xl font-medium">
                 <span>
                   {displayPrice(
-                    quotesData.find((item) => item.id === quoteSelected)
+                    quotesDataV2.find((item) => item.id === quoteSelected)
                       ?.price!,
                     true,
                   )}
@@ -121,7 +136,12 @@ export default function CustomQuote() {
             <Button
               className="flex h-16 w-full items-center gap-1 rounded-b rounded-t-none text-lg"
               size="lg"
-              onClick={() => onTakeAction()}
+              type="button"
+              onClick={() =>
+                handleSubmitCustomPlan().then(() =>
+                  router.push("/get-started/domain", { scroll: true }),
+                )
+              }
             >
               <span className="text-xl">{t("confirm_and_pay")}</span>
               <span className="pr-3 text-3xl">
@@ -132,7 +152,6 @@ export default function CustomQuote() {
           </HeightMotion>
         </div>
       </div>
-      {/* <FooterSales /> */}
-    </>
+    </div>
   );
 }

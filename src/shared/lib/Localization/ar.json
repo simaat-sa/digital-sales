@@ -105,7 +105,8 @@
       "from_to": "من {from} الي {to} = {total} ر.س",
       "logged_with": "تم تسجيل دخولك بحساب جوجل",
       "dialog_title": "تسجيل الخروج",
-      "dialog_desc": "هل أنت متأكد من تسجيل الخروج؟"
+      "dialog_desc": "هل أنت متأكد من تسجيل الخروج؟",
+      "steps_number": "خطوة {pageNumber} من 5"
     }
   }
 }
