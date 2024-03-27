@@ -36,7 +36,6 @@ export default function PricingPlanForm({
 }: {
   state: QuoteRequestModel;
 }) {
-  console.log("🚀 ~ state:", state);
   const { quotePlan, onTakeAction, setState, handleSubmitSelectPlan } =
     useQuotePricingServiceV2();
   const t = useTranslations("sales");

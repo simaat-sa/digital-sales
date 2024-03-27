@@ -56,13 +56,13 @@ export default function CustomPlanForm({
         </Button>
       </div>
       <div
-        className={cn("mb-8 grid w-full grid-cols-12 items-start gap-8", {
+        className={cn(" grid w-full grid-cols-12 items-start", {
           "col-start-3": true,
         })}
       >
         <div
           className={cn(
-            "relative col-span-12 mx-auto grid grid-cols-12 gap-6 transition-all delay-200 duration-500 ease-out md:col-span-8",
+            "relative col-span-12 mx-auto grid grid-cols-12 gap-6 bg-white px-6 pb-6 transition-all delay-200 duration-500 ease-out md:col-span-8",
           )}
         >
           {addonsData.map((addon) => (
@@ -90,7 +90,7 @@ export default function CustomPlanForm({
             </AddonCard.Card>
           ))}
         </div>
-        <div className="sticky top-4 col-span-12 overflow-hidden rounded-md border font-medium shadow md:col-span-4">
+        <div className="sticky top-4 col-span-12 overflow-hidden rounded-md bg-secondaryblue-100 px-6 pb-6 font-medium  md:col-span-4">
           <div className="flex flex-col p-3">
             <div className="mb-4 flex items-center justify-between">
               <span className="pt-3 text-xl font-medium">
@@ -112,10 +112,16 @@ export default function CustomPlanForm({
               </span>
             </div>
 
-            <FeatList
-              quote={quotesDataV2.find((item) => item.id === quoteSelected)}
-              isSpeared={false}
-            />
+            <div>
+              <h2 className="my-3 text-lg font-medium">
+                {v2t("basic_addons")}
+              </h2>
+              <FeatList
+                quote={quotesDataV2.find((item) => item.id === quoteSelected)}
+                isSpeared={false}
+                isGradient
+              />
+            </div>
           </div>
 
           <HeightMotion>

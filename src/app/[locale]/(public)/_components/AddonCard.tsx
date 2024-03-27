@@ -41,9 +41,9 @@ function AddonCardWrapper({
   return (
     <div
       className={cn(
-        "col-span-12 flex flex-wrap gap-3 rounded bg-slate-50 p-3 text-foreground/70 shadow md:col-span-4",
+        "col-span-12 flex flex-wrap items-start justify-start gap-3 rounded border border-transparent p-3 text-foreground/70 shadow hover:bg-slate-50 hover:bg-opacity-50 md:col-span-6",
         {
-          "border text-foreground/100": active,
+          "border-gray-200 bg-slate-50 text-foreground/100": active,
         },
       )}
     >
@@ -211,7 +211,7 @@ function PlusMinus({ addon }: AddonCardWrapperProps) {
   }, [addon.data, addon.id, AddonSelectedPlusMinus, inputValue]);
 
   return (
-    <div className="flex w-full flex-col gap-3">
+    <div className="flex w-auto flex-col gap-3">
       <InputPlusMinus
         setDecrement={() => setDecrement(addon.id, addon?.steps || ADDON_STEPS)}
         setIncrement={() => {

@@ -1,4 +1,5 @@
 import "@/shared/assets/css/globals.css";
+import IntercomProvider from "@/shared/lib/intercom/IntercomProvider";
 import ReactQueryProvider from "@/shared/lib/ReactQueryProvider";
 import SessionProviderAuth from "@/shared/lib/SessionProvider";
 import { LocaleType } from "@/shared/types/locale";
@@ -38,7 +39,7 @@ export default async function RootLayout({
           <ReactQueryProvider>
             <SessionProviderAuth session={session}>
               <Bar />
-              {children}
+              <IntercomProvider>{children}</IntercomProvider>
               <FooterSales />
             </SessionProviderAuth>
           </ReactQueryProvider>

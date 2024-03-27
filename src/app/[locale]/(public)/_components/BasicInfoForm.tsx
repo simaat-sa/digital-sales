@@ -147,9 +147,13 @@ export default function BasicInfoForm({
 
   useEffect(() => {
     if (state) {
-      setState(state);
+      setState({
+        ...state,
+        email: user?.user?.email || "",
+        registerType: status === "authenticated" ? "SocialMedia" : "",
+      });
     }
-  }, [setState, state]);
+  }, [setState, state, status, user?.user?.email]);
 
   return (
     <HeightMotion>
