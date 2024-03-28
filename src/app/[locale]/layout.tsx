@@ -39,10 +39,7 @@ export default async function RootLayout({
           <ReactQueryProvider>
             <SessionProviderAuth session={session}>
               <Bar />
-              <IntercomProvider>
-                <></>
-              </IntercomProvider>
-              {children}
+              <IntercomProvider>{children}</IntercomProvider>
               <FooterSales />
             </SessionProviderAuth>
           </ReactQueryProvider>
