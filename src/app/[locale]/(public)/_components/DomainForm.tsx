@@ -65,7 +65,6 @@ export default function DomainForm({ state }: { state: QuoteRequestModel }) {
             width={24}
             height={24}
             alt="verified"
-            className="mb-3"
             loading="lazy"
           />
         )}

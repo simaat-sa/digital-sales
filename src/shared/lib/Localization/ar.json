@@ -106,7 +106,7 @@
       "logged_with": "تم تسجيل دخولك بحساب جوجل",
       "dialog_title": "تسجيل الخروج",
       "dialog_desc": "هل أنت متأكد من تسجيل الخروج؟",
-      "steps_number": "خطوة {pageNumber} من 5",
+      "steps_number": "{pageNumber} / 5",
       "basic_addons": "خصائص أساسية",
       "show_more": "عرض الكل",
       "show_less": "عرض الاقل"

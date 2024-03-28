@@ -18,7 +18,7 @@ export default async function Page() {
   return (
     <div className="min-h-layout w-full">
       <LayoutGrid hasBg isGrid>
-        <BasicInfoForm state={data ? JSON.parse(data) : null} />
+        <BasicInfoForm state={parsed} />
       </LayoutGrid>
     </div>
   );

@@ -1,5 +1,7 @@
 "use client";
 import HeightMotion from "@/shared/components/motions/HeighEffect";
+import Cookies from "js-cookie";
+import { signOut, useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -9,16 +11,30 @@ import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2"
 const checkedUrl = "/assets/images/check.png";
 
 export default function Page() {
-  const { email, handleDeleteDataStored } = useQuotePricingServiceV2();
+  const { email, resetV2 } = useQuotePricingServiceV2();
   const t = useTranslations("sales");
   const router = useRouter();
 
+  const { status } = useSession();
+
   useEffect(() => {
-    setTimeout(async () => {
-      await handleDeleteDataStored();
-      router.push("/get-started");
-    }, 5000);
-  }, [handleDeleteDataStored, router]);
+    async function clearData() {
+      if (status === "authenticated") {
+        await signOut({
+          redirect: false,
+        });
+      }
+      setTimeout(async () => {
+        await Cookies.remove("data");
+        await resetV2();
+        router.push("/get-started", {
+          scroll: true,
+        });
+      }, 5000);
+    }
+
+    clearData();
+  }, [resetV2, router, status]);
 
   return (
     <div className="min-h-layout container flex items-center justify-center">

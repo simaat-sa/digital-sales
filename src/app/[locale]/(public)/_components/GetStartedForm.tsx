@@ -92,7 +92,6 @@ export default function GetStartedForm({
           {!verifiedMobile && showCode && t("check_code")}
           {verifiedMobile && t("next")}
         </ActionButton.Submit>
-        <div className="font-medium">5/1</div>
       </ActionButton.Root>
     </form>
   );
