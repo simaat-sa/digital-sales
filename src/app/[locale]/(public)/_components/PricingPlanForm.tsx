@@ -1,7 +1,6 @@
 "use client";
 
 import { QuoteRequestModel } from "@/shared/@types/model/QuoteRequest";
-import GoogleCalendarSchedulingButton from "@/shared/components/GoogleCalender";
 import Iframe from "@/shared/components/IFrame";
 import { VideoComponent } from "@/shared/components/VideoComponent";
 import { Button } from "@/shared/components/ui/button";
@@ -18,11 +17,19 @@ import { displayPrice } from "@/shared/lib/format-pricing";
 import { useRouter } from "@/shared/lib/navigation";
 import { cn } from "@/shared/lib/utils";
 import { useTranslations } from "next-intl";
+import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useQuotePricingServiceV2 } from "../_services/QuotePricingServiceV2";
 import { quotesDataV2 } from "../_services/quotesData";
 import FeatList from "./FeatList";
+
+const GoogleCalendarSchedulingButtonDynamic = dynamic(
+  () => import("@/shared/components/GoogleCalender"),
+  {
+    ssr: false,
+  },
+);
 
 const VideoStream = "/assets/svg/icons/media-player.svg";
 const CalenderIcon = "/assets/svg/icons/Calender.svg";
@@ -36,7 +43,7 @@ export default function PricingPlanForm({
 }: {
   state: QuoteRequestModel;
 }) {
-  const { quotePlan, onTakeAction, setState, handleSubmitSelectPlan } =
+  const { quotePlan, setState, handleSubmitSelectPlan } =
     useQuotePricingServiceV2();
   const t = useTranslations("sales");
   const tv2 = useTranslations("v2.sales");
@@ -111,10 +118,10 @@ export default function PricingPlanForm({
                   isSpeared
                 />
                 <Dialog>
-                  <DialogTrigger className="w-full text-secondaryblue lg:w-9/12">
+                  <DialogTrigger className="w-auto text-secondaryblue lg:w-9/12">
                     <Button
                       variant="outline"
-                      className="flex w-full justify-start gap-x-6 border-2 p-6"
+                      className="flex justify-start gap-x-6 border-2 p-6"
                     >
                       <Image
                         src={VideoStream}
@@ -146,10 +153,10 @@ export default function PricingPlanForm({
                   </DialogContent>
                 </Dialog>
                 <Dialog>
-                  <DialogTrigger className="w-full text-secondaryblue lg:w-9/12">
+                  <DialogTrigger className="w-auto text-secondaryblue lg:w-9/12">
                     <Button
                       variant="outline"
-                      className="flex w-full justify-start gap-x-6 border-2 p-6"
+                      className="flex justify-start gap-x-6 border-2 p-6"
                     >
                       <Image
                         src={VideoStream}
@@ -174,11 +181,11 @@ export default function PricingPlanForm({
                 <a
                   href="https://demo.simaat.sa/"
                   target="_blank"
-                  className="w-full text-secondaryblue lg:w-9/12"
+                  className="w-auto text-secondaryblue lg:w-9/12"
                 >
                   <Button
                     variant="outline"
-                    className="flex w-full justify-start gap-x-6 border-2 p-6"
+                    className="flex w-auto justify-start gap-x-6 border-2 p-6"
                   >
                     <Image
                       src={externalLink}
@@ -193,7 +200,7 @@ export default function PricingPlanForm({
                 {name === "companies" ? (
                   <div className="flex flex-col gap-4 p-2">
                     <Dialog>
-                      <DialogTrigger className="flex w-9/12 flex-nowrap gap-4">
+                      <DialogTrigger className="flex w-auto flex-nowrap gap-4">
                         <Image
                           src={CallIcon}
                           alt={t("order_call")}
@@ -241,7 +248,9 @@ export default function PricingPlanForm({
                         height={20}
                         loading="lazy"
                       />
-                      <GoogleCalendarSchedulingButton />
+                      <Suspense fallback={null}>
+                        <GoogleCalendarSchedulingButtonDynamic />
+                      </Suspense>
                     </div>
                   </div>
                 ) : null}
