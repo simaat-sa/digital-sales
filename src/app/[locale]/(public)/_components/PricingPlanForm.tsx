@@ -35,8 +35,6 @@ const VideoStream = "/assets/svg/icons/media-player.svg";
 const CalenderIcon = "/assets/svg/icons/Calender.svg";
 const CallIcon = "/assets/svg/icons/Call.svg";
 const externalLink = "/assets/svg/icons/Linkexternal.svg";
-const calendarUrl =
-  "https://calendar.google.com/calendar/appointments/schedules/AcZssZ0B3HrdIkhYVbzyufSC9EU5gfYwWY1C6U8g3rQLaeoxIhDKzTkm9zOOHlFuQ6763c_6JrQQjtBO?gv=true";
 
 export default function PricingPlanForm({
   state,
@@ -58,15 +56,15 @@ export default function PricingPlanForm({
   return (
     <div className="container">
       <div className="flex h-[8rem] w-full items-center justify-between px-4 lg:px-0">
-        <div>
-          <h2 className="inline-flex items-end  text-2xl font-medium lg:text-3xl">
-            {t("quotes_title")}
-          </h2>
+        <h2 className="inline-flex items-end  text-2xl font-medium lg:text-3xl">
+          {t("quotes_title")}
+        </h2>
+        <div className="flex items-center gap-3">
           <span className="mx-3">{tv2("steps_number", { pageNumber: 3 })}</span>
+          <Button variant="outline" type="button" onClick={() => router.back()}>
+            {t("back")}
+          </Button>
         </div>
-        <Button variant="outline" type="button" onClick={() => router.back()}>
-          {t("back")}
-        </Button>
       </div>
       <div className="card_pricing_plan grid grid-cols-12 items-start gap-6 px-4 md:px-2 lg:px-0">
         {quotesDataV2.map(

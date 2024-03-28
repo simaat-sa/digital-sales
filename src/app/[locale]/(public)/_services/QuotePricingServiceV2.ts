@@ -273,7 +273,6 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
       email: email,
       verifiedEmail: true,
       registerWay: "SocialMedia",
-      actionButton: "get_code",
     }));
   },
   onSelectAddon(addon) {
@@ -717,7 +716,7 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
       email: data.email,
       emailVerified: data.verifiedEmail,
       mobileNumber: data.mobileNumber,
-      mobileNumberVerified: data.verifiedMobile,
+      mobileNumberVerified: data.mobileNumber ? true : false,
       registerType: data.registerWay,
       planId: Number(data.quoteSelected || 0),
       business_needed: +data.quotePlan,

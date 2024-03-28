@@ -124,7 +124,6 @@ export default function BasicInfoForm({
     quotePlan,
     email,
     errors,
-    onChange,
     verifiedEmail,
     verifiedMobile,
     mobileNumber,
@@ -132,10 +131,12 @@ export default function BasicInfoForm({
     showCode,
     disable,
     registerWay,
-    signOut,
     country_code,
+    onChange,
+    signOut,
     setState,
     handleSubmitBasicInfo,
+    onLoginWithGoogle,
   } = useQuotePricingServiceV2();
 
   const t = useTranslations("sales");
@@ -146,10 +147,16 @@ export default function BasicInfoForm({
   const router = useRouter();
 
   useEffect(() => {
+    if (user?.user?.email) {
+      onLoginWithGoogle(user.user.email);
+    }
+  }, [onLoginWithGoogle, user?.user?.email]);
+
+  useEffect(() => {
     if (state) {
       setState({
         ...state,
-        email: user?.user?.email || "",
+        email: status === "authenticated" ? user?.user?.email || "" : "",
         registerType: status === "authenticated" ? "SocialMedia" : "",
       });
     }
@@ -208,6 +215,7 @@ export default function BasicInfoForm({
             </AlertDialog>
           </div>
         ) : null}
+
         <div className="flex w-full flex-col gap-4">
           <Label>{t("business_needed")}</Label>
 
@@ -237,7 +245,7 @@ export default function BasicInfoForm({
           <InputName />
         </HeightMotion>
 
-        {registerWay === "MobileNumber" ? (
+        {status !== "authenticated" ? (
           <InputBase
             value={email}
             onChange={(e) => {
@@ -253,7 +261,7 @@ export default function BasicInfoForm({
           />
         ) : null}
 
-        {status === "authenticated" ? (
+        {status === "authenticated" && (
           <MobileNumberWithCode
             value={mobileNumber}
             countryCode={country_code}
@@ -270,8 +278,7 @@ export default function BasicInfoForm({
             }}
             verified={verifiedMobile}
           />
-        ) : null}
-
+        )}
         <ActionButton.Root>
           <ActionButton.Submit type="submit">
             {!showCode && status === "authenticated"

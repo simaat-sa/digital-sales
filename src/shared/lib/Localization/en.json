@@ -106,7 +106,7 @@
       "logged_with": "Logged in with Google",
       "dialog_title": "log out",
       "dialog_desc": "Are you sure you want to logout ?",
-      "steps_number": "Step {pageNumber}/5",
+      "steps_number": "{pageNumber}/5",
       "basic_addons": "Features",
       "show_more": "Show all",
       "show_less": "Show less"
