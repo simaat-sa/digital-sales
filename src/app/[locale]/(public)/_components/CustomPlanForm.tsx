@@ -68,6 +68,7 @@ export default function CustomPlanForm({
           {addonsData.map((addon) => (
             <AddonCard.Card
               key={addon.id}
+              addon={addon}
               active={
                 AddonSelected.find((item) => item.id === addon.id) ||
                 AddonSelectedDropdown.find((item) => item.id === addon.id) ||
@@ -76,17 +77,20 @@ export default function CustomPlanForm({
                   : false
               }
             >
-              <AddonCard.Header addon={addon} />
-              <AddonCard.Description addon={addon} />
-              <AddonCard.Checkbox addon={addon} />
+              <div className="flex flex-col gap-3">
+                <AddonCard.Header addon={addon} />
+                <AddonCard.Description addon={addon} />
 
-              {addon.addonType === "DROPDOWN" ? (
-                <AddonCard.Dropdown addon={addon} />
-              ) : null}
+                {addon.addonType === "DROPDOWN" ? (
+                  <AddonCard.Dropdown addon={addon} />
+                ) : null}
 
-              {addon.addonType === "PLUS_MINUS" ? (
-                <AddonCard.PlusMinus addon={addon} />
-              ) : null}
+                {addon.addonType === "PLUS_MINUS" ? (
+                  <AddonCard.PlusMinus addon={addon} />
+                ) : null}
+              </div>
+
+              <AddonCard.Footer addon={addon} />
             </AddonCard.Card>
           ))}
         </div>

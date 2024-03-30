@@ -42,7 +42,10 @@ export default function InputMobileNumber({
       >
         <Select value="966" disabled={props.disabled}>
           <SelectTrigger className="my-auto mr-0 h-full max-w-[5rem] rounded-none border-0 pr-0 focus-visible:ring-0">
-            <SelectValue className="max-w-[5rem] border-0 py-3 outline-none focus:border-0 focus:outline-none focus-visible:border-0 focus-visible:outline-none" />
+            <SelectValue
+              className="max-w-[5rem] border-0 py-3 outline-none focus:border-0 focus:outline-none focus-visible:border-0 focus-visible:outline-none"
+              tabIndex={1}
+            />
           </SelectTrigger>
           <SelectContent className="w-auto">
             {countryCodes.map((code) => (
@@ -65,6 +68,7 @@ export default function InputMobileNumber({
           dir="ltr"
           type="tel"
           aria-label={t("mobile_number")}
+          tabIndex={0}
           {...props}
         />
         {verified && (
