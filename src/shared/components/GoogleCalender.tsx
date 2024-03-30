@@ -10,6 +10,7 @@ function GoogleCalendarSchedulingButton() {
   return (
     <>
       <Script
+        async
         src="https://calendar.google.com/calendar/scheduling-button-script.js"
         onLoad={() => {
           (window as any).calendar.schedulingButton.load({

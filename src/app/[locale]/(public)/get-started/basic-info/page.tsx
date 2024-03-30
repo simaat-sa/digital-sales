@@ -12,7 +12,6 @@ export default async function Page() {
 
   if (!parsed?.mobileNumberVerified && typeof session !== "string") {
     return redirect("/");
-  } else {
   }
 
   return (

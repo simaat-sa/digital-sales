@@ -124,7 +124,7 @@ interface IRequestQuoteActions {
   _setCurrentWizard: (wizard: Wizards) => void;
   _getCode: (isRegister: boolean) => void;
   _onUpdateWizardHistory: (wizard?: Wizards, isBack?: boolean) => void;
-  _checkCode: () => void;
+  _checkCode: () => Promise<boolean>;
   _isMobileNumberValid: () => boolean;
   _isRequirementsValid: () => Promise<boolean>;
   _onChangeCode: (name: FieldName, value: string) => void;
@@ -133,6 +133,13 @@ interface IRequestQuoteActions {
   onTakeAction: (isBack?: boolean) => void;
   resetV2: () => void;
   onChange: (name: FieldName, value: string | number | boolean) => void;
+  onChangeCode: (
+    name: FieldName,
+    value: string | number | boolean,
+    callback?: () => void,
+  ) => void;
+  setError: (name: FieldName, value: string) => void;
+  isOTPCodeValid: () => boolean;
   onSelectQuote: (id: number) => void;
   onSelectAddon: (addon: AddonV2) => void;
   onSelectAddonDropDown: (addon: AddonV2) => void;
@@ -209,6 +216,9 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
     firstName: "",
     lastName: "",
     organizeName: "",
+  },
+  isOTPCodeValid() {
+    return get().code.length === 4;
   },
   setState(state) {
     let basicAddon: any[] = addonsData.filter((a) => {
@@ -338,16 +348,25 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
     }
   },
   _checkCode() {
-    const code = get().code;
-    if (code.length === 4) {
-      get()._disableField("code", true);
+    return new Promise(async (resolve, reject) => {
+      try {
+        const code = get().code;
 
-      set(() => ({
-        actionButton: "next",
-        verifiedMobile: true,
-        registerWay: "MobileNumber",
-      }));
-    }
+        if (code.length === 4) {
+          get()._disableField("code", true);
+
+          await set(() => ({
+            actionButton: "next",
+            verifiedMobile: true,
+            registerWay: "MobileNumber",
+          }));
+
+          resolve(true);
+        }
+      } catch (error) {
+        reject(true);
+      }
+    });
   },
   _onUpdateWizardHistory(wizard, isBack) {
     if (!isBack && wizard) {
@@ -515,6 +534,29 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
 
     if (name === "code") {
       get()._checkCode();
+    }
+  },
+  async onChangeCode(name, value, callback) {
+    let errors = get().errors;
+
+    set(() => ({
+      [name]: value,
+      errors: {
+        ...errors,
+        [name]: "",
+      },
+    }));
+
+    if (String(value).length === 4) {
+      await set(() => ({
+        actionButton: "next",
+        verifiedMobile: true,
+        registerWay: "MobileNumber",
+      }));
+
+      get().storeRequestData();
+
+      if (callback) callback();
     }
   },
   _onChangeCode(name, value) {
@@ -701,6 +743,7 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
       signOut().then(async () => {
         try {
           await get().resetV2();
+          await Cookies.remove("data");
           resolve(true);
         } catch (error) {
           reject(true);
@@ -745,6 +788,9 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
           .then(async () => {
             await get().storeRequestData();
             resolve(true);
+          })
+          .catch((error) => {
+            console.log("🚀 ~ returnnewPromise ~ error:", error);
           });
       } else {
         get()._getCode(false);
@@ -788,6 +834,14 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
   async handleDeleteDataStored() {
     await Cookies.remove("data");
     get().resetV2();
+  },
+  setError(name, value) {
+    set(() => ({
+      errors: {
+        ...get().errors,
+        [name]: value,
+      },
+    }));
   },
 }));
 
