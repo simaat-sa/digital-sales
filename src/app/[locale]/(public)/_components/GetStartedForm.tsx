@@ -18,14 +18,17 @@ export default function GetStartedForm({
     showCode,
     code,
     errors,
-    onChange,
     disable,
     country_code,
+    verifiedMobile,
+    onChange,
+    onChangeCode,
     _getCode,
     _checkCode,
-    verifiedMobile,
     setState,
     storeRequestData,
+    isOTPCodeValid,
+    setError,
   } = useQuotePricingServiceV2();
 
   const t = useTranslations("sales");
@@ -37,11 +40,15 @@ export default function GetStartedForm({
     }
 
     if (!verifiedMobile && showCode) {
-      _checkCode();
+      if (isOTPCodeValid()) {
+        _checkCode();
+      } else {
+        setError("code", "code_required");
+      }
     }
 
     if (verifiedMobile) {
-      new Promise(async (resolve, reject) => {
+      new Promise(async (resolve) => {
         storeRequestData();
         resolve(true);
       }).then(() => {
@@ -75,7 +82,15 @@ export default function GetStartedForm({
       <MobileNumberWithCode
         value={mobileNumber}
         countryCode={country_code}
-        onChange={onChange}
+        onChange={(name, value) => {
+          if (name === "code") {
+            onChangeCode("code", value, () =>
+              router.push("/get-started/basic-info"),
+            );
+          } else {
+            onChange(name, value);
+          }
+        }}
         errors={{
           mobileNumber: errors.mobileNumber,
           code: errors.code,
@@ -86,6 +101,7 @@ export default function GetStartedForm({
         code={code}
         showCode={showCode}
       />
+
       <ActionButton.Root>
         <ActionButton.Submit type="submit">
           {!verifiedMobile && !showCode && t("get_code")}

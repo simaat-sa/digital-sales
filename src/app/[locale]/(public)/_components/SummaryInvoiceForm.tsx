@@ -2,6 +2,11 @@
 import { QuoteRequestModel } from "@/shared/@types/model/QuoteRequest";
 import InputBase from "@/shared/components/Inputs/InputBase";
 import { Button } from "@/shared/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "@/shared/components/ui/dialog";
 import { Separator } from "@/shared/components/ui/separator";
 import { displayPrice } from "@/shared/lib/format-pricing";
 import { cn } from "@/shared/lib/utils";
@@ -20,6 +25,7 @@ import { quotesDataV2 } from "../_services/quotesData";
 import { ActionButton } from "./ActionButton";
 import AddonsList from "./AddonsList";
 import FeatList from "./FeatList";
+import PaymentIFrame from "./PaymentFrame";
 
 const checkedDecagramIcon = "/assets/svg/icons/checked-decagram.svg";
 
@@ -217,16 +223,16 @@ export default function SummaryInvoiceForm({
             </div>
 
             <ActionButton.Root>
-              <ActionButton.Submit
-                type="button"
-                onClick={() =>
-                  handleSubmitSummaryInvoice().then(() =>
-                    router.push("/get-started/success", { scroll: true }),
-                  )
-                }
-              >
-                {t("confirm_and_pay")}
-              </ActionButton.Submit>
+              <Dialog>
+                <DialogTrigger>
+                  <ActionButton.Submit type="button">
+                    {t("confirm_and_pay")}
+                  </ActionButton.Submit>
+                </DialogTrigger>
+                <DialogContent className="w-4/5 md:w-1/2 lg:w-1/3">
+                  <PaymentIFrame />
+                </DialogContent>
+              </Dialog>
               <ActionButton.Back type="button">{t("back")}</ActionButton.Back>
             </ActionButton.Root>
           </div>

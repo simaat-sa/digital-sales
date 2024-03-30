@@ -130,13 +130,11 @@ export default function BasicInfoForm({
     code,
     showCode,
     disable,
-    registerWay,
     country_code,
     onChange,
     signOut,
     setState,
     handleSubmitBasicInfo,
-    onLoginWithGoogle,
   } = useQuotePricingServiceV2();
 
   const t = useTranslations("sales");
@@ -144,18 +142,32 @@ export default function BasicInfoForm({
   const tc = useTranslations("common");
   const validations = useTranslations("validations");
   const { status, data: user } = useSession();
-  const router = useRouter();
 
-  useEffect(() => {
-    if (user?.user?.email) {
-      onLoginWithGoogle(user.user.email);
-    }
-  }, [onLoginWithGoogle, user?.user?.email]);
+  const router = useRouter();
 
   useEffect(() => {
     if (state) {
       setState({
         ...state,
+        email: status === "authenticated" ? user?.user?.email || "" : "",
+        registerType: status === "authenticated" ? "SocialMedia" : "",
+      });
+    } else {
+      setState({
+        addons: [],
+        business_needed: 1,
+        domain: "",
+        domainVerified: false,
+        emailVerified: true,
+        firstName: "",
+        lastName: "",
+        mobileNumber: "",
+        mobileNumberVerified: false,
+        monthsDuration: 1,
+        organize: "",
+        planId: 1,
+        promoCode: "",
+        promoCodeVerified: false,
         email: status === "authenticated" ? user?.user?.email || "" : "",
         registerType: status === "authenticated" ? "SocialMedia" : "",
       });
@@ -167,9 +179,9 @@ export default function BasicInfoForm({
       <form
         className="flex flex-col gap-4 lg:gap-6"
         action={() =>
-          handleSubmitBasicInfo().then(() =>
-            router.push("/get-started/pricing-plan"),
-          )
+          handleSubmitBasicInfo().then(() => {
+            router.push("/get-started/pricing-plan");
+          })
         }
       >
         <h3 className="mt-4 text-xl font-medium lg:mt-2 lg:text-3xl">
@@ -281,7 +293,7 @@ export default function BasicInfoForm({
         )}
         <ActionButton.Root>
           <ActionButton.Submit type="submit">
-            {!showCode && status === "authenticated"
+            {!verifiedMobile && status === "authenticated"
               ? t("get_code")
               : !verifiedMobile
                 ? t("check_code")
