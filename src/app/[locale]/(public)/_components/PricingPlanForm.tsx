@@ -79,10 +79,10 @@ export default function PricingPlanForm({
               )}
               key={String(id)}
             >
-              <div className="flex min-h-40 w-full flex-col justify-center gap-4">
+              <div className="flex min-h-30 w-full flex-col justify-center gap-4 pt-3">
                 <div className="flex w-full flex-nowrap items-center justify-between gap-x-4">
                   <h4 className="text-3xl font-medium">
-                    {t("quote")} {t(name as any)}
+                    {t(name as any)}
                   </h4>
                   {String(id) === quotePlan ? (
                     <span className="flex items-center rounded-md border bg-primary p-2 font-medium text-white shadow-md shadow-slate-200">
@@ -116,7 +116,7 @@ export default function PricingPlanForm({
                   isSpeared
                 />
                 <Dialog>
-                  <DialogTrigger className="w-auto text-secondaryblue lg:w-9/12">
+                  <DialogTrigger className="w-auto text-secondaryblue lg:w-9/12 pt-3">
                     <Button
                       variant="outline"
                       className="flex justify-start gap-x-6 border-2 p-6"

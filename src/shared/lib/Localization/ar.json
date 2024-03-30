@@ -7,7 +7,7 @@
     "next": "استمرار",
     "back": "السابق",
     "code_otp": "رمز OTP",
-    "resend_code": "إعلدة إرسال رمز التحقق",
+    "resend_code": "إعادة إرسال رمز التحقق",
     "quote_type": "نوع الباقة",
     "email": "البريد إلاكتروني",
     "best_matching": "المرشحة لك",
@@ -17,7 +17,7 @@
     "select": "اختر",
     "check": "تاكيد",
     "confirm_and_pay": "تأكيد ودفع ",
-    "ar": "Arabic",
+    "ar": "عربي",
     "en": "English",
     "optional": "أختياري",
     "companies": "شركات",
@@ -47,7 +47,7 @@
     "firstName": "الإسم الأول",
     "lastName": "الإسم الأخير",
     "success_title": "تم الاشتراك بنجاح",
-    "success_desc": "تم ارسال بيانات الحساب والدخول علي منصتك الي البريد الالكتروني ",
+    "success_desc": "تم ارسال بيانات الحساب والدخول علي منصتك الي البريد الالكتروني {email}",
     "auto_redirect": "سيتم إعادة التوجيه تلقائيًا بعد ثوانٍ.",
     "personal": "مالك فرد",
     "office": "مكتب",
@@ -73,22 +73,22 @@
   },
   "validations": {
     "quote_type_is_required": "نوع العمل مطلوب",
-    "email_not_valid": "البريد الألكتروني غير صحيح",
+    "email_not_valid": "البريد الإلكتروني غير صحيح",
     "mobile_number_not_valid": "الجوال غير صحيح",
-    "first_name_required": "الأسم الاول مطلوب",
-    "last_name_required": "الأسم الأخير مطلوب",
+    "first_name_required": "الإسم الاول مطلوب",
+    "last_name_required": "الإسم الأخير مطلوب",
     "code_required": "الرمز مطلوب",
-    "office_name_required": "أسم المكتب مطلوب",
-    "company_name_required": "أسم الشركة مطلوب",
-    "domain_is_required": "أسم النطاق مطلوب"
+    "office_name_required": "إسم المكتب مطلوب",
+    "company_name_required": "إسم الشركة مطلوب",
+    "domain_is_required": "إسم النطاق مطلوب"
   },
   "common": {
     "resend_code": "إعادة إرسال الرمز",
     "countdown": " {time} ثانية",
-    "continue_with_google": "تسجيل الدخول عن طريق جوجل",
-    "simaat": "سمات - عقارية تفاعلية متكاملة",
+    "continue_with_google": "تسجيل الدخول بحساب جوجل",
+    "simaat": "منصة سمات",
     "Confirm": "تأكيد",
-    "close": "الالغاء"
+    "close": "إلغاء"
   },
   "v2": {
     "sales": {
@@ -109,7 +109,7 @@
       "steps_number": "{pageNumber} / 5",
       "basic_addons": "خصائص أساسية",
       "show_more": "عرض الكل",
-      "show_less": "عرض الاقل"
+      "show_less": "عرض أقل"
     }
   }
 }

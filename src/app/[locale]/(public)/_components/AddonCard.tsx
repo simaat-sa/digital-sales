@@ -41,9 +41,9 @@ function AddonCardWrapper({
   return (
     <div
       className={cn(
-        "col-span-12 flex flex-wrap items-start justify-start gap-3 rounded border border-transparent p-3 text-foreground/70 shadow hover:bg-slate-50 hover:bg-opacity-50 md:col-span-6",
+        "col-span-12 flex flex-wrap items-start justify-start gap-3 rounded border border p-3 text-foreground/100 hover:bg-slate-70 hover:bg-opacity-50 md:col-span-6",
         {
-          "border-gray-200 bg-slate-50 text-foreground/100": active,
+          "border-primary bg-slate-50 text-foreground/100": active,
         },
       )}
     >
@@ -166,9 +166,6 @@ function AddonCardCheckbox({ addon }: AddonCardWrapperProps) {
 
   return (
     <div className="mt-4 flex w-full items-center justify-between">
-      <span className="text-2xl font-medium">
-        {displayPrice(price, true, locale)}
-      </span>
       <Checkbox
         className="h-6 w-6 rounded-sm"
         onCheckedChange={(checked) => {
@@ -176,6 +173,9 @@ function AddonCardCheckbox({ addon }: AddonCardWrapperProps) {
         }}
         checked={checked}
       />
+      <span className="text-2xl font-medium">
+        {displayPrice(price, true, locale)}
+      </span>
     </div>
   );
 }
