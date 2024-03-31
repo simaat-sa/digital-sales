@@ -53,7 +53,7 @@ export default function FeatList({
                 {isSpeared &&
                 feat.data.length - 1 === i &&
                 quote.features.length - 1 !== index ? (
-                  <Separator className="my-3 h-6 bg-slate-50" />
+                  <Separator className="my-6" />
                 ) : null}
               </Fragment>
             ))}

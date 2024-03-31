@@ -40,7 +40,7 @@ export default function DomainForm({ state }: { state: QuoteRequestModel }) {
         <h3 className="inline-flex text-3xl font-medium">
           {t("confirm_domain_title")}
         </h3>
-        <span className="mx-3">{tv2("steps_number", { pageNumber: 4 })}</span>
+        <span className="mx-3">{tv2("steps_number", { pageNumber: 5 })}</span>
       </div>
       <form
         className="mb-4 flex flex-nowrap gap-4"

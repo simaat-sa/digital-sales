@@ -31,6 +31,3 @@
 - Next.js v14
 - Redux and Zustand
 - TailwindCSS / ShadCN-UI
-
-
-<!-- // https://www.npmjs.com/package/@react-oauth/google -->

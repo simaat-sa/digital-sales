@@ -106,10 +106,11 @@
       "logged_with": "تم تسجيل دخولك بحساب جوجل",
       "dialog_title": "تسجيل الخروج",
       "dialog_desc": "هل أنت متأكد من تسجيل الخروج؟",
-      "steps_number": "{pageNumber} / 5",
+      "steps_number": "{pageNumber} / 6",
       "basic_addons": "خصائص أساسية",
       "show_more": "عرض الكل",
-      "show_less": "عرض أقل"
+      "show_less": "عرض أقل",
+      "compare_plans": "قارن الخطط بالتفصيل"
     }
   }
 }

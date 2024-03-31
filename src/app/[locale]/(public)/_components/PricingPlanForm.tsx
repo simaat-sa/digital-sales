@@ -1,5 +1,4 @@
 "use client";
-
 import { QuoteRequestModel } from "@/shared/@types/model/QuoteRequest";
 import Iframe from "@/shared/components/IFrame";
 import { VideoComponent } from "@/shared/components/VideoComponent";
@@ -21,7 +20,8 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Suspense, useEffect } from "react";
 import { useQuotePricingServiceV2 } from "../_services/QuotePricingServiceV2";
-import { quotesDataV2 } from "../_services/quotesData";
+import { comparedData, quotesDataV2 } from "../_services/quotesData";
+import ComparePlanning from "./ComparePlanning";
 import FeatList from "./FeatList";
 
 const GoogleCalendarSchedulingButtonDynamic = dynamic(
@@ -35,6 +35,7 @@ const VideoStream = "/assets/svg/icons/media-player.svg";
 const CalenderIcon = "/assets/svg/icons/Calender.svg";
 const CallIcon = "/assets/svg/icons/Call.svg";
 const externalLink = "/assets/svg/icons/Linkexternal.svg";
+const ArrowDown = "/assets/svg/icons/ArrowDown.svg";
 
 export default function PricingPlanForm({
   state,
@@ -72,18 +73,16 @@ export default function PricingPlanForm({
             <div
               className={cn(
                 {
-                  "bg-gradient-to-r from-slate-200 to-gray-100 shadow-lg":
+                  "bg-gradient-to-r from-secondaryblue-100 to-gray-100 shadow-lg":
                     String(id) === quotePlan,
                 },
-                "card_pricing_plan_sibling col-span-12 mb-4 flex flex-col gap-y-3 overflow-hidden rounded-3xl border bg-white p-4 shadow-md transition-colors duration-150 md:col-span-6 lg:col-span-4",
+                "card_pricing_plan_sibling col-span-12 mb-4 flex flex-col gap-y-3 overflow-hidden rounded-lg border bg-white p-4 shadow-md transition-colors duration-150 md:col-span-6 lg:col-span-4",
               )}
               key={String(id)}
             >
-              <div className="flex min-h-30 w-full flex-col justify-center gap-4 pt-3">
+              <div className="min-h-30 flex w-full flex-col justify-center gap-4 pt-3">
                 <div className="flex w-full flex-nowrap items-center justify-between gap-x-4">
-                  <h4 className="text-3xl font-medium">
-                    {t(name as any)}
-                  </h4>
+                  <h4 className="text-3xl font-medium">{t(name as any)}</h4>
                   {String(id) === quotePlan ? (
                     <span className="flex items-center rounded-md border bg-primary p-2 font-medium text-white shadow-md shadow-slate-200">
                       {t("best_matching")}
@@ -103,7 +102,6 @@ export default function PricingPlanForm({
                 })}
               />
               <div className="flex flex-col gap-4">
-                {/* <p>{description}</p> */}
                 <FeatList
                   quote={{
                     id,
@@ -116,19 +114,14 @@ export default function PricingPlanForm({
                   isSpeared
                 />
                 <Dialog>
-                  <DialogTrigger className="w-auto text-secondaryblue lg:w-9/12 pt-3">
-                    <Button
-                      variant="outline"
-                      className="flex justify-start gap-x-6 border-2 p-6"
-                    >
-                      <Image
-                        src={VideoStream}
-                        alt="video stream"
-                        width={24}
-                        height={24}
-                      />
-                      <span>{t("presentation_video")}</span>
-                    </Button>
+                  <DialogTrigger className="flex w-auto justify-start gap-x-6 rounded-md border-2 bg-white p-4 text-secondaryblue lg:w-9/12">
+                    <Image
+                      src={VideoStream}
+                      alt="video stream"
+                      width={24}
+                      height={24}
+                    />
+                    <span className="px-2">{t("presentation_video")}</span>
                   </DialogTrigger>
                   <DialogContent className="w-screen">
                     <DialogHeader>
@@ -151,19 +144,14 @@ export default function PricingPlanForm({
                   </DialogContent>
                 </Dialog>
                 <Dialog>
-                  <DialogTrigger className="w-auto text-secondaryblue lg:w-9/12">
-                    <Button
-                      variant="outline"
-                      className="flex justify-start gap-x-6 border-2 p-6"
-                    >
-                      <Image
-                        src={VideoStream}
-                        alt="video stream"
-                        width={24}
-                        height={24}
-                      />
-                      <span>{t("demo_video")}</span>
-                    </Button>
+                  <DialogTrigger className="flex w-auto justify-start gap-x-6 rounded-md border-2 bg-white p-4 text-secondaryblue lg:w-9/12">
+                    <Image
+                      src={VideoStream}
+                      alt="video stream"
+                      width={24}
+                      height={24}
+                    />
+                    <span className="px-2">{t("demo_video")}</span>
                   </DialogTrigger>
                   <DialogContent className="w-screen">
                     <DialogHeader>
@@ -179,20 +167,15 @@ export default function PricingPlanForm({
                 <a
                   href="https://demo.simaat.sa/"
                   target="_blank"
-                  className="w-auto text-secondaryblue lg:w-9/12"
+                  className="flex w-auto justify-start gap-x-6 rounded-md border-2 bg-white p-4 text-secondaryblue lg:w-9/12"
                 >
-                  <Button
-                    variant="outline"
-                    className="flex w-auto justify-start gap-x-6 border-2 p-6"
-                  >
-                    <Image
-                      src={externalLink}
-                      alt="video stream"
-                      width={24}
-                      height={24}
-                    />
-                    <span>{t("try_by_yourself")}</span>
-                  </Button>
+                  <Image
+                    src={externalLink}
+                    alt="video stream"
+                    width={24}
+                    height={24}
+                  />
+                  <span className="px-2">{t("try_by_yourself")}</span>
                 </a>
 
                 {name === "companies" ? (
@@ -222,27 +205,6 @@ export default function PricingPlanForm({
                         </DialogDescription>
                       </DialogContent>
                     </Dialog>
-
-                    {/* <Dialog>
-                      <DialogTrigger className="flex w-9/12 flex-nowrap gap-4">
-                        <Image
-                          src={CalenderIcon}
-                          alt={t("schedule_meeting")}
-                          width={20}
-                          height={20}
-                          loading="lazy"
-                        />
-                        {t("schedule_meeting")}
-                      </DialogTrigger>
-                      <DialogContent className="w-screen md:w-[18rem] lg:w-[30rem]">
-                        <DialogHeader>
-                          <DialogTitle>{t("schedule_meeting")}</DialogTitle>
-                        </DialogHeader>
-                        <DialogDescription className="my-0 py-0">
-                          <div className="w-full overflow-hidden"></div>
-                        </DialogDescription>
-                      </DialogContent>
-                    </Dialog> */}
                     <div className="flex items-center gap-2">
                       <Image
                         src={CalenderIcon}
@@ -276,6 +238,19 @@ export default function PricingPlanForm({
           ),
         )}
       </div>
+      <div className="mb-6 mt-[5em]">
+        <h2 className="text-center text-xl font-medium text-secondaryblue-900">
+          {tv2("compare_plans")}
+        </h2>
+        <Image
+          src={ArrowDown}
+          alt="arrow_down"
+          width={24}
+          height={24}
+          className="mx-auto"
+        />
+      </div>
+      <ComparePlanning pricingPlan={quotesDataV2} comparedData={comparedData} />
     </div>
   );
 }

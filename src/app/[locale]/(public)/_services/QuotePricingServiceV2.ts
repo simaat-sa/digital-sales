@@ -6,7 +6,7 @@ import { signOut } from "next-auth/react";
 import { useMemo } from "react";
 import { object, ObjectSchema, string, ValidationError } from "yup";
 import { create } from "zustand";
-import { addonsData, AddonV2, quotesDataV2 } from "./quotesData";
+import { addonsData, AddonType, AddonV2, quotesDataV2 } from "./quotesData";
 
 export const ADDON_STEPS = 50;
 const taxNumber = 15;
@@ -165,6 +165,7 @@ interface IRequestQuoteActions {
   handleSubmitDomain: () => Promise<boolean>;
   handleSubmitSummaryInvoice: () => Promise<boolean>;
   handleDeleteDataStored: () => void;
+  handleUnSelect: (type: AddonType, id: number) => void;
 }
 
 interface QuotePricingV2 extends QuotePricingStateType, IRequestQuoteActions {}
@@ -842,6 +843,39 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
         [name]: value,
       },
     }));
+  },
+  handleUnSelect(type, id) {
+    switch (type) {
+      case "PLUS_MINUS":
+        const addons = get().AddonSelectedPlusMinus.filter(
+          (item) => item.id !== id,
+        );
+
+        set(() => ({
+          AddonSelectedPlusMinus: addons,
+        }));
+
+        break;
+
+      case "DROPDOWN":
+        const dropDown = get().AddonSelectedDropdown.filter(
+          (item) => item.id !== id,
+        );
+
+        set(() => ({
+          AddonSelectedDropdown: dropDown,
+        }));
+
+        break;
+
+      default:
+        const defaults = get().AddonSelected.filter((item) => item.id !== id);
+        set(() => ({
+          AddonSelected: defaults,
+        }));
+
+        break;
+    }
   },
 }));
 
