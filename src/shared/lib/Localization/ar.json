@@ -109,7 +109,8 @@
       "steps_number": "{pageNumber} / 6",
       "basic_addons": "خصائص أساسية",
       "show_more": "عرض الكل",
-      "show_less": "عرض أقل"
+      "show_less": "عرض أقل",
+      "compare_plans": "قارن الخطط بالتفصيل"
     }
   }
 }

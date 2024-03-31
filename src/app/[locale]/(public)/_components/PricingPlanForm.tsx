@@ -20,7 +20,8 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Suspense, useEffect } from "react";
 import { useQuotePricingServiceV2 } from "../_services/QuotePricingServiceV2";
-import { quotesDataV2 } from "../_services/quotesData";
+import { comparedData, quotesDataV2 } from "../_services/quotesData";
+import ComparePlanning from "./ComparePlanning";
 import FeatList from "./FeatList";
 
 const GoogleCalendarSchedulingButtonDynamic = dynamic(
@@ -34,6 +35,7 @@ const VideoStream = "/assets/svg/icons/media-player.svg";
 const CalenderIcon = "/assets/svg/icons/Calender.svg";
 const CallIcon = "/assets/svg/icons/Call.svg";
 const externalLink = "/assets/svg/icons/Linkexternal.svg";
+const ArrowDown = "/assets/svg/icons/ArrowDown.svg";
 
 export default function PricingPlanForm({
   state,
@@ -53,7 +55,7 @@ export default function PricingPlanForm({
   }, [setState, state]);
 
   return (
-    <div className="container" suppressHydrationWarning>
+    <div className="container">
       <div className="flex h-[8rem] w-full items-center justify-between px-4 lg:px-0">
         <h2 className="inline-flex items-end  text-2xl font-medium lg:text-3xl">
           {t("quotes_title")}
@@ -236,6 +238,19 @@ export default function PricingPlanForm({
           ),
         )}
       </div>
+      <div className="mb-6 mt-[5em]">
+        <h2 className="text-center text-xl font-medium text-secondaryblue-900">
+          {tv2("compare_plans")}
+        </h2>
+        <Image
+          src={ArrowDown}
+          alt="arrow_down"
+          width={24}
+          height={24}
+          className="mx-auto"
+        />
+      </div>
+      <ComparePlanning pricingPlan={quotesDataV2} comparedData={comparedData} />
     </div>
   );
 }

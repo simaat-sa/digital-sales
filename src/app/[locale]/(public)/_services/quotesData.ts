@@ -46,6 +46,19 @@ export type AddonV2 = {
 
 export type AddonType = "DEFAULT" | "DROPDOWN" | "PLUS_MINUS";
 
+export type ComparedData = {
+  id: number;
+  name: {
+    en: string;
+    ar: string;
+  };
+  plan: {
+    planId: number;
+    value?: string | number;
+    checked?: boolean;
+  }[];
+};
+
 export const quotesDataV2: QuoteModelV2[] = [
   {
     id: 1,
@@ -323,5 +336,212 @@ export const addonsData: AddonV2[] = [
     data: [],
     description:
       "إذا كان لديك حساب واتساب أعمال خاص بك، يمكننا تفعيله على منصتك",
+  },
+];
+
+export const comparedData: ComparedData[] = [
+  {
+    id: 1,
+    name: {
+      ar: "عدد مستخدمين",
+      en: "عدد مستخدمين",
+    },
+    plan: [
+      { planId: 1, checked: true, value: 1 },
+      { planId: 2, checked: true, value: 4 },
+      { planId: 3, checked: true, value: 10 },
+    ],
+  },
+  {
+    id: 2,
+    name: {
+      ar: "عقارات ووحدات غير محدودة",
+      en: "عقارات ووحدات غير محدودة",
+    },
+    plan: [
+      { planId: 1, checked: true },
+      { planId: 2, checked: true },
+      { planId: 3, checked: true },
+    ],
+  },
+  {
+    id: 3,
+    name: {
+      ar: "عقود ومستأجرين غير محدودة",
+      en: "عقود ومستأجرين غير محدودة",
+    },
+    plan: [
+      { planId: 1, checked: true },
+      { planId: 2, checked: true },
+      { planId: 3, checked: true },
+    ],
+  },
+  {
+    id: 4,
+    name: {
+      ar: "رسالة جوال",
+      en: "رسالة جوال",
+    },
+    plan: [
+      { planId: 1, checked: true, value: 300 },
+      { planId: 2, checked: true, value: 1000 },
+      { planId: 3, checked: true, value: 5000 },
+    ],
+  },
+  {
+    id: 5,
+    name: {
+      ar: "تقرير تفصيلي للعقارات والوحدات",
+      en: "تقرير تفصيلي للعقارات والوحدات",
+    },
+    plan: [
+      { planId: 1, checked: true, value: 14 },
+      { planId: 2, checked: true, value: 36 },
+      { planId: 3, checked: true, value: 36 },
+    ],
+  },
+  {
+    id: 6,
+    name: {
+      ar: "مصاريف الوحدات العقارية",
+      en: "مصاريف الوحدات العقارية",
+    },
+    plan: [
+      { planId: 1, checked: true },
+      { planId: 2, checked: true },
+      { planId: 3, checked: true },
+    ],
+  },
+  {
+    id: 7,
+    name: {
+      ar: "متابعة التحصيل وإشعارات المستأجرين",
+      en: "متابعة التحصيل وإشعارات المستأجرين",
+    },
+    plan: [
+      { planId: 1, checked: true },
+      { planId: 2, checked: true },
+      { planId: 3, checked: true },
+    ],
+  },
+  {
+    id: 8,
+    name: {
+      ar: "اخلاء الوحدة/التأمين",
+      en: "اخلاء الوحدة/التأمين",
+    },
+    plan: [
+      { planId: 1, checked: true },
+      { planId: 2, checked: true },
+      { planId: 3, checked: true },
+    ],
+  },
+  {
+    id: 9,
+    name: {
+      ar: "فاتورة إلكترونية متوافقة مع متطلبات الهيئة",
+      en: "فاتورة إلكترونية متوافقة مع متطلبات الهيئة",
+    },
+    plan: [
+      { planId: 1, checked: true },
+      { planId: 2, checked: true },
+      { planId: 3, checked: true },
+    ],
+  },
+  {
+    id: 10,
+    name: {
+      ar: "الوحدات الشاغرة",
+      en: "الوحدات الشاغرة",
+    },
+    plan: [
+      { planId: 1, checked: false },
+      { planId: 2, checked: true },
+      { planId: 3, checked: true },
+    ],
+  },
+  {
+    id: 11,
+    name: {
+      ar: "تجديد آلي وأرشفة للعقود",
+      en: "تجديد آلي وأرشفة للعقود",
+    },
+    plan: [
+      { planId: 1, checked: false },
+      { planId: 2, checked: true },
+      { planId: 3, checked: true },
+    ],
+  },
+  {
+    id: 12,
+    name: {
+      ar: "شاشة مؤشرات ورسوم بيانية",
+      en: "شاشة مؤشرات ورسوم بيانية",
+    },
+    plan: [
+      { planId: 1, checked: false },
+      { planId: 2, checked: true },
+      { planId: 3, checked: true },
+    ],
+  },
+  {
+    id: 13,
+    name: {
+      ar: "نظام صيانة الوحدات والمرافق",
+      en: "نظام صيانة الوحدات والمرافق",
+    },
+    plan: [
+      { planId: 1, checked: false },
+      { planId: 2, checked: true },
+      { planId: 3, checked: true },
+    ],
+  },
+  {
+    id: 14,
+    name: {
+      ar: "نظام محاسبي مالي",
+      en: "نظام محاسبي مالي",
+    },
+    plan: [
+      { planId: 1, checked: false },
+      { planId: 2, checked: true, value: "أساسي" },
+      { planId: 3, checked: true, value: "متكامل" },
+    ],
+  },
+  {
+    id: 15,
+    name: {
+      ar: "بوابة الخدمات الذاتية للمالك",
+      en: "بوابة الخدمات الذاتية للمالك",
+    },
+    plan: [
+      { planId: 1, checked: false },
+      { planId: 2, checked: false },
+      { planId: 3, checked: true },
+    ],
+  },
+  {
+    id: 16,
+    name: {
+      ar: "بوابة الخدمات الذاتية للمستأجر",
+      en: "بوابة الخدمات الذاتية للمستأجر",
+    },
+    plan: [
+      { planId: 1, checked: false },
+      { planId: 2, checked: false },
+      { planId: 3, checked: true },
+    ],
+  },
+  {
+    id: 17,
+    name: {
+      ar: "بوابة الوسيط العقاري وعروض الأسعار",
+      en: "بوابة الوسيط العقاري وعروض الأسعار",
+    },
+    plan: [
+      { planId: 1, checked: false },
+      { planId: 2, checked: false },
+      { planId: 3, checked: true },
+    ],
   },
 ];

@@ -109,7 +109,8 @@
       "steps_number": "{pageNumber}/6",
       "basic_addons": "Features",
       "show_more": "Show all",
-      "show_less": "Show less"
+      "show_less": "Show less",
+      "compare_plans" : "Compare plans in detail"
     }
   }
 }
