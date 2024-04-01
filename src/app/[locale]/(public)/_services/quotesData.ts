@@ -166,176 +166,213 @@ export const quotesDataV2: QuoteModelV2[] = [
   },
 ];
 
-export const addonsData: AddonV2[] = [
+export type AddonData = {
+  group_name: string;
+  icon_url: string;
+  list: AddonV2[];
+};
+
+export const addonsData: AddonData[] = [
   {
-    id: 7,
-    name: "الربط مع إيجار",
-    price: 4999,
-    logo: "/assets/images/ejar-logo-ar.svg",
-    addonType: "DEFAULT",
-    data: [],
-    description:
-      "الربط التكاملي مع حساب مكتب الوساطة بمنصة إيجار لتوثيق العقود آلياً من خلال منصة سمات",
-  },
-  {
-    id: 4,
-    name: "مستخدم إضافي",
-    price: 0,
-    logo: "",
-    addonType: "PLUS_MINUS",
-    description: "يمكنك زيادة عدد مستخدمين إضافيين حسب احتياجك",
-    data: [
+    group_name: "ربط و تكامل",
+    icon_url: "",
+    list: [
       {
-        from: 1,
-        to: 10,
-        price: 125,
-      },
-    ],
-    steps: 1,
-  },
-  {
-    id: 10,
-    name: "مرسل SMS مخصص",
-    price: 499,
-    logo: "",
-    addonType: "DROPDOWN",
-    description: "تذكيرات برسائل نصية بإسم مخصص ومعرف لك",
-    data: [
-      {
-        from: 101,
-        to: 1000,
-        price: 399,
+        id: 7,
+        name: "الربط مع إيجار",
+        price: 4999,
+        logo: "/assets/images/ejar-logo-ar.svg",
+        addonType: "DEFAULT",
+        data: [],
+        description:
+          "الربط التكاملي مع حساب مكتب الوساطة بمنصة إيجار لتوثيق العقود آلياً من خلال منصة سمات",
       },
       {
-        from: 501,
-        to: 5000,
-        price: 1499,
-      },
-      { from: 1001, to: 10000, price: 2499 },
-      { from: 1001, to: 20000, price: 3999 },
-    ],
-    steps: 50,
-  },
-  {
-    id: 9,
-    name: "تطبيق الهاتف",
-    price: 500,
-    logo: "",
-    addonType: "DEFAULT",
-    description:
-      "عملياتك بين يديك أينما كنت ووسع قاعدة عملائك من المستأجرين والملاك",
-    data: [],
-  },
-  {
-    id: 1,
-    name: "أدخال العقود",
-    price: 0,
-    logo: "",
-    addonType: "PLUS_MINUS",
-    description: "لا تشيل هم ادخال عقودك، ودع الأمر لنا مهما كان حجمها",
-    data: [
-      {
-        from: 1,
-        to: 100,
-        price: 10.0,
+        id: 5,
+        name: "تسجيل حساب واتساب مخصص",
+        price: 8999,
+        logo: "https://simaat.sa/images/product/WhatsApp-Business.png",
+        addonType: "DEFAULT",
+        data: [],
+        description:
+          "تسجيل حساب جديد لواتساب أعمال مخصص لك للتنبيهات والتذكيرات ",
       },
       {
-        from: 101,
-        to: 500,
-        price: 8.0,
-      },
-      {
-        from: 501,
-        to: 1000,
-        price: 5.0,
-      },
-      {
-        from: 1001,
-        to: 2000,
-        price: 2.5,
+        id: 6,
+        name: "تفعيل حساب واتساب (مسجل مسبقاً)",
+        price: 4999,
+        logo: "https://simaat.sa/images/product/WhatsApp-Business.png",
+        addonType: "DEFAULT",
+        data: [],
+        description:
+          "إذا كان لديك حساب واتساب أعمال خاص بك، يمكننا تفعيله على منصتك",
       },
     ],
   },
   {
-    id: 2,
-    name: "ادخال القيود",
-    price: 0,
-    logo: "",
-    addonType: "PLUS_MINUS",
-    description: "ادخال القيود بأي عدد حسب احتياجك",
-    data: [
+    group_name: "أفراد",
+    icon_url: "",
+    list: [
       {
-        from: 1,
-        to: 100,
-        price: 10.0,
+        id: 4,
+        name: "مستخدم إضافي",
+        price: 0,
+        logo: "",
+        addonType: "PLUS_MINUS",
+        description: "يمكنك زيادة عدد مستخدمين إضافيين حسب احتياجك",
+        data: [
+          {
+            from: 1,
+            to: 10,
+            price: 125,
+          },
+        ],
+        steps: 1,
       },
       {
-        from: 101,
-        to: 500,
-        price: 8.0,
-      },
-      {
-        from: 501,
-        to: 1000,
-        price: 5.0,
-      },
-      {
-        from: 1001,
-        to: 2000,
-        price: 2.5,
-      },
-    ],
-    steps: 50,
-  },
-  {
-    id: 3,
-    name: "عدد مستخدمين بوابات",
-    price: 0,
-    logo: "",
-    addonType: "PLUS_MINUS",
-    description: "وسع قنواتك التسويقية ومصادر العملاء",
-    data: [
-      {
-        from: 1,
-        to: 100,
-        price: 50.0,
-      },
-      {
-        from: 101,
-        to: 500,
-        price: 30.0,
-      },
-      {
-        from: 501,
-        to: 1000,
-        price: 25.0,
-      },
-      {
-        from: 1001,
-        to: 2000,
-        price: 20,
+        id: 3,
+        name: "عدد مستخدمين بوابات",
+        price: 0,
+        logo: "",
+        addonType: "PLUS_MINUS",
+        description: "وسع قنواتك التسويقية ومصادر العملاء",
+        data: [
+          {
+            from: 1,
+            to: 100,
+            price: 50.0,
+          },
+          {
+            from: 101,
+            to: 500,
+            price: 30.0,
+          },
+          {
+            from: 501,
+            to: 1000,
+            price: 25.0,
+          },
+          {
+            from: 1001,
+            to: 2000,
+            price: 20,
+          },
+        ],
+        steps: 50,
       },
     ],
-    steps: 50,
   },
   {
-    id: 5,
-    name: "تسجيل حساب واتساب مخصص",
-    price: 8999,
-    logo: "https://simaat.sa/images/product/WhatsApp-Business.png",
-    addonType: "DEFAULT",
-    data: [],
-    description: "تسجيل حساب جديد لواتساب أعمال مخصص لك للتنبيهات والتذكيرات ",
+    group_name: "توثيق",
+    icon_url: "",
+    list: [
+      {
+        id: 1,
+        name: "أدخال العقود",
+        price: 0,
+        logo: "",
+        addonType: "PLUS_MINUS",
+        description: "لا تشيل هم ادخال عقودك، ودع الأمر لنا مهما كان حجمها",
+        data: [
+          {
+            from: 1,
+            to: 100,
+            price: 10.0,
+          },
+          {
+            from: 101,
+            to: 500,
+            price: 8.0,
+          },
+          {
+            from: 501,
+            to: 1000,
+            price: 5.0,
+          },
+          {
+            from: 1001,
+            to: 2000,
+            price: 2.5,
+          },
+        ],
+      },
+      {
+        id: 2,
+        name: "ادخال القيود",
+        price: 0,
+        logo: "",
+        addonType: "PLUS_MINUS",
+        description: "ادخال القيود بأي عدد حسب احتياجك",
+        data: [
+          {
+            from: 1,
+            to: 100,
+            price: 10.0,
+          },
+          {
+            from: 101,
+            to: 500,
+            price: 8.0,
+          },
+          {
+            from: 501,
+            to: 1000,
+            price: 5.0,
+          },
+          {
+            from: 1001,
+            to: 2000,
+            price: 2.5,
+          },
+        ],
+        steps: 50,
+      },
+    ],
   },
   {
-    id: 6,
-    name: "تفعيل حساب واتساب (مسجل مسبقاً)",
-    price: 4999,
-    logo: "https://simaat.sa/images/product/WhatsApp-Business.png",
-    addonType: "DEFAULT",
-    data: [],
-    description:
-      "إذا كان لديك حساب واتساب أعمال خاص بك، يمكننا تفعيله على منصتك",
+    group_name: "مراسلة",
+    icon_url: "",
+    list: [
+      {
+        id: 10,
+        name: "مرسل SMS مخصص",
+        price: 499,
+        logo: "",
+        addonType: "DROPDOWN",
+        description: "تذكيرات برسائل نصية بإسم مخصص ومعرف لك",
+        data: [
+          {
+            from: 101,
+            to: 1000,
+            price: 399,
+          },
+          {
+            from: 501,
+            to: 5000,
+            price: 1499,
+          },
+          { from: 1001, to: 10000, price: 2499 },
+          { from: 1001, to: 20000, price: 3999 },
+        ],
+        steps: 50,
+      },
+    ],
+  },
+  {
+    group_name: "وسائل اتصال",
+    icon_url: "",
+    list: [
+      {
+        id: 9,
+        name: "تطبيق الهاتف",
+        price: 500,
+        logo: "",
+        addonType: "DEFAULT",
+        description:
+          "عملياتك بين يديك أينما كنت ووسع قاعدة عملائك من المستأجرين والملاك",
+        data: [],
+      },
+    ],
   },
 ];
 

@@ -8,7 +8,7 @@ import Image from "next/image";
 import { Fragment, useState } from "react";
 import { QuoteModelV2 } from "../_services/quotesData";
 
-const checkedIcon = "/assets/svg/icons/CheckBold.svg";
+const checkedIcon = "/assets/svg/icons/CheckBold-blue.svg";
 
 export default function FeatList({
   quote,

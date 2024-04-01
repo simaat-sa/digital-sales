@@ -50,7 +50,7 @@
     "auto_redirect": "Will automatically redirect after seconds",
     "personal": "Personal",
     "office": "Office",
-    "company": "شركة",
+    "company": "company",
     "personal_name": "Personal name",
     "office_name": "Office name",
     "company_name": "Company name",
@@ -88,7 +88,8 @@
     "continue_with_google": "Continue with Google",
     "simaat": "Simaat Platform",
     "Confirm": "Confirm",
-    "close": "Close"
+    "close": "Close",
+    "price_r_s": "{price} R.S"
   },
   "v2": {
     "sales": {
@@ -110,7 +111,7 @@
       "basic_addons": "Features",
       "show_more": "Show all",
       "show_less": "Show less",
-      "compare_plans" : "Compare plans in detail"
+      "compare_plans": "Compare plans in detail"
     }
   }
 }
