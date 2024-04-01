@@ -27,6 +27,7 @@ export default function ComparePlanning({
   pricingPlan,
   comparedData,
 }: ComparedPlanningProps) {
+  const tc = useTranslations("common");
   const t = useTranslations("sales");
   const tv2 = useTranslations("v2.sales");
   const [hasScrolled, setHasScrolled] = useState<boolean>(false);
@@ -65,6 +66,7 @@ export default function ComparePlanning({
                 <span className="text-lg">{t(plan.name as any)}</span>
                 <Button
                   type="button"
+                  className="inline-flex items-center gap-x-1"
                   onClick={() => {
                     handleSubmitSelectPlan(plan.id).then(() => {
                       router.push("/get-started/custom-plan", {
@@ -73,7 +75,9 @@ export default function ComparePlanning({
                     });
                   }}
                 >
-                  {tv2("custom_your_quote")}
+                  <span>{tv2("custom_your_quote")}</span>
+                  <span className="text-2xl">{plan.price}</span>
+                  <span>{t("s_r")}</span>
                 </Button>
               </div>
             ))}

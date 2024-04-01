@@ -1,14 +1,30 @@
 "use client";
 import HeightMotion from "@/shared/components/motions/HeighEffect";
+import { Locale } from "@/shared/types/locale";
 import Cookies from "js-cookie";
+import { Metadata } from "next";
 import { signOut, useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useQuotePricingServiceV2 } from "../../_services/QuotePricingServiceV2";
 
 const checkedUrl = "/assets/images/check.png";
+
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: Locale };
+}): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: "sales" });
+
+  return {
+    title: t("success_title"),
+    description: t("success_title"),
+  };
+}
 
 export default function Page() {
   const { email, resetV2 } = useQuotePricingServiceV2();

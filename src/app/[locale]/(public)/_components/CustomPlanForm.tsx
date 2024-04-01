@@ -56,42 +56,58 @@ export default function CustomPlanForm({
         </div>
       </div>
       <div
-        className={cn(" grid w-full grid-cols-12 items-start", {
+        className={cn("grid w-full grid-cols-12 items-start gap-6", {
           "col-start-3": true,
         })}
       >
         <div
           className={cn(
-            "relative col-span-12 mx-auto grid grid-cols-12 gap-6 bg-white px-6 pb-6 transition-all delay-200 duration-500 ease-out md:col-span-8",
+            "relative col-span-12 mx-auto bg-white pb-6 md:col-span-8",
           )}
         >
-          {addonsData.map((addon) => (
-            <AddonCard.Card
-              key={addon.id}
-              addon={addon}
-              active={
-                AddonSelected.find((item) => item.id === addon.id) ||
-                AddonSelectedDropdown.find((item) => item.id === addon.id) ||
-                AddonSelectedPlusMinus.find((item) => item.id === addon.id)
-                  ? true
-                  : false
-              }
+          {addonsData.map((group, i) => (
+            <div
+              key={group.group_name}
+              className={cn("mb-12 w-full", {
+                "mb-4": addonsData.length - 1 === i,
+              })}
             >
-              <div className="flex flex-col gap-3">
-                <AddonCard.Header addon={addon} />
-                <AddonCard.Description addon={addon} />
+              <h2 className="mb-4 text-2xl font-medium">{group.group_name}</h2>
+              <div className="col-span-12 grid w-full grid-cols-12 gap-6 md:col-span-8">
+                {group.list.map((addon) => (
+                  <AddonCard.Card
+                    key={addon.id}
+                    addon={addon}
+                    active={
+                      AddonSelected.find((item) => item.id === addon.id) ||
+                      AddonSelectedDropdown.find(
+                        (item) => item.id === addon.id,
+                      ) ||
+                      AddonSelectedPlusMinus.find(
+                        (item) => item.id === addon.id,
+                      )
+                        ? true
+                        : false
+                    }
+                  >
+                    <div className="flex flex-col gap-3">
+                      <AddonCard.Header addon={addon} />
+                      <AddonCard.Description addon={addon} />
 
-                {addon.addonType === "DROPDOWN" ? (
-                  <AddonCard.Dropdown addon={addon} />
-                ) : null}
+                      {addon.addonType === "DROPDOWN" ? (
+                        <AddonCard.Dropdown addon={addon} />
+                      ) : null}
 
-                {addon.addonType === "PLUS_MINUS" ? (
-                  <AddonCard.PlusMinus addon={addon} />
-                ) : null}
+                      {addon.addonType === "PLUS_MINUS" ? (
+                        <AddonCard.PlusMinus addon={addon} />
+                      ) : null}
+                    </div>
+
+                    <AddonCard.Footer addon={addon} />
+                  </AddonCard.Card>
+                ))}
               </div>
-
-              <AddonCard.Footer addon={addon} />
-            </AddonCard.Card>
+            </div>
           ))}
         </div>
         <div className="sticky top-4 col-span-12 overflow-hidden rounded-md bg-secondaryblue-100 px-6 pb-6 font-medium  md:col-span-4">
