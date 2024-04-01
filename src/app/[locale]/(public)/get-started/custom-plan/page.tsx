@@ -4,11 +4,6 @@ import { getTranslations } from "next-intl/server";
 import { cookies } from "next/headers";
 import CustomPlanForm from "../../_components/CustomPlanForm";
 
-type Props = {
-  params: { id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-
 export async function generateMetadata({
   params: { locale },
 }: {
@@ -23,7 +18,7 @@ export async function generateMetadata({
 }
 
 export default async function Page() {
-  const data = await cookies().get("data")?.value;
+  const data = cookies().get("data")?.value;
 
   return <CustomPlanForm state={data ? JSON.parse(data) : null} />;
 }

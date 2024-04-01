@@ -222,16 +222,21 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
     return get().code.length === 4;
   },
   setState(state) {
-    let basicAddon: any[] = addonsData.filter((a) => {
-      if (state.addons.find((b) => b === a.id) && a.addonType === "DEFAULT") {
-        return {
-          ...a,
-          count: 1,
-        } as CustomQuotesSelected;
-      }
-    });
+    let basicAddon: any[] = addonsData
+      .map((a) => a.list)
+      .flat(1)
+      .filter((a) => {
+        if (state.addons.find((b) => b === a.id) && a.addonType === "DEFAULT") {
+          return {
+            ...a,
+            count: 1,
+          } as CustomQuotesSelected;
+        }
+      });
 
     let plusAndMinusAddon: AddonSelectedPlusMinus[] = addonsData
+      .map((a) => a.list)
+      .flat(1)
       .filter(
         (a) =>
           state.addons.find((b) => b === a.id) && a.addonType === "PLUS_MINUS",
@@ -247,6 +252,8 @@ const useQuotePricingServiceV2 = create<QuotePricingV2>((set, get) => ({
       });
 
     let dropdownAddon: any[] = addonsData
+      .map((a) => a.list)
+      .flat(1)
       .filter(
         (a) =>
           state.addons.find((b) => b === a.id) && a.addonType === "DROPDOWN",

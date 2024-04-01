@@ -45,11 +45,13 @@ export default function CustomPlanForm({
   return (
     <div className="container">
       <div className="flex h-[6rem] w-full items-center justify-between lg:h-[8rem]">
-        <h2 className="inline-flex text-2xl font-medium lg:text-3xl">
+        <h2 className="text-2xl font-medium lg:text-3xl">
           {v2t("custom_your_quote_title")}
         </h2>
-        <div className="flex items-center gap-3">
-          <span className="mx-3">{v2t("steps_number", { pageNumber: 4 })}</span>
+        <div className="flex md:flex-row flex-col-reverse flex-wrap items-center justify-end gap-3 md:flex-nowrap">
+          <span className="mx-3 block md:inline-flex">
+            {v2t("steps_number", { pageNumber: 3 })}
+          </span>
           <Button variant="outline" type="button" onClick={() => router.back()}>
             {t("back")}
           </Button>

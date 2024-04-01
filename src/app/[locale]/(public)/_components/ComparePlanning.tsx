@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/components/ui/table";
+import { cn } from "@/shared/lib/utils";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -48,92 +49,105 @@ export default function ComparePlanning({
   }, [hasScrolled]);
 
   return (
-    <div className="relative w-full min-w-[50em]">
-      <div
-        className="sticky top-0 z-10 flex w-full flex-nowrap bg-white text-center font-medium"
-        ref={filler}
-      >
-        {hasScrolled ? (
-          <>
-            <div className="flex w-2/5 items-center justify-center border">
-              {tv2("basic_addons")}
-            </div>
-            {pricingPlan.map((plan) => (
-              <div
-                className="flex w-1/5 flex-col items-center justify-center gap-2 border py-4"
-                key={plan.id}>
-                <span className="text-lg">{t(plan.name as any)}</span>
-                <Button
-                  type="button"
-                  className="inline-flex items-center gap-x-1"
-                  onClick={() => {
-                    handleSubmitSelectPlan(plan.id).then(() => {
-                      router.push("/get-started/custom-plan", {
-                        scroll: true,
-                      });
-                    });
-                  }}
-                >
-                  <span>{tv2("custom_your_quote")}</span>
-                  <span className="text-2xl">{plan.price}</span>
-                  <span>{t("s_r")}</span>
-                </Button>
-              </div>
-            ))}
-          </>
-        ) : null}
-      </div>
-      <Table className="my-12 w-full">
-        <TableHeader>
-          <TableRow>
-            <TableHead className="h-16 text-left rtl:text-right">
-              {tv2("basic_addons")}
-            </TableHead>
-            {pricingPlan.map((plan) => (
-              <TableHead key={plan.id} className="h-16 text-center">
-                {t(plan.name as any)}
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {comparedData.map((feature, index) => (
-            <TableRow key={feature.id} className="h-16 w-full">
-              <TableCell className="w-2/5 font-medium">
-                {feature.name.ar}
-              </TableCell>
-
-              {pricingPlan.map((p, i) => {
-                let feat = feature.plan.find((f) => f.planId === p.id);
-
-                return (
-                  <TableCell key={index + i} className="w-1/5 text-center">
-                    {feat?.value ? (
-                      feat.value
-                    ) : feat?.checked ? (
-                      <Image
-                        src={checkIcon}
-                        alt="checked"
-                        width={28}
-                        height={28}
-                        className="mx-auto"
-                      />
-                    ) : (
-                      <Image
-                        src={LineIcon}
-                        alt="checked"
-                        width={28}
-                        height={28}
-                        className="mx-auto"
-                      />
+    <div className="w-full overflow-hidden md:overflow-visible">
+      <div className="w-full overflow-x-auto md:overflow-visible">
+        <div className="relative min-w-[50em]">
+          <div
+            className="sticky top-0 z-10 flex w-full flex-nowrap bg-white text-center font-medium"
+            ref={filler}
+          >
+            {hasScrolled ? (
+              <>
+                <div className="flex w-2/5 items-center justify-center border">
+                  {tv2("basic_addons")}
+                </div>
+                {pricingPlan.map((plan, i) => (
+                  <div
+                    className={cn(
+                      "flex w-1/5 flex-col items-center justify-center gap-2 border py-3",
+                      {
+                        "rounded-tl-sm rounded-tr-sm border-t-[6px] border-x-primary-600 border-t-primary-600":
+                          i === 1,
+                      },
                     )}
+                    key={plan.id}
+                  >
+                    <span className="text-xl">{t(plan.name as any)}</span>
+                    <div>
+                      <span className="mx-1 text-2xl">{plan.price}</span>
+                      <span>{t("s_r_monthly")}</span>
+                    </div>
+                    <Button
+                      type="button"
+                      className="inline-flex items-center gap-x-1"
+                      onClick={() => {
+                        handleSubmitSelectPlan(plan.id).then(() => {
+                          router.push("/get-started/custom-plan", {
+                            scroll: true,
+                          });
+                        });
+                      }}
+                    >
+                      <span>{tv2("custom_your_quote")}</span>
+                    </Button>
+                  </div>
+                ))}
+              </>
+            ) : null}
+          </div>
+          <Table className="my-12 w-full">
+            <TableHeader>
+              <TableRow>
+                <TableHead className="h-16 text-left rtl:text-right">
+                  {tv2("basic_addons")}
+                </TableHead>
+                {pricingPlan.map((plan) => (
+                  <TableHead key={plan.id} className="h-16 text-center">
+                    {t(plan.name as any)}
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {comparedData.map((feature, index) => (
+                <TableRow key={feature.id} className="h-16 w-full">
+                  <TableCell className="w-2/5 font-medium">
+                    {feature.name.ar}
                   </TableCell>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+
+                  {pricingPlan.map((p, i) => {
+                    let feat = feature.plan.find((f) => f.planId === p.id);
+
+                    return (
+                      <TableCell key={index + i} className="w-1/5 text-center">
+                        {feat?.value ? (
+                          feat.value
+                        ) : feat?.checked ? (
+                          <Image
+                            src={checkIcon}
+                            alt="checked"
+                            width={28}
+                            height={28}
+                            className="mx-auto"
+                          />
+                        ) : (
+                          <Image
+                            src={LineIcon}
+                            alt="checked"
+                            width={28}
+                            height={28}
+                            className="mx-auto"
+                          />
+                        )}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
     </div>
   );
 }

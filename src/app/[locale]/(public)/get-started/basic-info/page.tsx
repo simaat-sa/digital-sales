@@ -22,11 +22,11 @@ export async function generateMetadata({
 }
 
 export default async function Page() {
-  const data = await cookies().get("data")?.value;
+  const data =  cookies().get("data")?.value;
   const parsed = data ? (JSON.parse(data) as QuoteRequestModel) : null;
   const session = await getServerSession().then((s) => s?.user?.email);
 
-  if (!parsed?.mobileNumberVerified && typeof session !== "string") {
+  if (!parsed?.mobileNumberVerified && !session) {
     return redirect("/");
   }
 

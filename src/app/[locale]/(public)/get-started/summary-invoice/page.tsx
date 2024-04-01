@@ -18,7 +18,7 @@ export async function generateMetadata({
 }
 
 export default async function Page() {
-  const data = await cookies().get("data")?.value;
+  const data = cookies().get("data")?.value;
 
   return <SummaryInvoiceForm state={data ? JSON.parse(data) : null} />;
 }
