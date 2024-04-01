@@ -56,13 +56,12 @@ export default function ComparePlanning({
         {hasScrolled ? (
           <>
             <div className="flex w-2/5 items-center justify-center border">
-              {t("addons")}
+              {tv2("basic_addons")}
             </div>
             {pricingPlan.map((plan) => (
               <div
                 className="flex w-1/5 flex-col items-center justify-center gap-2 border py-4"
-                key={plan.id}
-              >
+                key={plan.id}>
                 <span className="text-lg">{t(plan.name as any)}</span>
                 <Button
                   type="button"
@@ -88,7 +87,7 @@ export default function ComparePlanning({
         <TableHeader>
           <TableRow>
             <TableHead className="h-16 text-left rtl:text-right">
-              {t("addons")}
+              {tv2("basic_addons")}
             </TableHead>
             {pricingPlan.map((plan) => (
               <TableHead key={plan.id} className="h-16 text-center">
