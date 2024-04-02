@@ -74,20 +74,19 @@ export default function PricingPlanForm({
           ({ id, name, features, price, description, business_need_label }) => (
             <div
               key={String(id)}
-              className={cn(
-                {
-                  "border-primary-600": String(id) === quotePlan,
-                  "mt-12": String(id) !== quotePlan,
-                },
-                "col-span-12 md:col-span-6 lg:col-span-4",
-              )}
+              className={cn("col-span-12 md:col-span-6 lg:col-span-4")}
             >
               {String(id) === quotePlan ? (
-                <div className="flex items-center justify-center border-primary border-b-[6px] bg-white p-2 text-2xl font-normal text-primary h-12">
+                <div className="flex h-12 items-center justify-center border-b-[6px] border-primary bg-white p-2 text-2xl font-normal text-primary">
                   {t("best_matching")}
                 </div>
               ) : null}
-              <div className="flex flex-col gap-y-3 border bg-white p-4 ">
+              <div
+                className={cn("flex flex-col gap-y-3 border bg-white p-4", {
+                  "border-primary-600": String(id) === quotePlan,
+                  "mt-12": String(id) !== quotePlan,
+                })}
+              >
                 <div className="min-h-30 flex w-full flex-col justify-center gap-4 pt-3">
                   <div className="flex w-full flex-nowrap items-center justify-between gap-x-4">
                     <h4 className="text-3xl font-medium">{t(name as any)}</h4>
@@ -104,7 +103,7 @@ export default function PricingPlanForm({
                     "bg-slate-300": String(id) === quotePlan,
                   })}
                 />
-                <div className="flex flex-col items-start gap-4 mb-4">
+                <div className="mb-4 flex flex-col items-start gap-4">
                   <FeatList
                     quote={{
                       id,
