@@ -161,7 +161,16 @@ export default function PricingPlanForm({
                       </DialogHeader>
                       <DialogDescription className="my-0 py-0">
                         <div className="w-full overflow-hidden">
-                          <VideoComponent src="https://www.w3schools.com/html/mov_bbb.mp4" />
+                          <Iframe
+                            id="ytplayer"
+                            type="text/html"
+                            width="100%"
+                            height="562.5"
+                            src="https://www.youtube.com/embed/Gg9IbtogKB8"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowFullScreen={true}
+                          />
                         </div>
                       </DialogDescription>
                     </DialogContent>
