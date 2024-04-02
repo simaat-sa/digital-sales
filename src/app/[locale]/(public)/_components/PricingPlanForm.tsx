@@ -104,7 +104,7 @@ export default function PricingPlanForm({
                     "bg-slate-300": String(id) === quotePlan,
                   })}
                 />
-                <div className="flex flex-col items-start gap-4">
+                <div className="flex flex-col items-start gap-4 mb-4">
                   <FeatList
                     quote={{
                       id,

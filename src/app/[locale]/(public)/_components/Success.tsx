@@ -40,7 +40,7 @@ export default function Success() {
       <div className="flex flex-col items-center justify-center gap-2">
         <h2 className="text-2xl font-medium">{t("success_title")}</h2>
         <p className="pt-3 text-lg font-medium">
-          {t("success_desc", { email })}
+          {t("success_desc")}
         </p>
         <p className="pb-2 text-xl font-medium text-secondaryblue">{email}</p>
         <div>{t("auto_redirect")}</div>

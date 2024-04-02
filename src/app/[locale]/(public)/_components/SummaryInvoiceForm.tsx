@@ -100,7 +100,7 @@ export default function SummaryInvoiceForm({
                   <div
                     key={payment.type}
                     className={cn(
-                      "col-span-2 flex cursor-pointer flex-col items-center justify-center gap-6 rounded-xl border border-slate-50 bg-white p-3 shadow transition-colors duration-75 ease-in lg:flex-1",
+                      "col-span-2 flex cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border border-slate-50 bg-white p-3 shadow transition-colors duration-75 ease-in lg:flex-1",
                       {
                         "border-primary-600 bg-slate-50":
                           payment.months === paymentMonths,
