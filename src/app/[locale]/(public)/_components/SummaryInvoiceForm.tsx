@@ -71,7 +71,7 @@ export default function SummaryInvoiceForm({
           </h2>
           <FeatList quote={getQuoteSelected} isSpeared={false} />
 
-          <div className="flex justify-between rtl:mb-4 rtl:px-4">
+          <div className="flex justify-between rtl:mb-4 rtl:px-4 p-4 border-0 rounded bg-primary-100">
             <div className="flex flex-1 flex-col justify-center gap-4">
               <h2 className="text-xl font-medium">{t("guarantee_title")}</h2>
               <p className="text-lg font-medium text-neutral-600">

@@ -115,7 +115,7 @@ export default function CustomPlanForm({
         <div className="sticky top-4 col-span-12 overflow-hidden rounded-md bg-secondaryblue-100 px-6 pb-6 font-medium  md:col-span-4">
           <div className="flex flex-col p-3">
             <div className="mb-4 flex items-center justify-between">
-              <span className="pt-3 text-xl font-medium">
+              <span className="pt-3 text-2xl font-medium">
                 {t("quote")}{" "}
                 {t(
                   quotesDataV2.find((item) => item.id === quoteSelected)

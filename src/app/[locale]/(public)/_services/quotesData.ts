@@ -174,43 +174,7 @@ export type AddonData = {
 
 export const addonsData: AddonData[] = [
   {
-    group_name: "ربط و تكامل",
-    icon_url: "",
-    list: [
-      {
-        id: 7,
-        name: "الربط مع إيجار",
-        price: 4999,
-        logo: "/assets/images/ejar-logo-ar.svg",
-        addonType: "DEFAULT",
-        data: [],
-        description:
-          "الربط التكاملي مع حساب مكتب الوساطة بمنصة إيجار لتوثيق العقود آلياً من خلال منصة سمات",
-      },
-      {
-        id: 5,
-        name: "تسجيل حساب واتساب مخصص",
-        price: 8999,
-        logo: "https://simaat.sa/images/product/WhatsApp-Business.png",
-        addonType: "DEFAULT",
-        data: [],
-        description:
-          "تسجيل حساب جديد لواتساب أعمال مخصص لك للتنبيهات والتذكيرات ",
-      },
-      {
-        id: 6,
-        name: "تفعيل حساب واتساب (مسجل مسبقاً)",
-        price: 4999,
-        logo: "https://simaat.sa/images/product/WhatsApp-Business.png",
-        addonType: "DEFAULT",
-        data: [],
-        description:
-          "إذا كان لديك حساب واتساب أعمال خاص بك، يمكننا تفعيله على منصتك",
-      },
-    ],
-  },
-  {
-    group_name: "أفراد",
+    group_name: "مستخدمين",
     icon_url: "",
     list: [
       {
@@ -263,12 +227,87 @@ export const addonsData: AddonData[] = [
     ],
   },
   {
-    group_name: "توثيق",
+    group_name: " الربط والتكامل",
+    icon_url: "",
+    list: [
+      {
+        id: 7,
+        name: "توثيق العقود مع إيجار",
+        price: 4999,
+        logo: "/assets/images/ejar-logo-ar.svg",
+        addonType: "DEFAULT",
+        data: [],
+        description:
+          "الربط التكاملي مع حساب مكتب الوساطة بمنصة إيجار لتوثيق العقود آلياً من خلال منصة سمات",
+      },
+      {
+        id: 10,
+        name: "مرسل SMS مخصص",
+        price: 499,
+        logo: "",
+        addonType: "DROPDOWN",
+        description: "تذكيرات برسائل نصية بإسم مخصص ومعرف لك",
+        data: [
+          {
+            from: 101,
+            to: 1000,
+            price: 399,
+          },
+          {
+            from: 501,
+            to: 5000,
+            price: 1499,
+          },
+          { from: 1001, to: 10000, price: 2499 },
+          { from: 1001, to: 20000, price: 3999 },
+        ],
+        steps: 50,
+      },
+      {
+        id: 6,
+        name: "تفعيل حساب واتساب (مسجل مسبقاً)",
+        price: 4999,
+        logo: "https://simaat.sa/images/product/WhatsApp-Business.png",
+        addonType: "DEFAULT",
+        data: [],
+        description:
+          "إذا كان لديك حساب واتساب أعمال خاص بك، يمكننا تفعيله على منصتك",
+      },
+      {
+        id: 5,
+        name: "تسجيل حساب واتساب مخصص",
+        price: 8999,
+        logo: "https://simaat.sa/images/product/WhatsApp-Business.png",
+        addonType: "DEFAULT",
+        data: [],
+        description:
+          "تسجيل حساب جديد لواتساب أعمال مخصص لك للتنبيهات والتذكيرات ",
+      },
+    ],
+  },
+  // {
+  //   group_name: "ربط وتكامل",
+  //   icon_url: "",
+  //   list: [
+  //     {
+  //       id: 7,
+  //       name: "الربط مع إيجار",
+  //       price: 4999,
+  //       logo: "/assets/images/ejar-logo-ar.svg",
+  //       addonType: "DEFAULT",
+  //       data: [],
+  //       description:
+  //         "الربط التكاملي مع حساب مكتب الوساطة بمنصة إيجار لتوثيق العقود آلياً من خلال منصة سمات",
+  //     },
+  //   ],
+  // },
+  {
+    group_name: "رفع بيانات",
     icon_url: "",
     list: [
       {
         id: 1,
-        name: "أدخال العقود",
+        name: "إدخال العقود",
         price: 0,
         logo: "",
         addonType: "PLUS_MINUS",
@@ -298,7 +337,7 @@ export const addonsData: AddonData[] = [
       },
       {
         id: 2,
-        name: "ادخال القيود",
+        name: "إدخال القيود",
         price: 0,
         logo: "",
         addonType: "PLUS_MINUS",
@@ -329,43 +368,25 @@ export const addonsData: AddonData[] = [
       },
     ],
   },
+  
   {
-    group_name: "مراسلة",
-    icon_url: "",
-    list: [
-      {
-        id: 10,
-        name: "مرسل SMS مخصص",
-        price: 499,
-        logo: "",
-        addonType: "DROPDOWN",
-        description: "تذكيرات برسائل نصية بإسم مخصص ومعرف لك",
-        data: [
-          {
-            from: 101,
-            to: 1000,
-            price: 399,
-          },
-          {
-            from: 501,
-            to: 5000,
-            price: 1499,
-          },
-          { from: 1001, to: 10000, price: 2499 },
-          { from: 1001, to: 20000, price: 3999 },
-        ],
-        steps: 50,
-      },
-    ],
-  },
-  {
-    group_name: "وسائل اتصال",
+    group_name: "تطبيق جوال",
     icon_url: "",
     list: [
       {
         id: 9,
-        name: "تطبيق الهاتف",
+        name: "تطبيق جوال",
         price: 500,
+        logo: "",
+        addonType: "DEFAULT",
+        description:
+          "عملياتك بين يديك أينما كنت ووسع قاعدة عملائك من المستأجرين والملاك",
+        data: [],
+      },
+      {
+        id: 10,
+        name: "تطبيق جوال مخصص بهويتك",
+        price: 2500,
         logo: "",
         addonType: "DEFAULT",
         description:
