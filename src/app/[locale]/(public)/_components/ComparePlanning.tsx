@@ -58,7 +58,7 @@ export default function ComparePlanning({
           >
             {hasScrolled ? (
               <>
-                <div className="flex w-2/5 items-center justify-center border">
+                <div className="flex w-2/5 items-center border text-xl p-3">
                   {tv2("basic_addons")}
                 </div>
                 {pricingPlan.map((plan, i) => (
@@ -74,7 +74,7 @@ export default function ComparePlanning({
                   >
                     <span className="text-xl">{t(plan.name as any)}</span>
                     <div>
-                      <span className="mx-1 text-2xl">{plan.price}</span>
+                      <span className="mx-1 text-2xl text-secondaryblue">{plan.price}</span>
                       <span>{t("s_r_monthly")}</span>
                     </div>
                     <Button

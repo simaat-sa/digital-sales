@@ -25,7 +25,7 @@ export default function FeatList({
   return (
     <>
       <ul
-        className={cn("relative h-auto list-none", {
+        className={cn("relative h-auto list-none mb-4", {
           "gradient-black-to-transparent max-h-32 overflow-hidden bg-gray-200":
             !open && isGradient,
         })}

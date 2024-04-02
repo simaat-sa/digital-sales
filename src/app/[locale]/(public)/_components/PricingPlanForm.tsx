@@ -83,11 +83,11 @@ export default function PricingPlanForm({
               )}
             >
               {String(id) === quotePlan ? (
-                <div className="flex items-center justify-center border bg-primary-600 p-2 text-xl font-medium text-white shadow-md shadow-slate-200">
+                <div className="flex items-center justify-center border-primary border-b-[6px] bg-white p-2 text-2xl font-normal text-primary h-12">
                   {t("best_matching")}
                 </div>
               ) : null}
-              <div className="flex flex-col gap-y-3 rounded border bg-white p-4 ">
+              <div className="flex flex-col gap-y-3 border bg-white p-4 ">
                 <div className="min-h-30 flex w-full flex-col justify-center gap-4 pt-3">
                   <div className="flex w-full flex-nowrap items-center justify-between gap-x-4">
                     <h4 className="text-3xl font-medium">{t(name as any)}</h4>
