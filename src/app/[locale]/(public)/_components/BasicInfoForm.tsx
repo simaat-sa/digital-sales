@@ -178,7 +178,7 @@ export default function BasicInfoForm({
       className="flex flex-col gap-4 lg:gap-6"
       action={() =>
         handleSubmitBasicInfo().then(() => {
-          router.push("/get-started/pricing-plan");
+          router.push("/get-started/pricing-plan", { scroll: true });
         })
       }
     >

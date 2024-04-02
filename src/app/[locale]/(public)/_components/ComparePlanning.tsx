@@ -28,12 +28,11 @@ export default function ComparePlanning({
   pricingPlan,
   comparedData,
 }: ComparedPlanningProps) {
-  const tc = useTranslations("common");
   const t = useTranslations("sales");
   const tv2 = useTranslations("v2.sales");
   const [hasScrolled, setHasScrolled] = useState<boolean>(false);
   const filler = useRef<HTMLDivElement>(null);
-  const { handleSubmitSelectPlan } = useQuotePricingServiceV2();
+  const { quotePlan, handleSubmitSelectPlan } = useQuotePricingServiceV2();
   const router = useRouter();
 
   useEffect(() => {
@@ -58,7 +57,7 @@ export default function ComparePlanning({
           >
             {hasScrolled ? (
               <>
-                <div className="flex w-2/5 items-center border text-xl p-3">
+                <div className="flex w-2/5 items-center border p-3 text-xl">
                   {tv2("basic_addons")}
                 </div>
                 {pricingPlan.map((plan, i) => (
@@ -67,14 +66,16 @@ export default function ComparePlanning({
                       "flex w-1/5 flex-col items-center justify-center gap-2 border py-3",
                       {
                         "rounded-tl-sm rounded-tr-sm border-t-[6px] border-x-primary-600 border-t-primary-600":
-                          i === 1,
+                          String(plan.id) === quotePlan,
                       },
                     )}
                     key={plan.id}
                   >
                     <span className="text-xl">{t(plan.name as any)}</span>
                     <div>
-                      <span className="mx-1 text-2xl text-secondaryblue">{plan.price}</span>
+                      <span className="mx-1 text-2xl text-secondaryblue">
+                        {plan.price}
+                      </span>
                       <span>{t("s_r_monthly")}</span>
                     </div>
                     <Button
